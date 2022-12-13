@@ -72,7 +72,7 @@ namespace InstrumentLockServiceHost_WPF_namespace
                 _instance.EventFromClient += HandleEventFromClient;
 
                 // open ServiceHost of the above defined instance
-                Uri baseAddress = new Uri("http://localhost:8080/");
+                Uri baseAddress = new Uri("net.tcp://localhost:8001/");
                 _host = new ServiceHost(_instance, baseAddress);
                 //// In order to use one of the ServiceHost constructors that takes a service instance, the InstanceContextMode of the service must be set to InstanceContextMode.Single.  This can be configured via the ServiceBehaviorAttribute.  Otherwise, please consider using the ServiceHost constructors that take a Type argument.
                 /// instead of the following two lines, we now define the ServiceBehaviorAttribute before its class defnition in InstrumentLockService.cs
