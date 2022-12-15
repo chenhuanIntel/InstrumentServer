@@ -11,6 +11,10 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "InstrumentLockServiceHost_W
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "TesterClient_WPF", "TesterClient_WPF\TesterClient_WPF.csproj", "{6C8B8EA3-FB8F-45E1-A078-742AD24C48C2}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "InstrumentLockServiceHost", "InstrumentLockServiceHost\InstrumentLockServiceHost.csproj", "{3FF35AAC-9F92-4671-980E-346B73BEAECC}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "InstrumentLockServiceHost_WPF2", "InstrumentLockServiceHost_WPF2\InstrumentLockServiceHost_WPF2.csproj", "{2F232A4C-2706-4D7D-82E8-8359CE4906C7}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -33,6 +37,14 @@ Global
 		{6C8B8EA3-FB8F-45E1-A078-742AD24C48C2}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{6C8B8EA3-FB8F-45E1-A078-742AD24C48C2}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{6C8B8EA3-FB8F-45E1-A078-742AD24C48C2}.Release|Any CPU.Build.0 = Release|Any CPU
+		{3FF35AAC-9F92-4671-980E-346B73BEAECC}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{3FF35AAC-9F92-4671-980E-346B73BEAECC}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{3FF35AAC-9F92-4671-980E-346B73BEAECC}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{3FF35AAC-9F92-4671-980E-346B73BEAECC}.Release|Any CPU.Build.0 = Release|Any CPU
+		{2F232A4C-2706-4D7D-82E8-8359CE4906C7}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{2F232A4C-2706-4D7D-82E8-8359CE4906C7}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{2F232A4C-2706-4D7D-82E8-8359CE4906C7}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{2F232A4C-2706-4D7D-82E8-8359CE4906C7}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
