@@ -15,7 +15,7 @@ using System.Windows.Media.Imaging;
 using System.Windows.Navigation;
 using System.Windows.Shapes;
 using InstrumentLockService;
-using static InstrumentLockServiceHost_WPF_namespace.MainWindow;
+using InstrumentLockServiceHost;
 
 //https://stackoverflow.com/questions/4480087/wpf-the-type-name-app-does-not-exist-in-the-type-occurs-after-renaming-mai
 // the namespace and the class used to share the same name but need to change to different names
@@ -24,7 +24,7 @@ namespace InstrumentLockServiceHost_WPF_namespace
     /// <summary>
     /// Interaction logic for MainWindow.xaml
     /// </summary>
-    public class InstrumentLockServiceHost_WPF
+    public class InstrumentLockServiceHost_WPF : IInstrumentLockServiceHost
     {
         // https://stackoverflow.com/questions/40591726/can-i-get-set-data-into-wcf-service-by-host
         // in order to pass to host and show the client request value at host whenever there is a client request
@@ -44,11 +44,12 @@ namespace InstrumentLockServiceHost_WPF_namespace
         /// <summary>
         /// a class global variable of WCF service instance to work with event from client.
         /// </summary>
-        private static InstrumentLockService.InstrumentLockService _instance;
+        private InstrumentLockService.InstrumentLockService _instance;
         /// <summary>
         /// a varibale to access the WPF DataGrid defined in MainWindow class
         /// </summary>
         public DataGrid _dgFromMainWindow { get; set; }
+        public TextBlock _tbFromMainWindow { get; set; }
 
 
 
@@ -56,15 +57,12 @@ namespace InstrumentLockServiceHost_WPF_namespace
         /// define the global variable of WCF service instance
         /// and start the service host of the instance
         /// </summary>
-        /// <param name="dgServerRequest">DataGrid defined at MainWindow</param>
-        /// <param name="tbMainWindow">TestBlock defined at MainWindow</param>
-        public void initialize(DataGrid dgServerRequest, TextBlock tbMainWindow)
+        public void initialize()
         {
             try
             {
                 // To assign InstrumentLockServiceHost_WPF.dgFromMainWindow = MainWindow.dgServerRequest
                 // i.e. pass the WPF DataGrid of the MainWindow class to this InstrumentLockServiceHost_WPF class
-                _dgFromMainWindow = dgServerRequest;
                 _clientRequestValue = new List<ClientRequestValue>();
 
                 // define the WCF service instance and event handler
@@ -72,7 +70,8 @@ namespace InstrumentLockServiceHost_WPF_namespace
                 _instance.EventFromClient += HandleEventFromClient;
 
                 // open ServiceHost of the above defined instance
-                Uri baseAddress = new Uri("net.tcp://localhost:8001/");
+                Uri baseAddress = new Uri("http://localhost:8080/");
+                //Uri baseAddress = new Uri("net.tcp://localhost:8001/");
                 _host = new ServiceHost(_instance, baseAddress);
                 //// In order to use one of the ServiceHost constructors that takes a service instance, the InstanceContextMode of the service must be set to InstanceContextMode.Single.  This can be configured via the ServiceBehaviorAttribute.  Otherwise, please consider using the ServiceHost constructors that take a Type argument.
                 /// instead of the following two lines, we now define the ServiceBehaviorAttribute before its class defnition in InstrumentLockService.cs
@@ -81,25 +80,25 @@ namespace InstrumentLockServiceHost_WPF_namespace
                 _host.Open();
                 // The service can now be accessed.
                 //MessageBox.Show($"The service is ready at {baseAddress}.", "HOST");
-                tbMainWindow.Text = $"The service host is ready at {baseAddress}";
+                _tbFromMainWindow.Text = $"The service host is ready at {baseAddress}";
             }
             catch (TimeoutException timeProblem)
             {
                 Console.WriteLine(timeProblem.Message);
                 Console.ReadLine();
-                tbMainWindow.Text = timeProblem.Message;
+                _tbFromMainWindow.Text = timeProblem.Message;
             }
             catch (CommunicationException commProblem)
             {
                 Console.WriteLine(commProblem.Message);
                 Console.ReadLine();
-                tbMainWindow.Text = commProblem.Message;
+                _tbFromMainWindow.Text = commProblem.Message;
             }
             catch (Exception ex)
             {
                 // Logging
                 Console.WriteLine(ex.Message);
-                tbMainWindow.Text = ex.Message;
+                _tbFromMainWindow.Text = ex.Message;
             }
         }
 
@@ -165,7 +164,9 @@ namespace InstrumentLockServiceHost_WPF_namespace
             _server = new InstrumentLockServiceHost_WPF();
             // dgServerRequest is the DataGrid defined in MainWindow.xaml
             // tbMainWindow is the TextBlock defined in MainWindow.xaml
-            _server.initialize(dgServerRequest, tbMainWindow);
+            _server._tbFromMainWindow = tbMainWindow;
+            _server._dgFromMainWindow = dgServerRequest;
+            _server.initialize();
             // binding the WPF DataGrid to List<ClientRequestValue>
             dgServerRequest.ItemsSource = _server._clientRequestValue;
         }
