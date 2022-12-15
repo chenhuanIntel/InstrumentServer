@@ -51,6 +51,10 @@
     <None Include="App.config" />
   </ItemGroup>
   <ItemGroup>
+    <ProjectReference Include="..\InstrumentLockServiceHost\InstrumentLockServiceHost.csproj">
+      <Project>{3ff35aac-9f92-4671-980e-346b73beaecc}</Project>
+      <Name>InstrumentLockServiceHost</Name>
+    </ProjectReference>
     <ProjectReference Include="..\InstrumentLockService\InstrumentLockService.csproj">
       <Project>{e22bfb4c-2769-45a1-ac10-76cf2e8a4ad6}</Project>
       <Name>InstrumentLockService</Name>

@@ -6,10 +6,11 @@ using System.Text;
 using System.Threading;
 using System.Threading.Tasks;
 using InstrumentLockService;
+using InstrumentLockServiceHost;
 
 namespace InstrumentLockServiceHost_NET
 {
-    internal class Program
+    public class InstrumentLockServiceHostConsole : IInstrumentLockServiceHost
     {
         // https://stackoverflow.com/questions/40591726/can-i-get-set-data-into-wcf-service-by-host
         // in order to pass to host and show the client request value at host whenever there is a client request
@@ -28,11 +29,54 @@ namespace InstrumentLockServiceHost_NET
         private static InstrumentLockService.InstrumentLockService _instance;
 
         /// <summary>
+        /// Stop Host and dispose Instance
+        /// </summary>
+        public void Dispose()
+        {
+            try
+            {
+                if (_instance != null)
+                {
+                    _instance.Dispose();
+                }
+                _host.Close();
+            }
+            catch (Exception ex)
+            {
+                // Logging
+                Console.WriteLine(ex.Message);
+            }
+        }
+
+        /// <summary>
+        /// Host will handle the event from client here
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="e"></param>
+        public void HandleEventFromClient(object sender, CustomEventArgs e)
+        {
+            // do whatever you want here
+            // such as print the value on host console or WPF forms
+            var varValue = e.Value;
+            string userName = null;
+            // https://stackoverflow.com/questions/7312224/accessing-wcf-client-identity-on-service
+            if (ServiceSecurityContext.Current != null && ServiceSecurityContext.Current.PrimaryIdentity != null)
+            {
+                userName = ServiceSecurityContext.Current.PrimaryIdentity.Name;
+            }
+            Console.WriteLine($"WCF client userName = {userName}.");
+            Console.WriteLine($"\tinput A = {varValue.dInputA}.");
+            Console.WriteLine($"\tinput B = {varValue.dInputB}.");
+            Console.WriteLine($"\tservice = {varValue.sService}.");
+            Console.WriteLine($"\tresult Sum = {varValue.dResult}.");
+            Console.WriteLine($"\tCheckOutTime = {varValue.CheckOutTime}.");
+        }
+
+        /// <summary>
         /// define the global variable of WCF service instance
         /// and start the service host of the instance
         /// </summary>
-        /// <param name="args"></param>
-        protected void initialize(string[] args)
+        public void initialize()
         {
             try
             {
@@ -67,66 +111,23 @@ namespace InstrumentLockServiceHost_NET
                 Console.WriteLine(ex.Message);
             }
         }
-
-        /// <summary>
-        /// Host will handle the event from client here
-        /// </summary>
-        /// <param name="sender"></param>
-        /// <param name="e"></param>
-        public void HandleEventFromClient(object sender, CustomEventArgs e)
-        {
-            // do whatever you want here
-            // such as print the value on host console or WPF forms
-            var varValue = e.Value;
-            string userName = null;
-            // https://stackoverflow.com/questions/7312224/accessing-wcf-client-identity-on-service
-            if (ServiceSecurityContext.Current != null && ServiceSecurityContext.Current.PrimaryIdentity != null)
-            {
-                userName = ServiceSecurityContext.Current.PrimaryIdentity.Name;
-            }
-            Console.WriteLine($"WCF client userName = {userName}.");
-            Console.WriteLine($"\tinput A = {varValue.dInputA}.");
-            Console.WriteLine($"\tinput B = {varValue.dInputB}.");
-            Console.WriteLine($"\tservice = {varValue.sService}.");
-            Console.WriteLine($"\tresult Sum = {varValue.dResult}.");
-            Console.WriteLine($"\tCheckOutTime = {varValue.CheckOutTime}.");
-        }
-
-        /// <summary>
-        /// Stop Host and dispose Instance
-        /// </summary>
-        public void Dispose()
-        {
-            try
-            {
-                if (_instance != null)
-                {
-                    _instance.Dispose();
-                }
-                _host.Close();
-            }
-            catch (Exception ex)
-            {
-                // Logging
-                Console.WriteLine(ex.Message);
-            }
-        }
-
-
+    }
+    internal class Program
+    {
         /// <summary>
         /// console app Main()
         /// </summary>
         /// <param name="args"></param>
         static void Main(string[] args)
         {
-            var myProgram = new Program();
-            myProgram.initialize(args);
+            var myHost = new InstrumentLockServiceHostConsole();
+            myHost.initialize();
 
             // press ENTER to terminate
             Console.WriteLine("Press <ENTER> to terminate service.");
             Console.ReadLine();
 
-            myProgram.Dispose();
+            myHost.Dispose();
         }
     }
 }
