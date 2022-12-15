@@ -21,6 +21,12 @@ namespace TesterClient_WPF.InstrumentLockServiceClient {
         [System.ServiceModel.OperationContractAttribute(Action="http://tempuri.org/IInstrumentLockService/Add", ReplyAction="http://tempuri.org/IInstrumentLockService/AddResponse")]
         System.Threading.Tasks.Task<double> AddAsync(double a, double b);
         
+        [System.ServiceModel.OperationContractAttribute(Action="http://tempuri.org/IInstrumentLockService/AddAndDelay", ReplyAction="http://tempuri.org/IInstrumentLockService/AddAndDelayResponse")]
+        double AddAndDelay(double a, double b, int delayInSec);
+        
+        [System.ServiceModel.OperationContractAttribute(Action="http://tempuri.org/IInstrumentLockService/AddAndDelay", ReplyAction="http://tempuri.org/IInstrumentLockService/AddAndDelayResponse")]
+        System.Threading.Tasks.Task<double> AddAndDelayAsync(double a, double b, int delayInSec);
+        
         [System.ServiceModel.OperationContractAttribute(Action="http://tempuri.org/IInstrumentLockService/intDivide", ReplyAction="http://tempuri.org/IInstrumentLockService/intDivideResponse")]
         [System.ServiceModel.FaultContractAttribute(typeof(InstrumentLockService.MathFault), Action="http://tempuri.org/IInstrumentLockService/intDivideMathFaultFault", Name="MathFault", Namespace="http://schemas.datacontract.org/2004/07/InstrumentLockService")]
         int intDivide(double a, double b);
@@ -80,6 +86,14 @@ namespace TesterClient_WPF.InstrumentLockServiceClient {
         
         public System.Threading.Tasks.Task<double> AddAsync(double a, double b) {
             return base.Channel.AddAsync(a, b);
+        }
+        
+        public double AddAndDelay(double a, double b, int delayInSec) {
+            return base.Channel.AddAndDelay(a, b, delayInSec);
+        }
+        
+        public System.Threading.Tasks.Task<double> AddAndDelayAsync(double a, double b, int delayInSec) {
+            return base.Channel.AddAndDelayAsync(a, b, delayInSec);
         }
         
         public int intDivide(double a, double b) {

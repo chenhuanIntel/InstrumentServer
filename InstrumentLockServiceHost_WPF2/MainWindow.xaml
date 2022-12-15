@@ -17,6 +17,8 @@
                                     Binding="{Binding Path=dInputA}"/>
                 <DataGridTextColumn Header="B"
                                     Binding="{Binding Path=dInputB}"/>
+                <DataGridTextColumn Header="Delay"
+                                    Binding="{Binding Path=delayInSec}"/>
                 <DataGridTextColumn Header="Result"
                                     Binding="{Binding Path=dResult}"/>
                 <DataGridTextColumn Header="Service"

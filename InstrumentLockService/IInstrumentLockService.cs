@@ -21,6 +21,15 @@ namespace InstrumentLockService
         [OperationContract]
         double Add(double a, double b);
 
+        /// <summary>
+        /// demo/try-out WCF service
+        /// </summary>
+        /// <param name="a"></param>
+        /// <param name="b"></param>
+        /// <returns></returns>
+        [OperationContract]
+        double AddAndDelay(double a, double b, int delayInSec);
+
         // Arithmetic operations with the float and double types never throw an exception.
         // The result of arithmetic operations with those types can be one of special values that represent infinity and not-a-number:
         [OperationContract]

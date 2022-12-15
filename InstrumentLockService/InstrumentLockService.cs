@@ -4,6 +4,7 @@ using System.Linq;
 using System.Runtime.Serialization;
 using System.ServiceModel;
 using System.Text;
+using System.Threading;
 
 namespace InstrumentLockService
 {
@@ -21,6 +22,7 @@ namespace InstrumentLockService
     {
         public double dInputA { get; set; }
         public double dInputB { get; set; }
+        public int delayInSec { get; set; }
         public double dResult { get; set; }
         public string sService { get; set; }
         public string sClient { get; set; }
@@ -29,7 +31,16 @@ namespace InstrumentLockService
         public ClientRequestValue(double dInputA, double dInputB, double dResult, string sService, DateTime CheckOutTime)
         {
             this.dInputA = dInputA;
+            this.dInputB = dInputB;     
+            this.dResult = dResult;
+            this.sService = sService;
+            this.CheckOutTime = CheckOutTime;
+        }
+        public ClientRequestValue(double dInputA, double dInputB, int delayInSec, double dResult, string sService, DateTime CheckOutTime)
+        {
+            this.dInputA = dInputA;
             this.dInputB = dInputB;
+            this.delayInSec = delayInSec;
             this.dResult = dResult;
             this.sService = sService;
             this.CheckOutTime = CheckOutTime;
@@ -90,6 +101,25 @@ namespace InstrumentLockService
             double sum = a + b;
             // contruct the client request values to be sent to host
             var value = new ClientRequestValue(a, b, sum, "InstrumentLockService.Add", DateTime.Now);
+            // each WCF service fires the event EventFromClient with the values from WCF client
+            EventFromClient?.Invoke(this, new CustomEventArgs(value));
+            return sum;
+        }
+
+        /// <summary>
+        /// demo/try-out method between client and server
+        /// </summary>
+        /// <param name="a"></param>
+        /// <param name="b"></param>
+        /// <returns></returns>
+        public double AddAndDelay(double a, double b, int delayInSec)
+        {
+            Console.WriteLine("InstrumentLockService.AddAndDelay");
+            double sum = a + b;
+            // delay to hold the mutex
+            Thread.Sleep(delayInSec*1000);
+            // contruct the client request values to be sent to host
+            var value = new ClientRequestValue(a, b, delayInSec, sum, "InstrumentLockService.AddAndDelay", DateTime.Now);
             // each WCF service fires the event EventFromClient with the values from WCF client
             EventFromClient?.Invoke(this, new CustomEventArgs(value));
             return sum;

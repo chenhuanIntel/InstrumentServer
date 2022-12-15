@@ -21,6 +21,7 @@ namespace TesterClient_WPF
     public class Service
     {
         public static string Add => "Add";
+        public static string AddAndDelay => "AddAndDelay";
         public static string IntDivide => "IntDivide";
     }
     /// <summary>
@@ -40,12 +41,18 @@ namespace TesterClient_WPF
             InstrumentLockServiceClient.InstrumentLockServiceClient obj = new InstrumentLockServiceClient.InstrumentLockServiceClient();
             double a = double.Parse(aTextBox.Text);
             double b = double.Parse(bTextBox.Text);
+            int delay = Int32.Parse(delayTextBox.Text);
 
             try
             {
                 if (cmbService.SelectedItem == typeof(Service).GetProperty(Service.Add))
                 {
                     double sum = obj.Add(a, b);
+                    tbOut.Text = $"Add({a}, {b}) = {sum.ToString()}";
+                }
+                else if (cmbService.SelectedItem == typeof(Service).GetProperty(Service.AddAndDelay))
+                {
+                    double sum = obj.AddAndDelay(a, b, delay);
                     tbOut.Text = $"Add({a}, {b}) = {sum.ToString()}";
                 }
                 else if (cmbService.SelectedItem == typeof(Service).GetProperty(Service.IntDivide))

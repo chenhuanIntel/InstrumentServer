@@ -29,6 +29,8 @@
 
         <Label Content="Service" HorizontalAlignment="Left" Height="25" Margin="225,114,0,0" VerticalAlignment="Top" Width="70" Grid.ColumnSpan="2"/>
         <TextBlock x:Name="tbOut" Grid.ColumnSpan="2" HorizontalAlignment="Left" Height="95" Margin="140,264,0,0" TextWrapping="Wrap" Text="TextBlock" VerticalAlignment="Top" Width="470" TextAlignment="Center"/>
+        <TextBox x:Name="delayTextBox" HorizontalAlignment="Left" Height="30" Margin="330,44,0,0" TextWrapping="Wrap" Text="0" VerticalAlignment="Top" Width="80" Grid.Column="1"/>
+        <Label Content="delay=" HorizontalAlignment="Left" Height="35" Margin="270,44,0,0" VerticalAlignment="Top" Width="50" Grid.Column="1"/>
 
     </Grid>
 </Window>
