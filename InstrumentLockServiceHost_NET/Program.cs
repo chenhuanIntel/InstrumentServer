@@ -81,8 +81,8 @@ namespace InstrumentLockServiceHost_NET
 
                 // open ServiceHost of the above defined instance
                 Uri baseAddress = new Uri("http://localhost:8080/");
-                _host = new ServiceHost(_instance, baseAddress);
-                //_host = new ServiceHost(typeof(InstrumentLockService.InstrumentLockService), baseAddress);
+                //_host = new ServiceHost(_instance, baseAddress);
+                _host = new ServiceHost(typeof(InstrumentLockService.InstrumentLockService), baseAddress);
 
 
                 //// In order to use one of the ServiceHost constructors that takes a service instance, the InstanceContextMode of the service must be set to InstanceContextMode.Single.  This can be configured via the ServiceBehaviorAttribute.  Otherwise, please consider using the ServiceHost constructors that take a Type argument.
