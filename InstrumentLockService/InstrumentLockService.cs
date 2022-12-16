@@ -26,33 +26,48 @@ namespace InstrumentLockService
         public double dResult { get; set; }
         public string sService { get; set; }
         public string sClient { get; set; }
-        public DateTime CheckOutTime { get; set; }
+        public DateTime ServiceStart { get; set; }
+        public DateTime ServiceFinish { get; set; }
 
-        public ClientRequestValue(double dInputA, double dInputB, double dResult, string sService, DateTime CheckOutTime)
+        public ClientRequestValue(double dInputA, double dInputB, double dResult, string sService, DateTime ServiceStart, DateTime ServiceFinish)
         {
             this.dInputA = dInputA;
             this.dInputB = dInputB;     
             this.dResult = dResult;
             this.sService = sService;
-            this.CheckOutTime = CheckOutTime;
+            this.ServiceStart = ServiceStart;
+            this.ServiceFinish = ServiceFinish;
         }
-        public ClientRequestValue(double dInputA, double dInputB, int delayInSec, double dResult, string sService, DateTime CheckOutTime)
-        {
-            this.dInputA = dInputA;
-            this.dInputB = dInputB;
-            this.delayInSec = delayInSec;
-            this.dResult = dResult;
-            this.sService = sService;
-            this.CheckOutTime = CheckOutTime;
-        }
-        public ClientRequestValue(double dInputA, double dInputB, double dResult, string sService, string sClient, DateTime CheckOutTime)
+        public ClientRequestValue(double dInputA, double dInputB, double dResult, string sService, string sClient, DateTime ServiceStart, DateTime ServiceFinish)
         {
             this.dInputA = dInputA;
             this.dInputB = dInputB;
             this.dResult = dResult;
             this.sService = sService;
             this.sClient = sClient;
-            this.CheckOutTime = CheckOutTime;
+            this.ServiceStart = ServiceStart;
+            this.ServiceFinish = ServiceFinish;
+        }
+        public ClientRequestValue(double dInputA, double dInputB, int delayInSec, double dResult, string sService, DateTime ServiceStart, DateTime ServiceFinish)
+        {
+            this.dInputA = dInputA;
+            this.dInputB = dInputB;
+            this.delayInSec = delayInSec;
+            this.dResult = dResult;
+            this.sService = sService;
+            this.ServiceStart = ServiceStart;
+            this.ServiceFinish = ServiceFinish;
+        }
+        public ClientRequestValue(double dInputA, double dInputB, int delayInSec, double dResult, string sService, string sClient, DateTime ServiceStart, DateTime ServiceFinish)
+        {
+            this.dInputA = dInputA;
+            this.dInputB = dInputB;
+            this.delayInSec = delayInSec;
+            this.dResult = dResult;
+            this.sService = sService;
+            this.sClient = sClient;
+            this.ServiceStart = ServiceStart;
+            this.ServiceFinish = ServiceFinish;
         }
     }
 
@@ -73,13 +88,18 @@ namespace InstrumentLockService
     //[ServiceBehavior(InstanceContextMode = InstanceContextMode.PerSession)]
 
     // PerCall creates a new instance for each operation.
-    //[ServiceBehavior(InstanceContextMode = InstanceContextMode.PerCall)]
+    [ServiceBehavior(InstanceContextMode = InstanceContextMode.PerCall)]
 
     // Singleton creates a single instance for application lifetime.
-    [ServiceBehavior(InstanceContextMode = InstanceContextMode.Single)]
+    //[ServiceBehavior(InstanceContextMode = InstanceContextMode.Single)]
     // NOTE: You can use the "Rename" command on the "Refactor" menu to change the class name "Service1" in both code and config file together.
     public class InstrumentLockService : IInstrumentLockService
     {
+        // Create a new Mutex. The creating thread does not own the mutex.
+        private static Mutex mutexLockAdd = new Mutex();
+        private static Mutex mutexLockAddAndDelay = new Mutex();
+        private static Mutex mutexLockintDivide = new Mutex();
+
         /// <summary>
         /// WCF service will fire EventFromClient togerther with the values sent from WCF client
         /// </summary>
@@ -95,12 +115,28 @@ namespace InstrumentLockService
         /// <param name="a"></param>
         /// <param name="b"></param>
         /// <returns></returns>
-        public double Add(double a, double b)
+        public double Add(double a, double b, string ThreadID)
         {
-            Console.WriteLine("InstrumentLockService.Add");
-            double sum = a + b;
+            double sum = -999;
+            DateTime ServiceStart = DateTime.Now;
+            DateTime ServiceFinish;
+            string sClient = ThreadID;
+            string sService = "InstrumentLockService.null";
+            if (mutexLockAdd.WaitOne(10))
+            {   
+                Console.WriteLine("InstrumentLockService.Add");
+                sService = "InstrumentLockService.Add";
+                sum = a + b;
+                // Release the Mutex.
+                mutexLockAdd.ReleaseMutex();
+            }
+            else
+            {
+                Console.WriteLine($"{sClient} will not acquire the mutex");
+            }
+            ServiceFinish = DateTime.Now;
             // contruct the client request values to be sent to host
-            var value = new ClientRequestValue(a, b, sum, "InstrumentLockService.Add", DateTime.Now);
+            var value = new ClientRequestValue(a, b, sum, sService, sClient, ServiceStart, ServiceFinish);
             // each WCF service fires the event EventFromClient with the values from WCF client
             EventFromClient?.Invoke(this, new CustomEventArgs(value));
             return sum;
@@ -112,14 +148,30 @@ namespace InstrumentLockService
         /// <param name="a"></param>
         /// <param name="b"></param>
         /// <returns></returns>
-        public double AddAndDelay(double a, double b, int delayInSec)
+        public double AddAndDelay(double a, double b, int delayInSec, string ThreadID)
         {
-            Console.WriteLine("InstrumentLockService.AddAndDelay");
-            double sum = a + b;
-            // delay to hold the mutex
-            Thread.Sleep(delayInSec*1000);
+            double sum = -999;
+            DateTime ServiceStart = DateTime.Now;
+            DateTime ServiceFinish;
+            string sClient = ThreadID;
+            string sService = "InstrumentLockService.null";
+            if (mutexLockAddAndDelay.WaitOne(10))
+            {
+                Console.WriteLine($"{ThreadID} InstrumentLockService.AddAndDelay");
+                sService = "InstrumentLockService.AddAndDelay";
+                sum = a + b;
+                // delay to hold the mutex
+                Thread.Sleep(delayInSec * 1000);
+                // Release the Mutex.
+                mutexLockAddAndDelay.ReleaseMutex();
+            }
+            else
+            {
+                Console.WriteLine($"{sClient} will not acquire the mutex");
+            }      
+            ServiceFinish = DateTime.Now;
             // contruct the client request values to be sent to host
-            var value = new ClientRequestValue(a, b, delayInSec, sum, "InstrumentLockService.AddAndDelay", DateTime.Now);
+            var value = new ClientRequestValue(a, b, delayInSec, sum, sService, sClient, ServiceStart, ServiceFinish);
             // each WCF service fires the event EventFromClient with the values from WCF client
             EventFromClient?.Invoke(this, new CustomEventArgs(value));
             return sum;
@@ -133,30 +185,48 @@ namespace InstrumentLockService
         /// <param name="a"></param>
         /// <param name="b"></param>
         /// <returns></returns>
-        public int intDivide(double a, double b)
+        public int intDivide(double a, double b, string ThreadID)
         {
-            try
+            int intDiv = -999;
+            DateTime ServiceStart = DateTime.Now;
+            DateTime ServiceFinish;
+            string sClient = ThreadID;
+            string sService = "InstrumentLockService.null";
+            if (mutexLockintDivide.WaitOne(10))
             {
-                Console.WriteLine("service intDivide");
-                int intDiv = (int)a / (int)b;
-                // contruct the client request values to be sent to host
-                var value = new ClientRequestValue(a, b, intDiv, "InstrumentLockService.intDivide", DateTime.Now);
-                // each WCF service fires the event EventFromClient with the values from WCF client
-                EventFromClient?.Invoke(this, new CustomEventArgs(value));
-                return intDiv;
+                try
+                {
+                    Console.WriteLine("InstrumentLockService.intDivide");
+                    intDiv = (int)a / (int)b;
+                    // Release the Mutex.
+                    mutexLockintDivide.ReleaseMutex();
+                }
+                catch (DivideByZeroException e)
+                {
+                    // Release the Mutex.
+                    mutexLockintDivide.ReleaseMutex();
+                    Console.WriteLine("exception=", e);
+                    ServiceFinish = DateTime.Now;
+                    // contruct the client request values to be sent to host
+                    var valueEx = new ClientRequestValue(a, b, a / b, "InstrumentLockService.intDivide" + " " + e.Message, sClient, ServiceStart, ServiceFinish);
+                    // each WCF service fires the event EventFromClient with the values from WCF client
+                    EventFromClient?.Invoke(this, new CustomEventArgs(valueEx));
+                    MathFault mf = new MathFault();
+                    mf.Operation = "division";
+                    mf.ProblemType = "divide by zero";
+                    throw new FaultException<MathFault>(mf, new FaultReason("Divide_By_Zero_Exception"));
+                }
             }
-            catch (DivideByZeroException e)
+            else
             {
-                Console.WriteLine("exception=", e);
-                // contruct the client request values to be sent to host
-                var value = new ClientRequestValue(a, b, a/b, "InstrumentLockService.intDivide" + " " + e.Message, DateTime.Now);
-                // each WCF service fires the event EventFromClient with the values from WCF client
-                EventFromClient?.Invoke(this, new CustomEventArgs(value));
-                MathFault mf = new MathFault();
-                mf.Operation = "division";
-                mf.ProblemType = "divide by zero";
-                throw new FaultException<MathFault>(mf, new FaultReason("Divide_By_Zero_Exception"));
+                Console.WriteLine($"{sClient} will not acquire the mutex");
             }
+            ServiceFinish = DateTime.Now;
+            // contruct the client request values to be sent to host
+            var value = new ClientRequestValue(a, b, intDiv, sService, sClient, ServiceStart, ServiceFinish);
+            // each WCF service fires the event EventFromClient with the values from WCF client
+            EventFromClient?.Invoke(this, new CustomEventArgs(value));
+            return intDiv;
         }
 
         /// <summary>

@@ -49,6 +49,9 @@ namespace InstrumentLockServiceHost_WPF_namespace
         /// a varibale to access the WPF DataGrid defined in MainWindow class
         /// </summary>
         public DataGrid _dgFromMainWindow { get; set; }
+        /// <summary>
+        /// a varibale to access the WPF TextBlock defined in MainWindow class
+        /// </summary>
         public TextBlock _tbFromMainWindow { get; set; }
 
 
@@ -113,14 +116,8 @@ namespace InstrumentLockServiceHost_WPF_namespace
             // do whatever you want here
             // such as print the value on host console or WPF forms
             var varValue = e.Value;
-            string userName = null;
-            // https://stackoverflow.com/questions/7312224/accessing-wcf-client-identity-on-service
-            if (ServiceSecurityContext.Current != null && ServiceSecurityContext.Current.PrimaryIdentity != null)
-            {
-                userName = ServiceSecurityContext.Current.PrimaryIdentity.Name;
-            }
             // handling the event by adding client request value to the list; and it will trigger WPF to add one more column after refresh
-            _clientRequestValue.Add(new ClientRequestValue(dInputA: varValue.dInputA, dInputB: varValue.dInputB, dResult: varValue.dResult, sService: varValue.sService, sClient: userName, CheckOutTime: varValue.CheckOutTime));
+            _clientRequestValue.Add(new ClientRequestValue(dInputA: varValue.dInputA, dInputB: varValue.dInputB, dResult: varValue.dResult, sService: varValue.sService, sClient: varValue.sClient, ServiceStart: varValue.ServiceStart, ServiceFinish: varValue.ServiceFinish));
             // must refresh; otherwise ItemSource will not be updated when the corresponding list (such as the above list) is updated
             // https://stackoverflow.com/questions/7059070/why-does-the-datagrid-not-update-when-the-itemssource-is-changed
             _dgFromMainWindow.Items.Refresh();

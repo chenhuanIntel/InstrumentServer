@@ -19,7 +19,7 @@ namespace InstrumentLockService
         /// <param name="b"></param>
         /// <returns></returns>
         [OperationContract]
-        double Add(double a, double b);
+        double Add(double a, double b, string ThreadID);
 
         /// <summary>
         /// demo/try-out WCF service
@@ -28,13 +28,13 @@ namespace InstrumentLockService
         /// <param name="b"></param>
         /// <returns></returns>
         [OperationContract]
-        double AddAndDelay(double a, double b, int delayInSec);
+        double AddAndDelay(double a, double b, int delayInSec, string ThreadID);
 
         // Arithmetic operations with the float and double types never throw an exception.
         // The result of arithmetic operations with those types can be one of special values that represent infinity and not-a-number:
         [OperationContract]
         [FaultContract(typeof(MathFault))]
-        int intDivide(double a, double b);
+        int intDivide(double a, double b, string ThreadID);
 
         /// <summary>
         /// getInstrumentLock() of an instrument

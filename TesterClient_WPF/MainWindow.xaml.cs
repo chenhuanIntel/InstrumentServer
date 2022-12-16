@@ -1,8 +1,10 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Diagnostics;
 using System.Linq;
 using System.ServiceModel;
 using System.Text;
+using System.Threading;
 using System.Threading.Tasks;
 using System.Windows;
 using System.Windows.Controls;
@@ -42,17 +44,18 @@ namespace TesterClient_WPF
             double a = double.Parse(aTextBox.Text);
             double b = double.Parse(bTextBox.Text);
             int delay = Int32.Parse(delayTextBox.Text);
+            string ThreadID = Process.GetCurrentProcess().Id.ToString();
 
             try
             {
                 if (cmbService.SelectedItem == typeof(Service).GetProperty(Service.Add))
                 {
-                    double sum = obj.Add(a, b);
+                    double sum = obj.Add(a, b, ThreadID);
                     tbOut.Text = $"Add({a}, {b}) = {sum.ToString()}";
                 }
                 else if (cmbService.SelectedItem == typeof(Service).GetProperty(Service.AddAndDelay))
                 {
-                    double sum = obj.AddAndDelay(a, b, delay);
+                    double sum = obj.AddAndDelay(a, b, delay, ThreadID);
                     tbOut.Text = $"Add({a}, {b}) = {sum.ToString()}";
                 }
                 else if (cmbService.SelectedItem == typeof(Service).GetProperty(Service.IntDivide))
@@ -60,7 +63,7 @@ namespace TesterClient_WPF
                     try
                     {
                         tbOut.Text = $"intDivide({a}, {b})";
-                        int div0 = obj.intDivide(a, b);
+                        int div0 = obj.intDivide(a, b, ThreadID);
                         tbOut.Text = tbOut.Text + $" = {div0.ToString()}";
                     }
                     catch (FaultException<MathFault> error)

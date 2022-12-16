@@ -25,8 +25,10 @@
                                     Binding="{Binding Path=sService}"/>
                 <DataGridTextColumn Header="Client"
                                     Binding="{Binding Path=sClient}"/>
-                <DataGridTextColumn Header="CheckedOutTime"
-                                    Binding="{Binding Path=CheckOutTime}"/>
+                <DataGridTextColumn Header="ServiceStart"
+                                    Binding="{Binding Path=ServiceStart}"/>
+                <DataGridTextColumn Header="ServiceFinish"
+                                    Binding="{Binding Path=ServiceFinish}"/>
             </DataGrid.Columns>
         </DataGrid>
 

@@ -58,18 +58,13 @@ namespace InstrumentLockServiceHost_NET
             // do whatever you want here
             // such as print the value on host console or WPF forms
             var varValue = e.Value;
-            string userName = null;
-            // https://stackoverflow.com/questions/7312224/accessing-wcf-client-identity-on-service
-            if (ServiceSecurityContext.Current != null && ServiceSecurityContext.Current.PrimaryIdentity != null)
-            {
-                userName = ServiceSecurityContext.Current.PrimaryIdentity.Name;
-            }
-            Console.WriteLine($"WCF client userName = {userName}.");
+            Console.WriteLine($"WCF client thread = {varValue.sClient}.");
             Console.WriteLine($"\tinput A = {varValue.dInputA}.");
             Console.WriteLine($"\tinput B = {varValue.dInputB}.");
             Console.WriteLine($"\tservice = {varValue.sService}.");
             Console.WriteLine($"\tresult Sum = {varValue.dResult}.");
-            Console.WriteLine($"\tCheckOutTime = {varValue.CheckOutTime}.");
+            Console.WriteLine($"\tServiceStart = {varValue.ServiceStart}.");
+            Console.WriteLine($"\tServiceFinish = {varValue.ServiceFinish}.");
         }
 
         /// <summary>
@@ -87,6 +82,9 @@ namespace InstrumentLockServiceHost_NET
                 // open ServiceHost of the above defined instance
                 Uri baseAddress = new Uri("http://localhost:8080/");
                 _host = new ServiceHost(_instance, baseAddress);
+                //_host = new ServiceHost(typeof(InstrumentLockService.InstrumentLockService), baseAddress);
+
+
                 //// In order to use one of the ServiceHost constructors that takes a service instance, the InstanceContextMode of the service must be set to InstanceContextMode.Single.  This can be configured via the ServiceBehaviorAttribute.  Otherwise, please consider using the ServiceHost constructors that take a Type argument.
                 /// instead of the following two lines, we now define the ServiceBehaviorAttribute before its class defnition in InstrumentLockService.cs
                 //var behavior = _host.Description.Behaviors.Find<ServiceBehaviorAttribute>();

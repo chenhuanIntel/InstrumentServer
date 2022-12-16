@@ -46,22 +46,22 @@ namespace InstrumentLockServiceHost_WPF2
         /// a varibale to access the WPF DataGrid defined in MainWindow class
         /// </summary>
         public DataGrid _dgFromMainWindow { get; set; }
-
+        /// <summary>
+        /// a varibale to access the WPF TextBlock defined in MainWindow class
+        /// </summary>
+        public TextBlock _tbFromMainWindow { get; set; }
 
 
         /// <summary>
         /// define the global variable of WCF service instance
         /// and start the service host of the instance
         /// </summary>
-        /// <param name="dgServerRequest">DataGrid defined at MainWindow</param>
-        /// <param name="tbMainWindow">TestBlock defined at MainWindow</param>
-        public void initialize(DataGrid dgServerRequest, TextBlock tbMainWindow)
+        public void initialize()
         {
             try
             {
                 // To assign InstrumentLockServiceHost_WPF.dgFromMainWindow = MainWindow.dgServerRequest
                 // i.e. pass the WPF DataGrid of the MainWindow class to this InstrumentLockServiceHost_WPF class
-                _dgFromMainWindow = dgServerRequest;
                 _clientRequestValue = new List<ClientRequestValue>();
 
                 // define the WCF service instance and event handler
@@ -71,6 +71,7 @@ namespace InstrumentLockServiceHost_WPF2
                 // open ServiceHost of the above defined instance
                 Uri baseAddress = new Uri("http://localhost:8080/");
                 //Uri baseAddress = new Uri("net.tcp://localhost:8001/");
+                //_host = new ServiceHost(typeof(InstrumentLockService.InstrumentLockService), baseAddress);
                 _host = new ServiceHost(_instance, baseAddress);
                 //// In order to use one of the ServiceHost constructors that takes a service instance, the InstanceContextMode of the service must be set to InstanceContextMode.Single.  This can be configured via the ServiceBehaviorAttribute.  Otherwise, please consider using the ServiceHost constructors that take a Type argument.
                 /// instead of the following two lines, we now define the ServiceBehaviorAttribute before its class defnition in InstrumentLockService.cs
@@ -79,25 +80,25 @@ namespace InstrumentLockServiceHost_WPF2
                 _host.Open();
                 // The service can now be accessed.
                 //MessageBox.Show($"The service is ready at {baseAddress}.", "HOST");
-                tbMainWindow.Text = $"The service host is ready at {baseAddress}";
+                _tbFromMainWindow.Text = $"The service host is ready at {baseAddress}";
             }
             catch (TimeoutException timeProblem)
             {
                 Console.WriteLine(timeProblem.Message);
                 Console.ReadLine();
-                tbMainWindow.Text = timeProblem.Message;
+                _tbFromMainWindow.Text = timeProblem.Message;
             }
             catch (CommunicationException commProblem)
             {
                 Console.WriteLine(commProblem.Message);
                 Console.ReadLine();
-                tbMainWindow.Text = commProblem.Message;
+                _tbFromMainWindow.Text = commProblem.Message;
             }
             catch (Exception ex)
             {
                 // Logging
                 Console.WriteLine(ex.Message);
-                tbMainWindow.Text = ex.Message;
+                _tbFromMainWindow.Text = ex.Message;
             }
         }
 
@@ -112,14 +113,8 @@ namespace InstrumentLockServiceHost_WPF2
             // do whatever you want here
             // such as print the value on host console or WPF forms
             var varValue = e.Value;
-            string userName = null;
-            // https://stackoverflow.com/questions/7312224/accessing-wcf-client-identity-on-service
-            if (ServiceSecurityContext.Current != null && ServiceSecurityContext.Current.PrimaryIdentity != null)
-            {
-                userName = ServiceSecurityContext.Current.PrimaryIdentity.Name;
-            }
             // handling the event by adding client request value to the list; and it will trigger WPF to add one more column after refresh
-            _clientRequestValue.Add(new ClientRequestValue(dInputA: varValue.dInputA, dInputB: varValue.dInputB, dResult: varValue.dResult, sService: varValue.sService, sClient: userName, CheckOutTime: varValue.CheckOutTime));
+            _clientRequestValue.Add(new ClientRequestValue(dInputA: varValue.dInputA, dInputB: varValue.dInputB, dResult: varValue.dResult, sService: varValue.sService, sClient: varValue.sClient, ServiceStart: varValue.ServiceStart, ServiceFinish: varValue.ServiceFinish));
             // must refresh; otherwise ItemSource will not be updated when the corresponding list (such as the above list) is updated
             // https://stackoverflow.com/questions/7059070/why-does-the-datagrid-not-update-when-the-itemssource-is-changed
             _dgFromMainWindow.Items.Refresh();
@@ -145,11 +140,6 @@ namespace InstrumentLockServiceHost_WPF2
                 Console.WriteLine(ex.Message);
             }
         }
-
-        public void initialize()
-        {
-            throw new NotImplementedException();
-        }
     }
 
     public partial class MainWindow : Window
@@ -168,7 +158,9 @@ namespace InstrumentLockServiceHost_WPF2
             _server = new InstrumentLockServiceHost_WPF();
             // dgServerRequest is the DataGrid defined in MainWindow.xaml
             // tbMainWindow is the TextBlock defined in MainWindow.xaml
-            _server.initialize(dgServerRequest, tbMainWindow);
+            _server._tbFromMainWindow = tbMainWindow;
+            _server._dgFromMainWindow = dgServerRequest;
+            _server.initialize();
             // binding the WPF DataGrid to List<ClientRequestValue>
             dgServerRequest.ItemsSource = _server._clientRequestValue;
         }

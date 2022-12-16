@@ -5,6 +5,7 @@
       <xs:sequence>
         <xs:element minOccurs="0" name="a" type="xs:double" />
         <xs:element minOccurs="0" name="b" type="xs:double" />
+        <xs:element minOccurs="0" name="ThreadID" nillable="true" type="xs:string" />
       </xs:sequence>
     </xs:complexType>
   </xs:element>
@@ -21,6 +22,7 @@
         <xs:element minOccurs="0" name="a" type="xs:double" />
         <xs:element minOccurs="0" name="b" type="xs:double" />
         <xs:element minOccurs="0" name="delayInSec" type="xs:int" />
+        <xs:element minOccurs="0" name="ThreadID" nillable="true" type="xs:string" />
       </xs:sequence>
     </xs:complexType>
   </xs:element>
@@ -36,6 +38,7 @@
       <xs:sequence>
         <xs:element minOccurs="0" name="a" type="xs:double" />
         <xs:element minOccurs="0" name="b" type="xs:double" />
+        <xs:element minOccurs="0" name="ThreadID" nillable="true" type="xs:string" />
       </xs:sequence>
     </xs:complexType>
   </xs:element>

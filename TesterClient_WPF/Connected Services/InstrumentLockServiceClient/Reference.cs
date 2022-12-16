@@ -16,23 +16,23 @@ namespace TesterClient_WPF.InstrumentLockServiceClient {
     public interface IInstrumentLockService {
         
         [System.ServiceModel.OperationContractAttribute(Action="http://tempuri.org/IInstrumentLockService/Add", ReplyAction="http://tempuri.org/IInstrumentLockService/AddResponse")]
-        double Add(double a, double b);
+        double Add(double a, double b, string ThreadID);
         
         [System.ServiceModel.OperationContractAttribute(Action="http://tempuri.org/IInstrumentLockService/Add", ReplyAction="http://tempuri.org/IInstrumentLockService/AddResponse")]
-        System.Threading.Tasks.Task<double> AddAsync(double a, double b);
+        System.Threading.Tasks.Task<double> AddAsync(double a, double b, string ThreadID);
         
         [System.ServiceModel.OperationContractAttribute(Action="http://tempuri.org/IInstrumentLockService/AddAndDelay", ReplyAction="http://tempuri.org/IInstrumentLockService/AddAndDelayResponse")]
-        double AddAndDelay(double a, double b, int delayInSec);
+        double AddAndDelay(double a, double b, int delayInSec, string ThreadID);
         
         [System.ServiceModel.OperationContractAttribute(Action="http://tempuri.org/IInstrumentLockService/AddAndDelay", ReplyAction="http://tempuri.org/IInstrumentLockService/AddAndDelayResponse")]
-        System.Threading.Tasks.Task<double> AddAndDelayAsync(double a, double b, int delayInSec);
+        System.Threading.Tasks.Task<double> AddAndDelayAsync(double a, double b, int delayInSec, string ThreadID);
         
         [System.ServiceModel.OperationContractAttribute(Action="http://tempuri.org/IInstrumentLockService/intDivide", ReplyAction="http://tempuri.org/IInstrumentLockService/intDivideResponse")]
         [System.ServiceModel.FaultContractAttribute(typeof(InstrumentLockService.MathFault), Action="http://tempuri.org/IInstrumentLockService/intDivideMathFaultFault", Name="MathFault", Namespace="http://schemas.datacontract.org/2004/07/InstrumentLockService")]
-        int intDivide(double a, double b);
+        int intDivide(double a, double b, string ThreadID);
         
         [System.ServiceModel.OperationContractAttribute(Action="http://tempuri.org/IInstrumentLockService/intDivide", ReplyAction="http://tempuri.org/IInstrumentLockService/intDivideResponse")]
-        System.Threading.Tasks.Task<int> intDivideAsync(double a, double b);
+        System.Threading.Tasks.Task<int> intDivideAsync(double a, double b, string ThreadID);
         
         [System.ServiceModel.OperationContractAttribute(Action="http://tempuri.org/IInstrumentLockService/getInstrumentLock", ReplyAction="http://tempuri.org/IInstrumentLockService/getInstrumentLockResponse")]
         void getInstrumentLock();
@@ -80,28 +80,28 @@ namespace TesterClient_WPF.InstrumentLockServiceClient {
                 base(binding, remoteAddress) {
         }
         
-        public double Add(double a, double b) {
-            return base.Channel.Add(a, b);
+        public double Add(double a, double b, string ThreadID) {
+            return base.Channel.Add(a, b, ThreadID);
         }
         
-        public System.Threading.Tasks.Task<double> AddAsync(double a, double b) {
-            return base.Channel.AddAsync(a, b);
+        public System.Threading.Tasks.Task<double> AddAsync(double a, double b, string ThreadID) {
+            return base.Channel.AddAsync(a, b, ThreadID);
         }
         
-        public double AddAndDelay(double a, double b, int delayInSec) {
-            return base.Channel.AddAndDelay(a, b, delayInSec);
+        public double AddAndDelay(double a, double b, int delayInSec, string ThreadID) {
+            return base.Channel.AddAndDelay(a, b, delayInSec, ThreadID);
         }
         
-        public System.Threading.Tasks.Task<double> AddAndDelayAsync(double a, double b, int delayInSec) {
-            return base.Channel.AddAndDelayAsync(a, b, delayInSec);
+        public System.Threading.Tasks.Task<double> AddAndDelayAsync(double a, double b, int delayInSec, string ThreadID) {
+            return base.Channel.AddAndDelayAsync(a, b, delayInSec, ThreadID);
         }
         
-        public int intDivide(double a, double b) {
-            return base.Channel.intDivide(a, b);
+        public int intDivide(double a, double b, string ThreadID) {
+            return base.Channel.intDivide(a, b, ThreadID);
         }
         
-        public System.Threading.Tasks.Task<int> intDivideAsync(double a, double b) {
-            return base.Channel.intDivideAsync(a, b);
+        public System.Threading.Tasks.Task<int> intDivideAsync(double a, double b, string ThreadID) {
+            return base.Channel.intDivideAsync(a, b, ThreadID);
         }
         
         public void getInstrumentLock() {

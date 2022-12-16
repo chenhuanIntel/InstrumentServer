@@ -4,7 +4,6 @@
         xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:InstrumentLockServiceHost_WPF_namespace"   
-        xmlns:y="clr-namespace:InstrumentLockServiceHost"  
         mc:Ignorable="d"
         Title="Instrument Service Host" Height="450" Width="800">
 
@@ -25,8 +24,8 @@
                                     Binding="{Binding Path=sService}"/>
                 <DataGridTextColumn Header="Client"
                                     Binding="{Binding Path=sClient}"/>
-                <DataGridTextColumn Header="CheckedOutTime"
-                                    Binding="{Binding Path=CheckOutTime}"/>
+                <DataGridTextColumn Header="ServiceStart"
+                                    Binding="{Binding Path=ServiceStart}"/>
             </DataGrid.Columns>
         </DataGrid>
         

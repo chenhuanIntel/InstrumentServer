@@ -7,8 +7,6 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "InstrumentLockService", "In
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "InstrumentLockServiceHost_NET", "InstrumentLockServiceHost_NET\InstrumentLockServiceHost_NET.csproj", "{EA726965-BDBC-4F67-93D2-67C6A23B39D8}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "InstrumentLockServiceHost_WPF", "InstrumentLockServiceHost_WPF\InstrumentLockServiceHost_WPF.csproj", "{7BA026F8-3EB8-46C4-B3B8-81386E454CB3}"
-EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "TesterClient_WPF", "TesterClient_WPF\TesterClient_WPF.csproj", "{6C8B8EA3-FB8F-45E1-A078-742AD24C48C2}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "InstrumentLockServiceHost", "InstrumentLockServiceHost\InstrumentLockServiceHost.csproj", "{3FF35AAC-9F92-4671-980E-346B73BEAECC}"
@@ -29,10 +27,6 @@ Global
 		{EA726965-BDBC-4F67-93D2-67C6A23B39D8}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{EA726965-BDBC-4F67-93D2-67C6A23B39D8}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{EA726965-BDBC-4F67-93D2-67C6A23B39D8}.Release|Any CPU.Build.0 = Release|Any CPU
-		{7BA026F8-3EB8-46C4-B3B8-81386E454CB3}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{7BA026F8-3EB8-46C4-B3B8-81386E454CB3}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{7BA026F8-3EB8-46C4-B3B8-81386E454CB3}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{7BA026F8-3EB8-46C4-B3B8-81386E454CB3}.Release|Any CPU.Build.0 = Release|Any CPU
 		{6C8B8EA3-FB8F-45E1-A078-742AD24C48C2}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
 		{6C8B8EA3-FB8F-45E1-A078-742AD24C48C2}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{6C8B8EA3-FB8F-45E1-A078-742AD24C48C2}.Release|Any CPU.ActiveCfg = Release|Any CPU
