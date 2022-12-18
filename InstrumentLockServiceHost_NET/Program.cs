@@ -26,7 +26,7 @@ namespace InstrumentLockServiceHost_NET
         /// <summary>
         /// a global variable of WCF service instance to work with event from client.
         /// </summary>
-        private static InstrumentLockService.InstrumentLockService _instance;
+        //private static InstrumentLockService.InstrumentLockService _instance;
 
         /// <summary>
         /// Stop Host and dispose Instance
@@ -35,10 +35,10 @@ namespace InstrumentLockServiceHost_NET
         {
             try
             {
-                if (_instance != null)
-                {
-                    _instance.Dispose();
-                }
+                //if (_instance != null)
+                //{
+                //    _instance.Dispose();
+                //}
                 _host.Close();
             }
             catch (Exception ex)
@@ -76,13 +76,21 @@ namespace InstrumentLockServiceHost_NET
             try
             {
                 // define the WCF service instance and event handler
-                _instance = new InstrumentLockService.InstrumentLockService();
-                _instance.EventFromClient += HandleEventFromClient;
+                //_instance = new InstrumentLockService.InstrumentLockService();
+                //_instance.EventFromClient += HandleEventFromClient;
 
                 // open ServiceHost of the above defined instance
                 Uri baseAddress = new Uri("http://localhost:8080/");
                 //_host = new ServiceHost(_instance, baseAddress);
-                _host = new ServiceHost(typeof(InstrumentLockService.InstrumentLockService), baseAddress);
+                //_host = new ServiceHost(typeof(InstrumentLockService.InstrumentLockService), baseAddress);
+
+
+                //https://stackoverflow.com/questions/3469044/self-hosted-wcf-service-how-to-access-the-objects-implementing-the-service-co
+                // then host the Facade
+                _host = new ServiceHost(typeof(InstrumentLockServiceFacade), baseAddress);
+                // but you can still access the actual service class
+                var serviceInstance = InstrumentLockServiceFacade.ServiceInstance;
+                serviceInstance.EventFromClient += HandleEventFromClient;
 
 
                 //// In order to use one of the ServiceHost constructors that takes a service instance, the InstanceContextMode of the service must be set to InstanceContextMode.Single.  This can be configured via the ServiceBehaviorAttribute.  Otherwise, please consider using the ServiceHost constructors that take a Type argument.

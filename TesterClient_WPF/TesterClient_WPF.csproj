@@ -66,7 +66,7 @@
       <DependentUpon>App.xaml</DependentUpon>
       <SubType>Code</SubType>
     </Compile>
-    <Compile Include="Connected Services\InstrumentLockServiceClient\Reference.cs">
+    <Compile Include="Connected Services\InstrumentLockServiceFacadeClient\Reference.cs">
       <AutoGen>True</AutoGen>
       <DesignTime>True</DesignTime>
       <DependentUpon>Reference.svcmap</DependentUpon>
@@ -95,14 +95,14 @@
       <Generator>ResXFileCodeGenerator</Generator>
       <LastGenOutput>Resources.Designer.cs</LastGenOutput>
     </EmbeddedResource>
-    <None Include="Connected Services\InstrumentLockServiceClient\InstrumentLockService.wsdl" />
-    <None Include="Connected Services\InstrumentLockServiceClient\item.xsd">
+    <None Include="Connected Services\InstrumentLockServiceFacadeClient\InstrumentLockServiceFacade.wsdl" />
+    <None Include="Connected Services\InstrumentLockServiceFacadeClient\item.xsd">
       <SubType>Designer</SubType>
     </None>
-    <None Include="Connected Services\InstrumentLockServiceClient\item1.xsd">
+    <None Include="Connected Services\InstrumentLockServiceFacadeClient\item1.xsd">
       <SubType>Designer</SubType>
     </None>
-    <None Include="Connected Services\InstrumentLockServiceClient\item2.xsd">
+    <None Include="Connected Services\InstrumentLockServiceFacadeClient\item2.xsd">
       <SubType>Designer</SubType>
     </None>
     <None Include="Properties\Settings.settings">
@@ -123,19 +123,19 @@
     <WCFMetadata Include="Connected Services\" />
   </ItemGroup>
   <ItemGroup>
-    <WCFMetadataStorage Include="Connected Services\InstrumentLockServiceClient\" />
+    <WCFMetadataStorage Include="Connected Services\InstrumentLockServiceFacadeClient\" />
   </ItemGroup>
   <ItemGroup>
-    <None Include="Connected Services\InstrumentLockServiceClient\item.disco" />
+    <None Include="Connected Services\InstrumentLockServiceFacadeClient\item.disco" />
   </ItemGroup>
   <ItemGroup>
-    <None Include="Connected Services\InstrumentLockServiceClient\configuration91.svcinfo" />
+    <None Include="Connected Services\InstrumentLockServiceFacadeClient\configuration91.svcinfo" />
   </ItemGroup>
   <ItemGroup>
-    <None Include="Connected Services\InstrumentLockServiceClient\configuration.svcinfo" />
+    <None Include="Connected Services\InstrumentLockServiceFacadeClient\configuration.svcinfo" />
   </ItemGroup>
   <ItemGroup>
-    <None Include="Connected Services\InstrumentLockServiceClient\Reference.svcmap">
+    <None Include="Connected Services\InstrumentLockServiceFacadeClient\Reference.svcmap">
       <Generator>WCF Proxy Generator</Generator>
       <LastGenOutput>Reference.cs</LastGenOutput>
     </None>

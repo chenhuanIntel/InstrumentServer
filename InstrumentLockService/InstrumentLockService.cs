@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Runtime.Serialization;
 using System.ServiceModel;
+using System.ServiceModel.Security;
 using System.Text;
 using System.Threading;
 
@@ -84,11 +85,97 @@ namespace InstrumentLockService
         }
     }
 
+
+    // https://stackoverflow.com/questions/3469044/self-hosted-wcf-service-how-to-access-the-objects-implementing-the-service-co
+    // dummy Facade
+    // PerCall creates a new instance for each operation.
+    [ServiceBehavior(InstanceContextMode = InstanceContextMode.PerCall, ConcurrencyMode = ConcurrencyMode.Multiple, UseSynchronizationContext = false)]
+    //[ServiceBehavior(InstanceContextMode = InstanceContextMode.PerCall, ConcurrencyMode = ConcurrencyMode.Multiple, UseSynchronizationContext = true)]
+    public class InstrumentLockServiceFacade : IInstrumentLockServiceFacade
+    {
+        public static InstrumentLockService _serviceInstance = new InstrumentLockService();
+
+        public static InstrumentLockService ServiceInstance { get { return _serviceInstance; } }
+
+        /// <summary>
+        /// WCF service will fire EventFromClient togerther with the values sent from WCF client
+        /// </summary>
+        public event EventHandler<CustomEventArgs> EventFromClient;
+
+        public double Add(double a, double b, string ThreadID)
+        {
+            double sum = -999;
+            DateTime ServiceStart = DateTime.Now;
+            DateTime ServiceFinish = new DateTime(1, 1, 1);
+            string sClient = ThreadID;
+            string sService = "InstrumentLockService.null";
+
+            sum=_serviceInstance.Add(a, b, ThreadID);
+            if (sum != -999)
+            {
+                sService = "InstrumentLockService.Add";
+            }
+
+            ServiceFinish = DateTime.Now;
+            // contruct the client request values to be sent to host
+            var value = new ClientRequestValue(a, b, sum, sService, sClient, ServiceStart, ServiceFinish);
+            // each WCF service fires the event EventFromClient with the values from WCF client
+            EventFromClient?.Invoke(this, new CustomEventArgs(value));
+            return sum;
+        }
+
+        public double AddAndDelay(double a, double b, int delayInSec, string ThreadID)
+        {
+            double sum = -999;
+            DateTime ServiceStart = DateTime.Now;
+            DateTime ServiceFinish = new DateTime(1, 1, 1); 
+            string sClient = ThreadID;
+            string sService = "InstrumentLockService.null";
+
+            sum = _serviceInstance.AddAndDelay(a, b, delayInSec, ThreadID);
+            if (sum != -999)
+            {
+                sService = "InstrumentLockService.AddAndDelay";
+            }
+
+            ServiceFinish = DateTime.Now;
+            // contruct the client request values to be sent to host
+            var value = new ClientRequestValue(a, b, sum, sService, sClient, ServiceStart, ServiceFinish);
+            // each WCF service fires the event EventFromClient with the values from WCF client
+            EventFromClient?.Invoke(this, new CustomEventArgs(value));
+            return sum;
+        }
+
+        public void getConnectedInfo()
+        {
+            _serviceInstance.getConnectedInfo();
+        }
+
+        public void getInstrumentLock()
+        {
+            _serviceInstance.getInstrumentLock();
+        }
+
+        public void getProtocolLock()
+        {
+            _serviceInstance.getProtocolLock();
+        }
+
+        public int intDivide(double a, double b, string ThreadID)
+        {
+            return _serviceInstance.intDivide(a, b, ThreadID);
+        }
+
+    }
+
+
+
     // Enable one of the following instance modes to compare instancing behaviors.
     //[ServiceBehavior(InstanceContextMode = InstanceContextMode.PerSession)]
 
     // PerCall creates a new instance for each operation.
-    [ServiceBehavior(InstanceContextMode = InstanceContextMode.PerCall)]
+    [ServiceBehavior(InstanceContextMode = InstanceContextMode.PerCall, ConcurrencyMode = ConcurrencyMode.Multiple, UseSynchronizationContext = false)]
+    //[ServiceBehavior(InstanceContextMode = InstanceContextMode.PerCall, ConcurrencyMode = ConcurrencyMode.Multiple, UseSynchronizationContext = true)]
 
     // Singleton creates a single instance for application lifetime.
     //[ServiceBehavior(InstanceContextMode = InstanceContextMode.Single)]
@@ -119,9 +206,10 @@ namespace InstrumentLockService
         {
             double sum = -999;
             DateTime ServiceStart = DateTime.Now;
-            DateTime ServiceFinish;
+            DateTime ServiceFinish = new DateTime(1, 1, 1); 
             string sClient = ThreadID;
             string sService = "InstrumentLockService.null";
+
             if (mutexLockAdd.WaitOne(10))
             {   
                 Console.WriteLine("InstrumentLockService.Add");
@@ -152,14 +240,22 @@ namespace InstrumentLockService
         {
             double sum = -999;
             DateTime ServiceStart = DateTime.Now;
-            DateTime ServiceFinish;
+            DateTime ServiceFinish = new DateTime(1, 1, 1);
             string sClient = ThreadID;
             string sService = "InstrumentLockService.null";
+
             if (mutexLockAddAndDelay.WaitOne(10))
             {
                 Console.WriteLine($"{ThreadID} InstrumentLockService.AddAndDelay");
                 sService = "InstrumentLockService.AddAndDelay";
                 sum = a + b;
+
+                //// send an event before holding the resource
+                //// contruct the client request values to be sent to host
+                //var value1 = new ClientRequestValue(a, b, delayInSec, -888, sService, sClient, ServiceStart, ServiceFinish);
+                //// each WCF service fires the event EventFromClient with the values from WCF client
+                //EventFromClient?.Invoke(this, new CustomEventArgs(value1));
+
                 // delay to hold the mutex
                 Thread.Sleep(delayInSec * 1000);
                 // Release the Mutex.

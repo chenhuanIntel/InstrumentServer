@@ -60,6 +60,13 @@ namespace InstrumentLockService
         void getConnectedInfo();
     }
 
+
+    [ServiceContract]
+    interface IInstrumentLockServiceFacade : IInstrumentLockService
+    {
+
+    }
+
     [DataContract]
     public class MathFault
     {

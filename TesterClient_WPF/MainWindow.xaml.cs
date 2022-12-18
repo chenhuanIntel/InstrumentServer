@@ -40,7 +40,7 @@ namespace TesterClient_WPF
 
         private void Request_Service_Button_Click(object sender, RoutedEventArgs e)
         {
-            InstrumentLockServiceClient.InstrumentLockServiceClient obj = new InstrumentLockServiceClient.InstrumentLockServiceClient();
+            InstrumentLockServiceFacadeClient.InstrumentLockServiceFacadeClient obj = new InstrumentLockServiceFacadeClient.InstrumentLockServiceFacadeClient();
             double a = double.Parse(aTextBox.Text);
             double b = double.Parse(bTextBox.Text);
             int delay = Int32.Parse(delayTextBox.Text);

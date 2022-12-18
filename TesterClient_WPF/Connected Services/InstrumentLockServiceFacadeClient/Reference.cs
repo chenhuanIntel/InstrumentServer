@@ -8,12 +8,12 @@
 // </auto-generated>
 //------------------------------------------------------------------------------
 
-namespace TesterClient_WPF.InstrumentLockServiceClient {
+namespace TesterClient_WPF.InstrumentLockServiceFacadeClient {
     
     
     [System.CodeDom.Compiler.GeneratedCodeAttribute("System.ServiceModel", "4.0.0.0")]
-    [System.ServiceModel.ServiceContractAttribute(ConfigurationName="InstrumentLockServiceClient.IInstrumentLockService")]
-    public interface IInstrumentLockService {
+    [System.ServiceModel.ServiceContractAttribute(ConfigurationName="InstrumentLockServiceFacadeClient.IInstrumentLockServiceFacade")]
+    public interface IInstrumentLockServiceFacade {
         
         [System.ServiceModel.OperationContractAttribute(Action="http://tempuri.org/IInstrumentLockService/Add", ReplyAction="http://tempuri.org/IInstrumentLockService/AddResponse")]
         double Add(double a, double b, string ThreadID);
@@ -54,29 +54,29 @@ namespace TesterClient_WPF.InstrumentLockServiceClient {
     }
     
     [System.CodeDom.Compiler.GeneratedCodeAttribute("System.ServiceModel", "4.0.0.0")]
-    public interface IInstrumentLockServiceChannel : TesterClient_WPF.InstrumentLockServiceClient.IInstrumentLockService, System.ServiceModel.IClientChannel {
+    public interface IInstrumentLockServiceFacadeChannel : TesterClient_WPF.InstrumentLockServiceFacadeClient.IInstrumentLockServiceFacade, System.ServiceModel.IClientChannel {
     }
     
     [System.Diagnostics.DebuggerStepThroughAttribute()]
     [System.CodeDom.Compiler.GeneratedCodeAttribute("System.ServiceModel", "4.0.0.0")]
-    public partial class InstrumentLockServiceClient : System.ServiceModel.ClientBase<TesterClient_WPF.InstrumentLockServiceClient.IInstrumentLockService>, TesterClient_WPF.InstrumentLockServiceClient.IInstrumentLockService {
+    public partial class InstrumentLockServiceFacadeClient : System.ServiceModel.ClientBase<TesterClient_WPF.InstrumentLockServiceFacadeClient.IInstrumentLockServiceFacade>, TesterClient_WPF.InstrumentLockServiceFacadeClient.IInstrumentLockServiceFacade {
         
-        public InstrumentLockServiceClient() {
+        public InstrumentLockServiceFacadeClient() {
         }
         
-        public InstrumentLockServiceClient(string endpointConfigurationName) : 
+        public InstrumentLockServiceFacadeClient(string endpointConfigurationName) : 
                 base(endpointConfigurationName) {
         }
         
-        public InstrumentLockServiceClient(string endpointConfigurationName, string remoteAddress) : 
+        public InstrumentLockServiceFacadeClient(string endpointConfigurationName, string remoteAddress) : 
                 base(endpointConfigurationName, remoteAddress) {
         }
         
-        public InstrumentLockServiceClient(string endpointConfigurationName, System.ServiceModel.EndpointAddress remoteAddress) : 
+        public InstrumentLockServiceFacadeClient(string endpointConfigurationName, System.ServiceModel.EndpointAddress remoteAddress) : 
                 base(endpointConfigurationName, remoteAddress) {
         }
         
-        public InstrumentLockServiceClient(System.ServiceModel.Channels.Binding binding, System.ServiceModel.EndpointAddress remoteAddress) : 
+        public InstrumentLockServiceFacadeClient(System.ServiceModel.Channels.Binding binding, System.ServiceModel.EndpointAddress remoteAddress) : 
                 base(binding, remoteAddress) {
         }
         
