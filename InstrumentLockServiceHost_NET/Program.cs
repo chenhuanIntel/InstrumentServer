@@ -7,6 +7,7 @@ using System.Threading;
 using System.Threading.Tasks;
 using InstrumentLockService;
 using InstrumentLockServiceHost;
+using NetFwTypeLib; // Located in FirewallAPI.dll
 
 namespace InstrumentLockServiceHost_NET
 {
@@ -118,12 +119,61 @@ namespace InstrumentLockServiceHost_NET
     }
     internal class Program
     {
+        // https://stackoverflow.com/questions/1242566/any-way-to-turn-the-internet-off-in-windows-using-c/1243026#1243026
+        // https://learn.microsoft.com/en-us/previous-versions/windows/desktop/ics/using-windows-firewall-with-advanced-security
+        private static void setFirewall()
+        {
+            INetFwPolicy2 firewallPolicy = (INetFwPolicy2)Activator.CreateInstance(Type.GetTypeFromProgID("HNetCfg.FwPolicy2"));
+
+            //// add application
+            //INetFwRule firewallAppRule = (INetFwRule)Activator.CreateInstance(Type.GetTypeFromProgID("HNetCfg.FWRule"));
+            //firewallAppRule.Name = "WCF_Tester_Client";
+            //firewallAppRule.Description = "Allow WCF Tester Client thru firewall";
+            //firewallAppRule.ApplicationName = @"C:\project\chenhuan\InstrumentServer\TesterClient_WPF\bin\Debug\TesterClient_WPF.exe";
+            //firewallAppRule.Action = NET_FW_ACTION_.NET_FW_ACTION_ALLOW;
+            //firewallAppRule.Enabled = true;
+            //firewallPolicy.Rules.Add(firewallAppRule);
+
+            // add inbound rules for TCP ports
+            // first to remove the rule with the same name
+            INetFwRule firewallRule = firewallPolicy.Rules.OfType<INetFwRule>().Where(x => x.Name == "WCF_inbound_rule").FirstOrDefault();
+            if (firewallRule != null)
+                firewallPolicy.Rules.Remove(firewallRule.Name);
+            INetFwRule firewallInRule = (INetFwRule)Activator.CreateInstance(Type.GetTypeFromProgID("HNetCfg.FWRule"));
+            firewallInRule.Name = "WCF_inbound_rule";
+            firewallInRule.Description = "WCF service port inbound rule";      
+            firewallInRule.Protocol = (int)NET_FW_IP_PROTOCOL_.NET_FW_IP_PROTOCOL_TCP;
+            firewallInRule.LocalPorts = "8001";
+            firewallInRule.Direction = NET_FW_RULE_DIRECTION_.NET_FW_RULE_DIR_IN;
+            firewallInRule.Action = NET_FW_ACTION_.NET_FW_ACTION_ALLOW;
+            firewallInRule.Enabled = true;       
+            firewallPolicy.Rules.Add(firewallInRule);
+
+            // add outbound rules for TCP ports
+            // first to remove the rule with the same name
+            firewallRule = firewallPolicy.Rules.OfType<INetFwRule>().Where(x => x.Name == "WCF_outbound_rule").FirstOrDefault();
+            if (firewallRule != null)
+                firewallPolicy.Rules.Remove(firewallRule.Name);
+            INetFwRule firewallOutRule = (INetFwRule)Activator.CreateInstance(Type.GetTypeFromProgID("HNetCfg.FWRule"));
+            firewallOutRule.Name = "WCF_outbound_rule";
+            firewallOutRule.Description = "WCF service port outbound rule";
+            firewallOutRule.Protocol = (int)NET_FW_IP_PROTOCOL_.NET_FW_IP_PROTOCOL_TCP;
+            firewallOutRule.LocalPorts = "8001";
+            firewallOutRule.Direction = NET_FW_RULE_DIRECTION_.NET_FW_RULE_DIR_OUT;
+            firewallOutRule.Action = NET_FW_ACTION_.NET_FW_ACTION_ALLOW;
+            firewallOutRule.Enabled = true;
+            firewallPolicy.Rules.Add(firewallOutRule);
+        }
+
         /// <summary>
         /// console app Main()
         /// </summary>
         /// <param name="args"></param>
         static void Main(string[] args)
         {
+            // create firewall rukes
+            setFirewall();
+
             var myHost = new InstrumentLockServiceHostConsole();
             myHost.initialize();
 
