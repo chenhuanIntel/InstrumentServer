@@ -75,29 +75,27 @@ namespace InstrumentLockServiceHost_NET
         {
             try
             {
-                // define the WCF service instance and event handler
+                Uri baseAddress = new Uri("http://localhost:8080/");
+
+                //// if define the following Singleton _instance, then WCF behavior is limited to Single which is not what we want
+                //// that is, in order to use one of the ServiceHost constructors that takes a service instance, the InstanceContextMode of the service must be set to InstanceContextMode.Single.
+                //// define the WCF service instance and event handler
                 //_instance = new InstrumentLockService.InstrumentLockService();
                 //_instance.EventFromClient += HandleEventFromClient;
-
-                // open ServiceHost of the above defined instance
-                Uri baseAddress = new Uri("http://localhost:8080/");
+                //// open ServiceHost of the above defined instance
                 //_host = new ServiceHost(_instance, baseAddress);
                 //_host = new ServiceHost(typeof(InstrumentLockService.InstrumentLockService), baseAddress);
 
 
                 //https://stackoverflow.com/questions/3469044/self-hosted-wcf-service-how-to-access-the-objects-implementing-the-service-co
-                // then host the Facade
+                // instead of using Singleton _instance of InstrumentLockService,
+                // we develop InstrumentLockServiceFacade to allow WCF Per Call behavior by using the Type, not an instance
                 _host = new ServiceHost(typeof(InstrumentLockServiceFacade), baseAddress);
-                // but you can still access the actual service class
+                _host.Open();
+                // in InstrumentLockServiceFacade, we can still access the actual service class
                 var serviceInstance = InstrumentLockServiceFacade.ServiceInstance;
                 serviceInstance.EventFromClient += HandleEventFromClient;
 
-
-                //// In order to use one of the ServiceHost constructors that takes a service instance, the InstanceContextMode of the service must be set to InstanceContextMode.Single.  This can be configured via the ServiceBehaviorAttribute.  Otherwise, please consider using the ServiceHost constructors that take a Type argument.
-                /// instead of the following two lines, we now define the ServiceBehaviorAttribute before its class defnition in InstrumentLockService.cs
-                //var behavior = _host.Description.Behaviors.Find<ServiceBehaviorAttribute>();
-                //behavior.InstanceContextMode = InstanceContextMode.Single;
-                _host.Open();
                 // The service can now be accessed.
                 Console.WriteLine($"The service is ready at {baseAddress}");
             }
