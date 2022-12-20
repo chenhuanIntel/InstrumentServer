@@ -81,18 +81,15 @@ namespace TesterClient_WPF
             }
         }
 
-        private InstrumentLockServiceFacadeClient.IInstrumentLockServiceFacade _client;
-        public MainWindow()
+        /// <summary>
+        ///  https://stackoverflow.com/questions/6118221/how-do-i-add-wcf-client-endpoints-programmatically
+        ///  https://stackoverflow.com/questions/2943148/how-to-programmatically-connect-a-client-to-a-wcf-service
+        /// </summary>
+        private void wshttpClientEndPoint()
         {
-            setFirewall();
-            InitializeComponent();
-
             //_client = new InstrumentLockServiceFacadeClient.InstrumentLockServiceFacadeClient();
             // wsHttp
             Uri baseAddress = new Uri("http://localhost:8080/");
-            // net.tcp
-            //Uri baseAddress = new Uri("net.tcp://localhost:8001/");
-
             var myBinding = new WSHttpBinding();
             var myEndpoint = new EndpointAddress(baseAddress);
             var myChannelFactory = new ChannelFactory<InstrumentLockServiceFacadeClient.IInstrumentLockServiceFacade>(myBinding, myEndpoint);
@@ -107,6 +104,42 @@ namespace TesterClient_WPF
             {
                 (_client as ICommunicationObject)?.Abort();
             }
+        }
+
+        /// <summary>
+        ///  https://stackoverflow.com/questions/6118221/how-do-i-add-wcf-client-endpoints-programmatically
+        ///  https://stackoverflow.com/questions/2943148/how-to-programmatically-connect-a-client-to-a-wcf-service
+        /// </summary>
+        private void netTcpClientEndPoint()
+        {
+            //_client = new InstrumentLockServiceFacadeClient.InstrumentLockServiceFacadeClient();
+            // net.tcp
+            Uri baseAddress = new Uri("net.tcp://localhost:8001/");
+
+            var myBinding = new NetTcpBinding();
+            var myEndpoint = new EndpointAddress(baseAddress);
+            var myChannelFactory = new ChannelFactory<InstrumentLockServiceFacadeClient.IInstrumentLockServiceFacade>(myBinding, myEndpoint);
+
+            try
+            {
+                _client = myChannelFactory.CreateChannel();
+                //((ICommunicationObject)_client).Close();
+                //myChannelFactory.Close();
+            }
+            catch
+            {
+                (_client as ICommunicationObject)?.Abort();
+            }
+        }
+
+        private InstrumentLockServiceFacadeClient.IInstrumentLockServiceFacade _client;
+        public MainWindow()
+        {
+            setFirewall();
+            InitializeComponent();
+
+            //wshttpClientEndPoint();
+            netTcpClientEndPoint();
 
             // cmbService is defined in xaml
             cmbService.ItemsSource = typeof(Service).GetProperties();
