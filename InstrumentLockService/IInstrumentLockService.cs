@@ -62,7 +62,7 @@ namespace InstrumentLockService
 
 
     [ServiceContract]
-    interface IInstrumentLockServiceFacade : IInstrumentLockService
+    public interface IInstrumentLockServiceFacade : IInstrumentLockService
     {
 
     }

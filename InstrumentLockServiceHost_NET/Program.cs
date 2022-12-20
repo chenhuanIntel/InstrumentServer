@@ -1,7 +1,9 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Security.Cryptography;
 using System.ServiceModel;
+using System.ServiceModel.Description;
 using System.Text;
 using System.Threading;
 using System.Threading.Tasks;
@@ -76,7 +78,10 @@ namespace InstrumentLockServiceHost_NET
         {
             try
             {
+                // wsHttp
                 Uri baseAddress = new Uri("http://localhost:8080/");
+                // net.tcp
+                //Uri baseAddress = new Uri("net.tcp://localhost:8001/");
 
                 //// if define the following Singleton _instance, then WCF behavior is limited to Single which is not what we want
                 //// that is, in order to use one of the ServiceHost constructors that takes a service instance, the InstanceContextMode of the service must be set to InstanceContextMode.Single.
@@ -92,6 +97,38 @@ namespace InstrumentLockServiceHost_NET
                 // instead of using Singleton _instance of InstrumentLockService,
                 // we develop InstrumentLockServiceFacade to allow WCF Per Call behavior by using the Type, not an instance
                 _host = new ServiceHost(typeof(InstrumentLockServiceFacade), baseAddress);
+
+                // Check to see if the service host already has a ServiceMetadataBehavior
+                ServiceMetadataBehavior smb = _host.Description.Behaviors.Find<ServiceMetadataBehavior>();
+                // If not, add one
+                if (smb == null)
+                    smb = new ServiceMetadataBehavior();
+                // To avoid disclosing metadata information, set the values below to false before deployment
+                smb.HttpGetEnabled = true; // when using net tcp binding, HttpGetEnabled need to be false
+                smb.HttpsGetEnabled = true;
+                _host.Description.Behaviors.Add(smb);
+
+                // You can't actually ADD a ServiceDebugBehavior to a ServiceHost, what you have to do is modify the existing ServiceDebugBehavior (was having the same issue)
+                // https://stackoverflow.com/questions/21443347/how-to-programatically-add-servicedebug-behavior-with-endpoint
+                _host.Description.Behaviors.Find<ServiceDebugBehavior>().IncludeExceptionDetailInFaults = true;
+
+                //Add MEX endpoint
+                //_host.AddServiceEndpoint(
+                //  ServiceMetadataBehavior.MexContractName,
+                //  MetadataExchangeBindings.CreateMexTcpBinding(),
+                //  "mex"
+                //);
+                _host.AddServiceEndpoint(
+                    ServiceMetadataBehavior.MexContractName,
+                    MetadataExchangeBindings.CreateMexHttpBinding(),
+                    "mex"
+                );
+                // Add application endpoint
+                //NetTcpBinding netTCPbinding = new NetTcpBinding();
+                //_host.AddServiceEndpoint(typeof(IInstrumentLockServiceFacade), netTCPbinding, baseAddress);
+                WSHttpBinding wsHttpBinding = new WSHttpBinding();
+                _host.AddServiceEndpoint(typeof(IInstrumentLockServiceFacade), wsHttpBinding, baseAddress);
+
                 _host.Open();
                 // in InstrumentLockServiceFacade, we can still access the actual service class
                 var serviceInstance = InstrumentLockServiceFacade.ServiceInstance;
