@@ -20,6 +20,7 @@ using System.Windows.Threading;
 using System.Reflection.Emit;
 using NetFwTypeLib; // Located in FirewallAPI.dll
 using System.ServiceModel.Description;
+using System.Collections.ObjectModel;
 
 namespace InstrumentLockServiceHost_WPF2
 {
@@ -38,7 +39,7 @@ namespace InstrumentLockServiceHost_WPF2
         /// <summary>
         /// for data binding to WPF, will be assigned with the client request values from client in event handler
         /// </summary>
-        public List<ClientRequestValue> _clientRequestValue;
+        public ObservableCollection<ClientRequestValue> _clientRequestValue;
         /// <summary>
         /// a class global variable of Service Host
         /// </summary>
@@ -60,6 +61,9 @@ namespace InstrumentLockServiceHost_WPF2
         /// a class variable to MainWindow Dispatcher
         /// </summary>
         public Dispatcher _dpFromMainWindow { get; set; }
+
+        public Object _itemsLockMainWindow { get; set; }
+
 
 
         private void wsHttpEndPoint()
@@ -149,7 +153,7 @@ namespace InstrumentLockServiceHost_WPF2
                 // _dpFromMainWindow, _dgFromMainWindow, _tbFromMainWindow
 
                 // init _clientRequestValue and baseAddress
-                _clientRequestValue = new List<ClientRequestValue>();
+                _clientRequestValue = new ObservableCollection<ClientRequestValue>();
 
                 //wsHttpEndPoint();
                 netTcpEndPoint();
@@ -196,7 +200,11 @@ namespace InstrumentLockServiceHost_WPF2
                 // such as print the value on host console or WPF forms
                 var varValue = e.Value;
                 // handling the event by adding client request value to the list; and it will trigger WPF to add one more column after refresh
-                _clientRequestValue.Add(new ClientRequestValue(dInputA: varValue.dInputA, dInputB: varValue.dInputB, dResult: varValue.dResult, sService: varValue.sService, sClient: varValue.sClient, ServiceStart: varValue.ServiceStart, ServiceFinish: varValue.ServiceFinish));
+                lock (_itemsLockMainWindow)
+                {
+                    // Once locked, you can manipulate the collection safely from another thread
+                    _clientRequestValue.Add(new ClientRequestValue(dInputA: varValue.dInputA, dInputB: varValue.dInputB, dResult: varValue.dResult, sService: varValue.sService, sClient: varValue.sClient, ServiceStart: varValue.ServiceStart, ServiceFinish: varValue.ServiceFinish));
+                }
                 // must refresh; otherwise ItemsSource will not be updated when the corresponding list (such as the above list) is updated
                 // https://stackoverflow.com/questions/7059070/why-does-the-datagrid-not-update-when-the-itemssource-is-changed
                 // to avoid the exception of "The calling thread cannot access this object because a different thread owns it" on _dgFromMainWindow
@@ -292,6 +300,9 @@ namespace InstrumentLockServiceHost_WPF2
         /// </summary>
         public InstrumentLockServiceHost_WPF _server { get; set; }
 
+        //lock object for synchronization;
+        private static object _itemsLock = new object();
+
         public MainWindow()
         {
             setFirewall();
@@ -309,14 +320,20 @@ namespace InstrumentLockServiceHost_WPF2
             _server._tbFromMainWindow = tbMainWindow;
             _server._dgFromMainWindow = dgServerRequest;
             _server._dpFromMainWindow = Dispatcher.CurrentDispatcher;
+            _server._itemsLockMainWindow = _itemsLock;
             // no need to get a worker thread or task because WCF behavior UseSynchronizationContext = false
             // WCF will get a new thread when a client requests WCF services
             _server.initialize();
 
+            //Enable the cross acces to this collection elsewhere
+            BindingOperations.EnableCollectionSynchronization(_server._clientRequestValue, _itemsLock);
+           
             // binding the WPF DataGrid to List<ClientRequestValue>
             dgServerRequest.ItemsSource = _server._clientRequestValue;
-        }
 
+            //DataContext = this;
+
+        }
 
         /// <summary>
         /// to close the WPF window and stop the host

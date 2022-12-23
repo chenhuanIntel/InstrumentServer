@@ -95,14 +95,14 @@
       <Generator>ResXFileCodeGenerator</Generator>
       <LastGenOutput>Resources.Designer.cs</LastGenOutput>
     </EmbeddedResource>
-    <None Include="Connected Services\InstrumentLockServiceFacadeClient\InstrumentLockServiceFacade.wsdl" />
-    <None Include="Connected Services\InstrumentLockServiceFacadeClient\item.xsd">
+    <None Include="Connected Services\InstrumentLockServiceFacadeClient\InstrumentLockService.xsd">
       <SubType>Designer</SubType>
     </None>
-    <None Include="Connected Services\InstrumentLockServiceFacadeClient\item1.xsd">
+    <None Include="Connected Services\InstrumentLockServiceFacadeClient\service.wsdl" />
+    <None Include="Connected Services\InstrumentLockServiceFacadeClient\service.xsd">
       <SubType>Designer</SubType>
     </None>
-    <None Include="Connected Services\InstrumentLockServiceFacadeClient\item2.xsd">
+    <None Include="Connected Services\InstrumentLockServiceFacadeClient\service1.xsd">
       <SubType>Designer</SubType>
     </None>
     <None Include="Properties\Settings.settings">
@@ -123,10 +123,18 @@
     <WCFMetadata Include="Connected Services\" />
   </ItemGroup>
   <ItemGroup>
-    <WCFMetadataStorage Include="Connected Services\InstrumentLockServiceFacadeClient\" />
+    <COMReference Include="NetFwTypeLib">
+      <Guid>{58FBCF7C-E7A9-467C-80B3-FC65E8FCCA08}</Guid>
+      <VersionMajor>1</VersionMajor>
+      <VersionMinor>0</VersionMinor>
+      <Lcid>0</Lcid>
+      <WrapperTool>tlbimp</WrapperTool>
+      <Isolated>False</Isolated>
+      <EmbedInteropTypes>True</EmbedInteropTypes>
+    </COMReference>
   </ItemGroup>
   <ItemGroup>
-    <None Include="Connected Services\InstrumentLockServiceFacadeClient\item.disco" />
+    <WCFMetadataStorage Include="Connected Services\InstrumentLockServiceFacadeClient\" />
   </ItemGroup>
   <ItemGroup>
     <None Include="Connected Services\InstrumentLockServiceFacadeClient\configuration91.svcinfo" />
@@ -139,17 +147,6 @@
       <Generator>WCF Proxy Generator</Generator>
       <LastGenOutput>Reference.cs</LastGenOutput>
     </None>
-  </ItemGroup>
-  <ItemGroup>
-    <COMReference Include="NetFwTypeLib">
-      <Guid>{58FBCF7C-E7A9-467C-80B3-FC65E8FCCA08}</Guid>
-      <VersionMajor>1</VersionMajor>
-      <VersionMinor>0</VersionMinor>
-      <Lcid>0</Lcid>
-      <WrapperTool>tlbimp</WrapperTool>
-      <Isolated>False</Isolated>
-      <EmbedInteropTypes>True</EmbedInteropTypes>
-    </COMReference>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
 </Project>

@@ -8,8 +8,87 @@
 // </auto-generated>
 //------------------------------------------------------------------------------
 
-namespace TesterClient_WPF.InstrumentLockServiceFacadeClient {
+namespace TesterClient_NET.InstrumentLockServiceFacadeClient {
+    using System.Runtime.Serialization;
+    using System;
     
+    
+    [System.Diagnostics.DebuggerStepThroughAttribute()]
+    [System.CodeDom.Compiler.GeneratedCodeAttribute("System.Runtime.Serialization", "4.0.0.0")]
+    [System.Runtime.Serialization.DataContractAttribute(Name="MathFault", Namespace="http://schemas.datacontract.org/2004/07/InstrumentLockService")]
+    [System.SerializableAttribute()]
+    public partial class MathFault : object, System.Runtime.Serialization.IExtensibleDataObject, System.ComponentModel.INotifyPropertyChanged {
+        
+        [System.NonSerializedAttribute()]
+        private System.Runtime.Serialization.ExtensionDataObject extensionDataField;
+        
+        [System.Runtime.Serialization.OptionalFieldAttribute()]
+        private string OperationField;
+        
+        [System.Runtime.Serialization.OptionalFieldAttribute()]
+        private string ProblemTypeField;
+        
+        [global::System.ComponentModel.BrowsableAttribute(false)]
+        public System.Runtime.Serialization.ExtensionDataObject ExtensionData {
+            get {
+                return this.extensionDataField;
+            }
+            set {
+                this.extensionDataField = value;
+            }
+        }
+        
+        [System.Runtime.Serialization.DataMemberAttribute()]
+        public string Operation {
+            get {
+                return this.OperationField;
+            }
+            set {
+                if ((object.ReferenceEquals(this.OperationField, value) != true)) {
+                    this.OperationField = value;
+                    this.RaisePropertyChanged("Operation");
+                }
+            }
+        }
+        
+        [System.Runtime.Serialization.DataMemberAttribute()]
+        public string ProblemType {
+            get {
+                return this.ProblemTypeField;
+            }
+            set {
+                if ((object.ReferenceEquals(this.ProblemTypeField, value) != true)) {
+                    this.ProblemTypeField = value;
+                    this.RaisePropertyChanged("ProblemType");
+                }
+            }
+        }
+        
+        public event System.ComponentModel.PropertyChangedEventHandler PropertyChanged;
+        
+        protected void RaisePropertyChanged(string propertyName) {
+            System.ComponentModel.PropertyChangedEventHandler propertyChanged = this.PropertyChanged;
+            if ((propertyChanged != null)) {
+                propertyChanged(this, new System.ComponentModel.PropertyChangedEventArgs(propertyName));
+            }
+        }
+    }
+    
+    [System.CodeDom.Compiler.GeneratedCodeAttribute("System.Runtime.Serialization", "4.0.0.0")]
+    [System.Runtime.Serialization.DataContractAttribute(Name="sharedInstrument", Namespace="http://schemas.datacontract.org/2004/07/InstrumentLockService")]
+    public enum sharedInstrument : int {
+        
+        [System.Runtime.Serialization.EnumMemberAttribute()]
+        DCA = 0,
+    }
+    
+    [System.CodeDom.Compiler.GeneratedCodeAttribute("System.Runtime.Serialization", "4.0.0.0")]
+    [System.Runtime.Serialization.DataContractAttribute(Name="sharedProtocol", Namespace="http://schemas.datacontract.org/2004/07/InstrumentLockService")]
+    public enum sharedProtocol : int {
+        
+        [System.Runtime.Serialization.EnumMemberAttribute()]
+        DiCon = 0,
+    }
     
     [System.CodeDom.Compiler.GeneratedCodeAttribute("System.ServiceModel", "4.0.0.0")]
     [System.ServiceModel.ServiceContractAttribute(ConfigurationName="InstrumentLockServiceFacadeClient.IInstrumentLockServiceFacade")]
@@ -28,35 +107,35 @@ namespace TesterClient_WPF.InstrumentLockServiceFacadeClient {
         System.Threading.Tasks.Task<double> AddAndDelayAsync(double a, double b, int delayInSec, string ThreadID);
         
         [System.ServiceModel.OperationContractAttribute(Action="http://tempuri.org/IInstrumentLockService/intDivide", ReplyAction="http://tempuri.org/IInstrumentLockService/intDivideResponse")]
-        [System.ServiceModel.FaultContractAttribute(typeof(InstrumentLockService.MathFault), Action="http://tempuri.org/IInstrumentLockService/intDivideMathFaultFault", Name="MathFault", Namespace="http://schemas.datacontract.org/2004/07/InstrumentLockService")]
+        [System.ServiceModel.FaultContractAttribute(typeof(TesterClient_NET.InstrumentLockServiceFacadeClient.MathFault), Action="http://tempuri.org/IInstrumentLockService/intDivideMathFaultFault", Name="MathFault", Namespace="http://schemas.datacontract.org/2004/07/InstrumentLockService")]
         int intDivide(double a, double b, string ThreadID);
         
         [System.ServiceModel.OperationContractAttribute(Action="http://tempuri.org/IInstrumentLockService/intDivide", ReplyAction="http://tempuri.org/IInstrumentLockService/intDivideResponse")]
         System.Threading.Tasks.Task<int> intDivideAsync(double a, double b, string ThreadID);
         
         [System.ServiceModel.OperationContractAttribute(Action="http://tempuri.org/IInstrumentLockService/getInstrumentLock", ReplyAction="http://tempuri.org/IInstrumentLockService/getInstrumentLockResponse")]
-        bool getInstrumentLock(InstrumentLockService.sharedInstrument instr, string ThreadID);
+        bool getInstrumentLock(TesterClient_NET.InstrumentLockServiceFacadeClient.sharedInstrument instr, string ThreadID);
         
         [System.ServiceModel.OperationContractAttribute(Action="http://tempuri.org/IInstrumentLockService/getInstrumentLock", ReplyAction="http://tempuri.org/IInstrumentLockService/getInstrumentLockResponse")]
-        System.Threading.Tasks.Task<bool> getInstrumentLockAsync(InstrumentLockService.sharedInstrument instr, string ThreadID);
+        System.Threading.Tasks.Task<bool> getInstrumentLockAsync(TesterClient_NET.InstrumentLockServiceFacadeClient.sharedInstrument instr, string ThreadID);
         
         [System.ServiceModel.OperationContractAttribute(Action="http://tempuri.org/IInstrumentLockService/releaseInstrumentLock", ReplyAction="http://tempuri.org/IInstrumentLockService/releaseInstrumentLockResponse")]
-        bool releaseInstrumentLock(InstrumentLockService.sharedInstrument instr, string ThreadID);
+        bool releaseInstrumentLock(TesterClient_NET.InstrumentLockServiceFacadeClient.sharedInstrument instr, string ThreadID);
         
         [System.ServiceModel.OperationContractAttribute(Action="http://tempuri.org/IInstrumentLockService/releaseInstrumentLock", ReplyAction="http://tempuri.org/IInstrumentLockService/releaseInstrumentLockResponse")]
-        System.Threading.Tasks.Task<bool> releaseInstrumentLockAsync(InstrumentLockService.sharedInstrument instr, string ThreadID);
+        System.Threading.Tasks.Task<bool> releaseInstrumentLockAsync(TesterClient_NET.InstrumentLockServiceFacadeClient.sharedInstrument instr, string ThreadID);
         
         [System.ServiceModel.OperationContractAttribute(Action="http://tempuri.org/IInstrumentLockService/getProtocolLock", ReplyAction="http://tempuri.org/IInstrumentLockService/getProtocolLockResponse")]
-        bool getProtocolLock(InstrumentLockService.sharedProtocol protocol, string ThreadID);
+        bool getProtocolLock(TesterClient_NET.InstrumentLockServiceFacadeClient.sharedProtocol protocol, string ThreadID);
         
         [System.ServiceModel.OperationContractAttribute(Action="http://tempuri.org/IInstrumentLockService/getProtocolLock", ReplyAction="http://tempuri.org/IInstrumentLockService/getProtocolLockResponse")]
-        System.Threading.Tasks.Task<bool> getProtocolLockAsync(InstrumentLockService.sharedProtocol protocol, string ThreadID);
+        System.Threading.Tasks.Task<bool> getProtocolLockAsync(TesterClient_NET.InstrumentLockServiceFacadeClient.sharedProtocol protocol, string ThreadID);
         
         [System.ServiceModel.OperationContractAttribute(Action="http://tempuri.org/IInstrumentLockService/releaseProtocolLock", ReplyAction="http://tempuri.org/IInstrumentLockService/releaseProtocolLockResponse")]
-        bool releaseProtocolLock(InstrumentLockService.sharedProtocol protocol, string ThreadID);
+        bool releaseProtocolLock(TesterClient_NET.InstrumentLockServiceFacadeClient.sharedProtocol protocol, string ThreadID);
         
         [System.ServiceModel.OperationContractAttribute(Action="http://tempuri.org/IInstrumentLockService/releaseProtocolLock", ReplyAction="http://tempuri.org/IInstrumentLockService/releaseProtocolLockResponse")]
-        System.Threading.Tasks.Task<bool> releaseProtocolLockAsync(InstrumentLockService.sharedProtocol protocol, string ThreadID);
+        System.Threading.Tasks.Task<bool> releaseProtocolLockAsync(TesterClient_NET.InstrumentLockServiceFacadeClient.sharedProtocol protocol, string ThreadID);
         
         [System.ServiceModel.OperationContractAttribute(Action="http://tempuri.org/IInstrumentLockService/getConnectedInfo", ReplyAction="http://tempuri.org/IInstrumentLockService/getConnectedInfoResponse")]
         void getConnectedInfo();
@@ -66,12 +145,12 @@ namespace TesterClient_WPF.InstrumentLockServiceFacadeClient {
     }
     
     [System.CodeDom.Compiler.GeneratedCodeAttribute("System.ServiceModel", "4.0.0.0")]
-    public interface IInstrumentLockServiceFacadeChannel : TesterClient_WPF.InstrumentLockServiceFacadeClient.IInstrumentLockServiceFacade, System.ServiceModel.IClientChannel {
+    public interface IInstrumentLockServiceFacadeChannel : TesterClient_NET.InstrumentLockServiceFacadeClient.IInstrumentLockServiceFacade, System.ServiceModel.IClientChannel {
     }
     
     [System.Diagnostics.DebuggerStepThroughAttribute()]
     [System.CodeDom.Compiler.GeneratedCodeAttribute("System.ServiceModel", "4.0.0.0")]
-    public partial class InstrumentLockServiceFacadeClient : System.ServiceModel.ClientBase<TesterClient_WPF.InstrumentLockServiceFacadeClient.IInstrumentLockServiceFacade>, TesterClient_WPF.InstrumentLockServiceFacadeClient.IInstrumentLockServiceFacade {
+    public partial class InstrumentLockServiceFacadeClient : System.ServiceModel.ClientBase<TesterClient_NET.InstrumentLockServiceFacadeClient.IInstrumentLockServiceFacade>, TesterClient_NET.InstrumentLockServiceFacadeClient.IInstrumentLockServiceFacade {
         
         public InstrumentLockServiceFacadeClient() {
         }
@@ -116,35 +195,35 @@ namespace TesterClient_WPF.InstrumentLockServiceFacadeClient {
             return base.Channel.intDivideAsync(a, b, ThreadID);
         }
         
-        public bool getInstrumentLock(InstrumentLockService.sharedInstrument instr, string ThreadID) {
+        public bool getInstrumentLock(TesterClient_NET.InstrumentLockServiceFacadeClient.sharedInstrument instr, string ThreadID) {
             return base.Channel.getInstrumentLock(instr, ThreadID);
         }
         
-        public System.Threading.Tasks.Task<bool> getInstrumentLockAsync(InstrumentLockService.sharedInstrument instr, string ThreadID) {
+        public System.Threading.Tasks.Task<bool> getInstrumentLockAsync(TesterClient_NET.InstrumentLockServiceFacadeClient.sharedInstrument instr, string ThreadID) {
             return base.Channel.getInstrumentLockAsync(instr, ThreadID);
         }
         
-        public bool releaseInstrumentLock(InstrumentLockService.sharedInstrument instr, string ThreadID) {
+        public bool releaseInstrumentLock(TesterClient_NET.InstrumentLockServiceFacadeClient.sharedInstrument instr, string ThreadID) {
             return base.Channel.releaseInstrumentLock(instr, ThreadID);
         }
         
-        public System.Threading.Tasks.Task<bool> releaseInstrumentLockAsync(InstrumentLockService.sharedInstrument instr, string ThreadID) {
+        public System.Threading.Tasks.Task<bool> releaseInstrumentLockAsync(TesterClient_NET.InstrumentLockServiceFacadeClient.sharedInstrument instr, string ThreadID) {
             return base.Channel.releaseInstrumentLockAsync(instr, ThreadID);
         }
         
-        public bool getProtocolLock(InstrumentLockService.sharedProtocol protocol, string ThreadID) {
+        public bool getProtocolLock(TesterClient_NET.InstrumentLockServiceFacadeClient.sharedProtocol protocol, string ThreadID) {
             return base.Channel.getProtocolLock(protocol, ThreadID);
         }
         
-        public System.Threading.Tasks.Task<bool> getProtocolLockAsync(InstrumentLockService.sharedProtocol protocol, string ThreadID) {
+        public System.Threading.Tasks.Task<bool> getProtocolLockAsync(TesterClient_NET.InstrumentLockServiceFacadeClient.sharedProtocol protocol, string ThreadID) {
             return base.Channel.getProtocolLockAsync(protocol, ThreadID);
         }
         
-        public bool releaseProtocolLock(InstrumentLockService.sharedProtocol protocol, string ThreadID) {
+        public bool releaseProtocolLock(TesterClient_NET.InstrumentLockServiceFacadeClient.sharedProtocol protocol, string ThreadID) {
             return base.Channel.releaseProtocolLock(protocol, ThreadID);
         }
         
-        public System.Threading.Tasks.Task<bool> releaseProtocolLockAsync(InstrumentLockService.sharedProtocol protocol, string ThreadID) {
+        public System.Threading.Tasks.Task<bool> releaseProtocolLockAsync(TesterClient_NET.InstrumentLockServiceFacadeClient.sharedProtocol protocol, string ThreadID) {
             return base.Channel.releaseProtocolLockAsync(protocol, ThreadID);
         }
         

@@ -151,14 +151,24 @@ namespace InstrumentLockService
             _serviceInstance.getConnectedInfo();
         }
 
-        public void getInstrumentLock()
+        public bool getInstrumentLock(sharedInstrument instr, string ThreadID)
         {
-            _serviceInstance.getInstrumentLock();
+            return _serviceInstance.getInstrumentLock(instr, ThreadID);
         }
 
-        public void getProtocolLock()
+        public bool releaseInstrumentLock(sharedInstrument instr, string ThreadID)
         {
-            _serviceInstance.getProtocolLock();
+            return _serviceInstance.releaseInstrumentLock(instr, ThreadID);
+        }
+
+        public bool getProtocolLock(sharedProtocol protocol, string ThreadID)
+        {
+            return _serviceInstance.getProtocolLock(protocol, ThreadID);
+        }
+
+        public bool releaseProtocolLock(sharedProtocol protocol, string ThreadID)
+        {
+            return _serviceInstance.releaseProtocolLock(protocol, ThreadID);
         }
 
         public int intDivide(double a, double b, string ThreadID)
@@ -186,6 +196,8 @@ namespace InstrumentLockService
         private static Mutex mutexLockAdd = new Mutex();
         private static Mutex mutexLockAddAndDelay = new Mutex();
         private static Mutex mutexLockintDivide = new Mutex();
+        private static Semaphore semaphoreDCA = new Semaphore(initialCount: 1, maximumCount: 1);
+        private static Semaphore semaphoreDiCon = new Semaphore(initialCount: 1, maximumCount: 1);
 
         /// <summary>
         /// WCF service will fire EventFromClient togerther with the values sent from WCF client
@@ -210,8 +222,9 @@ namespace InstrumentLockService
             string sClient = ThreadID;
             string sService = "InstrumentLockService.null";
 
-            if (mutexLockAdd.WaitOne(10))
-            {   
+
+            if (mutexLockAdd.WaitOne())
+            {
                 Console.WriteLine("InstrumentLockService.Add");
                 sService = "InstrumentLockService.Add";
                 sum = a + b;
@@ -222,6 +235,8 @@ namespace InstrumentLockService
             {
                 Console.WriteLine($"{sClient} will not acquire the mutex");
             }
+
+
             ServiceFinish = DateTime.Now;
             // contruct the client request values to be sent to host
             var value = new ClientRequestValue(a, b, sum, sService, sClient, ServiceStart, ServiceFinish);
@@ -244,7 +259,7 @@ namespace InstrumentLockService
             string sClient = ThreadID;
             string sService = "InstrumentLockService.null";
 
-            if (mutexLockAddAndDelay.WaitOne(10))
+            if (mutexLockAddAndDelay.WaitOne())
             {
                 Console.WriteLine($"{ThreadID} InstrumentLockService.AddAndDelay");
                 sService = "InstrumentLockService.AddAndDelay";
@@ -329,9 +344,48 @@ namespace InstrumentLockService
         /// getInstrumentLock() of an instrument
         /// Such as getIntrumentLock(ATT1)
         /// </summary>
-        public void getInstrumentLock()
+        public bool getInstrumentLock(sharedInstrument instr, string ThreadID)
         {
-            throw new NotImplementedException();
+            bool ret = false;
+            DateTime ServiceStart = DateTime.Now;
+            DateTime ServiceFinish = new DateTime(1, 1, 1);
+            string sClient = ThreadID;
+            string sService = "InstrumentLockService.null";
+
+            semaphoreDCA.WaitOne();
+
+            Console.WriteLine("InstrumentLockService.getInstrumentLock");
+            sService = "InstrumentLockService.getInstrumentLock";
+            ret = true;
+
+            ServiceFinish = DateTime.Now;
+            // contruct the client request values to be sent to host
+            var value = new ClientRequestValue(0, 0, 0, sService, sClient, ServiceStart, ServiceFinish);
+            // each WCF service fires the event EventFromClient with the values from WCF client
+            EventFromClient?.Invoke(this, new CustomEventArgs(value));
+            return ret;
+        }
+
+        public bool releaseInstrumentLock(sharedInstrument instr, string ThreadID)
+        {
+            bool ret = false;
+            DateTime ServiceStart = DateTime.Now;
+            DateTime ServiceFinish = new DateTime(1, 1, 1);
+            string sClient = ThreadID;
+            string sService = "InstrumentLockService.null";
+
+            semaphoreDCA.Release();
+
+            Console.WriteLine("InstrumentLockService.releaseInstrumentLock");
+            sService = "InstrumentLockService.releaseInstrumentLock";
+            ret = true;
+
+            ServiceFinish = DateTime.Now;
+            // contruct the client request values to be sent to host
+            var value = new ClientRequestValue(0, 0, 0, sService, sClient, ServiceStart, ServiceFinish);
+            // each WCF service fires the event EventFromClient with the values from WCF client
+            EventFromClient?.Invoke(this, new CustomEventArgs(value));
+            return ret;
         }
 
         /// <summary>
@@ -340,9 +394,48 @@ namespace InstrumentLockService
         /// Mutex of Dicon1 is shared by PM1, SW1 and ATT1
         /// Because the DiCon box contains 3 different functional instruments, SW, ATT and PowerMeter.
         /// </summary>
-        public void getProtocolLock()
+        public bool getProtocolLock(sharedProtocol protocol, string ThreadID)
         {
-            throw new NotImplementedException();
+            bool ret = false;
+            DateTime ServiceStart = DateTime.Now;
+            DateTime ServiceFinish = new DateTime(1, 1, 1);
+            string sClient = ThreadID;
+            string sService = "InstrumentLockService.null";
+
+            semaphoreDiCon.WaitOne();
+
+            Console.WriteLine("InstrumentLockService.getProtocolLock");
+            sService = "InstrumentLockService.getProtocolLock";
+            ret = true;
+
+            ServiceFinish = DateTime.Now;
+            // contruct the client request values to be sent to host
+            var value = new ClientRequestValue(0, 0, 0, sService, sClient, ServiceStart, ServiceFinish);
+            // each WCF service fires the event EventFromClient with the values from WCF client
+            EventFromClient?.Invoke(this, new CustomEventArgs(value));
+            return ret;
+        }
+
+        public bool releaseProtocolLock(sharedProtocol protocol, string ThreadID)
+        {
+            bool ret = false;
+            DateTime ServiceStart = DateTime.Now;
+            DateTime ServiceFinish = new DateTime(1, 1, 1);
+            string sClient = ThreadID;
+            string sService = "InstrumentLockService.null";
+
+            semaphoreDiCon.Release();
+
+            Console.WriteLine("InstrumentLockService.releaseProtocolLock");
+            sService = "InstrumentLockService.releaseProtocolLock";
+            ret = true;
+
+            ServiceFinish = DateTime.Now;
+            // contruct the client request values to be sent to host
+            var value = new ClientRequestValue(0, 0, 0, sService, sClient, ServiceStart, ServiceFinish);
+            // each WCF service fires the event EventFromClient with the values from WCF client
+            EventFromClient?.Invoke(this, new CustomEventArgs(value));
+            return ret;
         }
 
         /// <summary>
