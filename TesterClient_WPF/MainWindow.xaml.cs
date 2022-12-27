@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Diagnostics;
 using System.Linq;
+using System.Reflection;
 using System.ServiceModel;
 using System.Text;
 using System.Threading;
@@ -160,17 +161,17 @@ namespace TesterClient_WPF
 
             try
             {
-                if (cmbService.SelectedItem == typeof(Service).GetProperty(Service.Add))
+                if (cmbService.SelectedItem == (Object)typeof(Service).GetProperty(Service.Add))
                 {
                     double sum = _client.Add(a, b, ThreadID);
                     tbOut.Text = $"Add({a}, {b}) = {sum.ToString()}";
                 }
-                else if (cmbService.SelectedItem == typeof(Service).GetProperty(Service.AddAndDelay))
+                else if (cmbService.SelectedItem == (Object)typeof(Service).GetProperty(Service.AddAndDelay))
                 {
                     double sum = _client.AddAndDelay(a, b, delay, ThreadID);
                     tbOut.Text = $"Add({a}, {b}) = {sum.ToString()}";
                 }
-                else if (cmbService.SelectedItem == typeof(Service).GetProperty(Service.IntDivide))
+                else if (cmbService.SelectedItem == (Object)typeof(Service).GetProperty(Service.IntDivide))
                 {
                     try
                     {
@@ -184,22 +185,22 @@ namespace TesterClient_WPF
                         //_client.Abort();
                     }
                 }
-                else if (cmbService.SelectedItem == typeof(Service).GetProperty(Service.getInstrumentLock))
+                else if (cmbService.SelectedItem == (Object)typeof(Service).GetProperty(Service.getInstrumentLock))
                 {
                     bool ret = _client.getInstrumentLock(sharedInstrument.DCA, ThreadID);
                     tbOut.Text = $"getInstrumentLock(sharedInstrument.DCA)";
                 }
-                else if (cmbService.SelectedItem == typeof(Service).GetProperty(Service.releaseInstrumentLock))
+                else if (cmbService.SelectedItem == (Object)typeof(Service).GetProperty(Service.releaseInstrumentLock))
                 {
                     bool ret = _client.releaseInstrumentLock(sharedInstrument.DCA, ThreadID);
                     tbOut.Text = $"releaseInstrumentLock(sharedInstrument.DCA)";
                 }
-                else if (cmbService.SelectedItem == typeof(Service).GetProperty(Service.getProtocolLock))
+                else if (cmbService.SelectedItem == (Object)typeof(Service).GetProperty(Service.getProtocolLock))
                 {
                     bool ret = _client.getProtocolLock(sharedProtocol.DiCon, ThreadID);
                     tbOut.Text = $"getProtocolLock(sharedProtocol.DiCon)";
                 }
-                else if (cmbService.SelectedItem == typeof(Service).GetProperty(Service.releaseProtocolLock))
+                else if (cmbService.SelectedItem == (Object)typeof(Service).GetProperty(Service.releaseProtocolLock))
                 {
                     bool ret = _client.releaseProtocolLock(sharedProtocol.DiCon, ThreadID);
                     tbOut.Text = $"releaseProtocolLock(sharedProtocol.DiCon)";

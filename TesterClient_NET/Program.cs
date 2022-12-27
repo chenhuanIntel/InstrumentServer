@@ -68,8 +68,6 @@ namespace TesterClient_NET
         /// </summary>
         private static void wshttpClientEndPoint()
         {
-            //_client = new InstrumentLockServiceFacadeClient.InstrumentLockServiceFacadeClient();
-            // wsHttp
             Uri baseAddress = new Uri("http://localhost:8080/");
             var myBinding = new WSHttpBinding();
             var myEndpoint = new EndpointAddress(baseAddress);
@@ -93,8 +91,6 @@ namespace TesterClient_NET
         /// </summary>
         private static void netTcpClientEndPoint()
         {
-            //_client = new InstrumentLockServiceFacadeClient.InstrumentLockServiceFacadeClient();
-            // net.tcp
             Uri baseAddress = new Uri("net.tcp://localhost:8001/");
 
             var myBinding = new NetTcpBinding();
