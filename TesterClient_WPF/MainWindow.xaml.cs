@@ -16,7 +16,7 @@ using System.Windows.Media.Animation;
 using System.Windows.Media.Imaging;
 using System.Windows.Navigation;
 using System.Windows.Shapes;
-using InstrumentLockService;
+using InstrumentLockServices;
 using NetFwTypeLib; // Located in FirewallAPI.dll
 
 namespace TesterClient_WPF

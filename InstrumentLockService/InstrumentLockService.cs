@@ -7,7 +7,8 @@ using System.ServiceModel.Security;
 using System.Text;
 using System.Threading;
 
-namespace InstrumentLockService
+// namespace name uses plural
+namespace InstrumentLockServices
 {
     // https://stackoverflow.com/questions/40591726/can-i-get-set-data-into-wcf-service-by-host
     // in order to pass to host and show the client request value at host whenever there is a client request

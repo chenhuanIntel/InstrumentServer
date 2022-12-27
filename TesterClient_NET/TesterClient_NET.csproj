@@ -55,34 +55,19 @@
   </ItemGroup>
   <ItemGroup>
     <None Include="App.config" />
-    <None Include="Connected Services\InstrumentLockServiceFacadeClient\InstrumentLockService.xsd">
+    <None Include="Connected Services\InstrumentLockServiceFacadeClient\InstrumentLockServiceFacade.wsdl" />
+    <None Include="Connected Services\InstrumentLockServiceFacadeClient\item.xsd">
       <SubType>Designer</SubType>
     </None>
-    <None Include="Connected Services\InstrumentLockServiceFacadeClient\service.wsdl" />
-    <None Include="Connected Services\InstrumentLockServiceFacadeClient\service.xsd">
+    <None Include="Connected Services\InstrumentLockServiceFacadeClient\item1.xsd">
       <SubType>Designer</SubType>
     </None>
-    <None Include="Connected Services\InstrumentLockServiceFacadeClient\service1.xsd">
+    <None Include="Connected Services\InstrumentLockServiceFacadeClient\item2.xsd">
       <SubType>Designer</SubType>
     </None>
   </ItemGroup>
   <ItemGroup>
     <WCFMetadata Include="Connected Services\" />
-  </ItemGroup>
-  <ItemGroup>
-    <WCFMetadataStorage Include="Connected Services\InstrumentLockServiceFacadeClient\" />
-  </ItemGroup>
-  <ItemGroup>
-    <None Include="Connected Services\InstrumentLockServiceFacadeClient\configuration91.svcinfo" />
-  </ItemGroup>
-  <ItemGroup>
-    <None Include="Connected Services\InstrumentLockServiceFacadeClient\configuration.svcinfo" />
-  </ItemGroup>
-  <ItemGroup>
-    <None Include="Connected Services\InstrumentLockServiceFacadeClient\Reference.svcmap">
-      <Generator>WCF Proxy Generator</Generator>
-      <LastGenOutput>Reference.cs</LastGenOutput>
-    </None>
   </ItemGroup>
   <ItemGroup>
     <COMReference Include="NetFwTypeLib">
@@ -100,6 +85,24 @@
       <Project>{e22bfb4c-2769-45a1-ac10-76cf2e8a4ad6}</Project>
       <Name>InstrumentLockService</Name>
     </ProjectReference>
+  </ItemGroup>
+  <ItemGroup>
+    <WCFMetadataStorage Include="Connected Services\InstrumentLockServiceFacadeClient\" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Connected Services\InstrumentLockServiceFacadeClient\item.disco" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Connected Services\InstrumentLockServiceFacadeClient\configuration91.svcinfo" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Connected Services\InstrumentLockServiceFacadeClient\configuration.svcinfo" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Connected Services\InstrumentLockServiceFacadeClient\Reference.svcmap">
+      <Generator>WCF Proxy Generator</Generator>
+      <LastGenOutput>Reference.cs</LastGenOutput>
+    </None>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
 </Project>

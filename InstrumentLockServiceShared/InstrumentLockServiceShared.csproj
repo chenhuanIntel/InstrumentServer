@@ -4,11 +4,11 @@
   <PropertyGroup>
     <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
     <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
-    <ProjectGuid>{3FF35AAC-9F92-4671-980E-346B73BEAECC}</ProjectGuid>
+    <ProjectGuid>{1805DCE8-568C-4307-9F91-FC707EAEDF67}</ProjectGuid>
     <OutputType>Library</OutputType>
     <AppDesignerFolder>Properties</AppDesignerFolder>
-    <RootNamespace>InstrumentLockServiceHost</RootNamespace>
-    <AssemblyName>InstrumentLockServiceHost</AssemblyName>
+    <RootNamespace>InstrumentLockServiceShared</RootNamespace>
+    <AssemblyName>InstrumentLockServiceShared</AssemblyName>
     <TargetFrameworkVersion>v4.7.2</TargetFrameworkVersion>
     <FileAlignment>512</FileAlignment>
     <Deterministic>true</Deterministic>
@@ -34,9 +34,6 @@
     <Reference Include="System" />
     <Reference Include="System.Core" />
     <Reference Include="System.ServiceModel" />
-    <Reference Include="System.Windows" />
-    <Reference Include="System.Windows.Controls.Ribbon" />
-    <Reference Include="System.Windows.Presentation" />
     <Reference Include="System.Xml.Linq" />
     <Reference Include="System.Data.DataSetExtensions" />
     <Reference Include="Microsoft.CSharp" />
@@ -45,15 +42,9 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="InstrumentLockServiceHost.cs" />
-    <Compile Include="IInstrumentLockServiceHost.cs" />
+    <Compile Include="InstrumentLockServiceShared.cs" />
+    <Compile Include="IInstrumentLockServiceShared.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
-  </ItemGroup>
-  <ItemGroup>
-    <ProjectReference Include="..\InstrumentLockService\InstrumentLockService.csproj">
-      <Project>{e22bfb4c-2769-45a1-ac10-76cf2e8a4ad6}</Project>
-      <Name>InstrumentLockService</Name>
-    </ProjectReference>
   </ItemGroup>
   <ItemGroup>
     <COMReference Include="NetFwTypeLib">

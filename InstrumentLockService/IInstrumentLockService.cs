@@ -6,7 +6,8 @@ using System.ServiceModel;
 using System.Text;
 using System.Threading;
 
-namespace InstrumentLockService
+// namespace name uses plural
+namespace InstrumentLockServices
 {
     public enum sharedInstrument
     {

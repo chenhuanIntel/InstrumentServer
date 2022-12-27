@@ -12,8 +12,8 @@ using System.Windows.Media;
 using System.Windows.Media.Imaging;
 using System.Windows.Navigation;
 using System.Windows.Shapes;
-using InstrumentLockService;
-using InstrumentLockServiceHost;
+using InstrumentLockServices;
+using InstrumentLockServiceHosts;
 using System.ServiceModel;
 using System.Threading;
 using System.Windows.Threading;
@@ -22,12 +22,13 @@ using NetFwTypeLib; // Located in FirewallAPI.dll
 using System.ServiceModel.Description;
 using System.Collections.ObjectModel;
 
-namespace InstrumentLockServiceHost_WPF2
+
+namespace InstrumentLockServiceHosts_WPF2
 {
     /// <summary>
     /// Interaction logic for MainWindow.xaml
     /// </summary>
-    public class InstrumentLockServiceHost_WPF : IInstrumentLockServiceHost
+    public class InstrumentLockServiceHost_WPF : InstrumentLockServiceHost
     {
         // https://stackoverflow.com/questions/40591726/can-i-get-set-data-into-wcf-service-by-host
         // in order to pass to host and show the client request value at host whenever there is a client request
@@ -40,15 +41,6 @@ namespace InstrumentLockServiceHost_WPF2
         /// for data binding to WPF, will be assigned with the client request values from client in event handler
         /// </summary>
         public ObservableCollection<ClientRequestValue> _clientRequestValue;
-        /// <summary>
-        /// a class global variable of Service Host
-        /// </summary>
-        private ServiceHost _host;
-        private Uri _baseAddress;
-        /// <summary>
-        /// a class global variable of WCF service instance to work with event from client.
-        /// </summary>
-        private InstrumentLockService.InstrumentLockService _instance;
         /// <summary>
         /// a varibale to access the WPF DataGrid defined in MainWindow class
         /// </summary>
@@ -64,135 +56,12 @@ namespace InstrumentLockServiceHost_WPF2
 
         public Object _itemsLockMainWindow { get; set; }
 
-
-
-        private void wsHttpEndPoint()
-        {
-            // wsHttp
-            _baseAddress = new Uri("http://localhost:8080/");
-
-            //https://stackoverflow.com/questions/3469044/self-hosted-wcf-service-how-to-access-the-objects-implementing-the-service-co
-            // instead of using Singleton _instance of InstrumentLockService,
-            // we develop InstrumentLockServiceFacade to allow WCF Per Call behavior by using the Type, not an instance
-            _host = new ServiceHost(typeof(InstrumentLockServiceFacade), _baseAddress);
-
-            // Check to see if the service host already has a ServiceMetadataBehavior
-            ServiceMetadataBehavior smb = _host.Description.Behaviors.Find<ServiceMetadataBehavior>();
-            // If not, add one
-            if (smb == null)
-                smb = new ServiceMetadataBehavior();
-            // To avoid disclosing metadata information, set the values below to false before deployment
-            smb.HttpGetEnabled = true; // when using net tcp binding, HttpGetEnabled need to be false
-            smb.HttpsGetEnabled = true;
-            _host.Description.Behaviors.Add(smb);
-
-            // You can't actually ADD a ServiceDebugBehavior to a ServiceHost, what you have to do is modify the existing ServiceDebugBehavior (was having the same issue)
-            // https://stackoverflow.com/questions/21443347/how-to-programatically-add-servicedebug-behavior-with-endpoint
-            _host.Description.Behaviors.Find<ServiceDebugBehavior>().IncludeExceptionDetailInFaults = true;
-
-            //Add MEX metadata endpoint
-            _host.AddServiceEndpoint(
-                ServiceMetadataBehavior.MexContractName,
-                MetadataExchangeBindings.CreateMexHttpBinding(),
-                "mex"
-            );
-            // Add application endpoint
-            WSHttpBinding wsHttpBinding = new WSHttpBinding();
-            _host.AddServiceEndpoint(typeof(IInstrumentLockServiceFacade), wsHttpBinding, _baseAddress);
-
-            _host.Open();
-        }
-        private void netTcpEndPoint()
-        {
-            // net.tcp
-            _baseAddress = new Uri("net.tcp://localhost:8001/");
-
-            //https://stackoverflow.com/questions/3469044/self-hosted-wcf-service-how-to-access-the-objects-implementing-the-service-co
-            // instead of using Singleton _instance of InstrumentLockService,
-            // we develop InstrumentLockServiceFacade to allow WCF Per Call behavior by using the Type, not an instance
-            _host = new ServiceHost(typeof(InstrumentLockServiceFacade), _baseAddress);
-
-            // Check to see if the service host already has a ServiceMetadataBehavior
-            ServiceMetadataBehavior smb = _host.Description.Behaviors.Find<ServiceMetadataBehavior>();
-            // If not, add one
-            if (smb == null)
-                smb = new ServiceMetadataBehavior();
-            // To avoid disclosing metadata information, set the values below to false before deployment
-            smb.HttpGetEnabled = false; // when using net tcp binding, HttpGetEnabled need to be false
-            smb.HttpsGetEnabled = false;
-            _host.Description.Behaviors.Add(smb);
-
-            // You can't actually ADD a ServiceDebugBehavior to a ServiceHost, what you have to do is modify the existing ServiceDebugBehavior (was having the same issue)
-            // https://stackoverflow.com/questions/21443347/how-to-programatically-add-servicedebug-behavior-with-endpoint
-            _host.Description.Behaviors.Find<ServiceDebugBehavior>().IncludeExceptionDetailInFaults = true;
-
-            //Add MEX endpoint
-            _host.AddServiceEndpoint(
-              ServiceMetadataBehavior.MexContractName,
-              MetadataExchangeBindings.CreateMexTcpBinding(),
-              "mex"
-            );
-
-            // Add application endpoint
-            NetTcpBinding netTCPbinding = new NetTcpBinding();
-            _host.AddServiceEndpoint(typeof(IInstrumentLockServiceFacade), netTCPbinding, _baseAddress);
-
-            _host.Open();
-        }
-
-        /// <summary>
-        /// define the global variable of WCF service instance
-        /// and start the service host of the instance
-        /// </summary>
-        //public void initialize(DataGrid dgFromMainWindow, TextBlock tbFromMainWindow)
-        public void initialize()
-        {
-            try
-            {
-                // in MainWindow(), the Dispatcher and WPF DataGrid/TextBlock of the MainWindow class are assigned to this InstrumentLockServiceHost_WPF class
-                // _dpFromMainWindow, _dgFromMainWindow, _tbFromMainWindow
-
-                // init _clientRequestValue and baseAddress
-                _clientRequestValue = new ObservableCollection<ClientRequestValue>();
-
-                //wsHttpEndPoint();
-                netTcpEndPoint();
-
-                // in InstrumentLockServiceFacade, we can still access the actual service class
-                var serviceInstance = InstrumentLockServiceFacade.ServiceInstance;
-                serviceInstance.EventFromClient += HandleEventFromClient;
-
-                // The service can now be accessed.
-                //MessageBox.Show($"The service is ready at {baseAddress}.", "HOST");
-                _tbFromMainWindow.Text = $"The service host is ready at {_baseAddress}";
-            }
-            catch (TimeoutException timeProblem)
-            {
-                Console.WriteLine(timeProblem.Message);
-                Console.ReadLine();
-                _tbFromMainWindow.Text = timeProblem.Message;
-            }
-            catch (CommunicationException commProblem)
-            {
-                Console.WriteLine(commProblem.Message);
-                Console.ReadLine();
-                _tbFromMainWindow.Text = commProblem.Message;
-            }
-            catch (Exception ex)
-            {
-                // Logging
-                Console.WriteLine(ex.Message);
-                _tbFromMainWindow.Text = ex.Message;
-            }
-        }
-
-
         /// <summary>
         /// Host will handle the event from client here
         /// </summary>
         /// <param name="sender"></param>
         /// <param name="e"></param>
-        public void HandleEventFromClient(object sender, CustomEventArgs e)
+        public override void HandleEventFromClient(object sender, CustomEventArgs e)
         {
             try
             {
@@ -200,6 +69,8 @@ namespace InstrumentLockServiceHost_WPF2
                 // such as print the value on host console or WPF forms
                 var varValue = e.Value;
                 // handling the event by adding client request value to the list; and it will trigger WPF to add one more column after refresh
+                // https://stackoverflow.com/questions/21720638/using-bindingoperations-enablecollectionsynchronization
+                // a syn-lock is placed to synchronize multiple (clients) threads to access the server to display the activities
                 lock (_itemsLockMainWindow)
                 {
                     // Once locked, you can manipulate the collection safely from another thread
@@ -221,80 +92,10 @@ namespace InstrumentLockServiceHost_WPF2
             }
         }
 
-        /// <summary>
-        /// Stop Host and dispose Instance
-        /// </summary>
-        public void Dispose()
-        {
-            try
-            {
-                if (_instance != null)
-                {
-                    _instance.Dispose();
-                }
-                // it takes about 10 sec to close the host
-                _host.Close();
-            }
-            catch (Exception ex)
-            {
-                // Logging
-                Console.WriteLine(ex.Message);
-            }
-        }
-
     }
 
     public partial class MainWindow : Window
     {
-        // https://stackoverflow.com/questions/1242566/any-way-to-turn-the-internet-off-in-windows-using-c/1243026#1243026
-        // https://learn.microsoft.com/en-us/previous-versions/windows/desktop/ics/using-windows-firewall-with-advanced-security
-        private static void setFirewall()
-        {
-            INetFwPolicy2 firewallPolicy = (INetFwPolicy2)Activator.CreateInstance(Type.GetTypeFromProgID("HNetCfg.FwPolicy2"));
-
-            //// add application
-            //INetFwRule firewallAppRule = (INetFwRule)Activator.CreateInstance(Type.GetTypeFromProgID("HNetCfg.FWRule"));
-            //firewallAppRule.Name = "WCF_Tester_Client";
-            //firewallAppRule.Description = "Allow WCF Tester Client thru firewall";
-            //firewallAppRule.ApplicationName = @"C:\project\chenhuan\InstrumentServer\TesterClient_WPF\bin\Debug\TesterClient_WPF.exe";
-            //firewallAppRule.Action = NET_FW_ACTION_.NET_FW_ACTION_ALLOW;
-            //firewallAppRule.Enabled = true;
-            //firewallPolicy.Rules.Add(firewallAppRule);
-
-            // add inbound rules for TCP ports
-            // first to remove the rule with the same name
-            INetFwRule firewallRule = firewallPolicy.Rules.OfType<INetFwRule>().Where(x => x.Name == "WCF_inbound_rule").FirstOrDefault();
-            if (firewallRule != null)
-                firewallPolicy.Rules.Remove(firewallRule.Name);
-            INetFwRule firewallInRule = (INetFwRule)Activator.CreateInstance(Type.GetTypeFromProgID("HNetCfg.FWRule"));
-            firewallInRule.Name = "WCF_inbound_rule";
-            firewallInRule.Description = "WCF service port inbound rule";
-            firewallInRule.Protocol = (int)NET_FW_IP_PROTOCOL_.NET_FW_IP_PROTOCOL_TCP;
-            firewallInRule.LocalPorts = "8001";
-            firewallInRule.Direction = NET_FW_RULE_DIRECTION_.NET_FW_RULE_DIR_IN;
-            firewallInRule.Action = NET_FW_ACTION_.NET_FW_ACTION_ALLOW;
-            firewallInRule.Enabled = true;
-            firewallPolicy.Rules.Add(firewallInRule);
-
-            // add outbound rules for TCP ports
-            // first to remove the rule with the same name
-            firewallRule = firewallPolicy.Rules.OfType<INetFwRule>().Where(x => x.Name == "WCF_outbound_rule").FirstOrDefault();
-            if (firewallRule != null)
-                firewallPolicy.Rules.Remove(firewallRule.Name);
-            INetFwRule firewallOutRule = (INetFwRule)Activator.CreateInstance(Type.GetTypeFromProgID("HNetCfg.FWRule"));
-            firewallOutRule.Name = "WCF_outbound_rule";
-            firewallOutRule.Description = "WCF service port outbound rule";
-            firewallOutRule.Protocol = (int)NET_FW_IP_PROTOCOL_.NET_FW_IP_PROTOCOL_TCP;
-            firewallOutRule.LocalPorts = "8001";
-            firewallOutRule.Direction = NET_FW_RULE_DIRECTION_.NET_FW_RULE_DIR_OUT;
-            firewallOutRule.Action = NET_FW_ACTION_.NET_FW_ACTION_ALLOW;
-            firewallOutRule.Enabled = true;
-            firewallPolicy.Rules.Add(firewallOutRule);
-        }
-
-
-
-
         /// <summary>
         /// a class variable to InstrumentLockServiceHost_WPF
         /// </summary>
@@ -305,34 +106,31 @@ namespace InstrumentLockServiceHost_WPF2
 
         public MainWindow()
         {
-            setFirewall();
-
             // InitializeComponent() is auto generated by the corresponsing xaml
             // needs to be placed in front of the rest of codes in MainWindow()
             InitializeComponent();
 
             _server = new InstrumentLockServiceHost_WPF();
-            // dgServerRequest is the DataGrid defined in MainWindow.xaml
-            // tbMainWindow is the TextBlock defined in MainWindow.xaml
-            // assign all the class variables of InstrumentLockServiceHost_WPF to the variables of MainWindow
+            _server.setFirewall();
+            // init/assign all class variables of _server            
+            // if to assign a value, assigning all the class variables of _server(InstrumentLockServiceHost_WPF) with the values of MainWindow's variables
             // that is, to assign InstrumentLockServiceHost_WPF.dgFromMainWindow = MainWindow.dgServerRequest, etc
             // i.e. pass the WPF DataGrid of the MainWindow class to this InstrumentLockServiceHost_WPF class
-            _server._tbFromMainWindow = tbMainWindow;
-            _server._dgFromMainWindow = dgServerRequest;
+            _server._clientRequestValue = new ObservableCollection<ClientRequestValue>();
+            _server._tbFromMainWindow = tbMainWindow; // tbMainWindow is the TextBlock defined in MainWindow.xaml
+            _server._dgFromMainWindow = dgServerRequest; // dgServerRequest is the DataGrid defined in MainWindow.xaml
             _server._dpFromMainWindow = Dispatcher.CurrentDispatcher;
-            _server._itemsLockMainWindow = _itemsLock;
+            _server._itemsLockMainWindow = _itemsLock; // synchronization lock defined above
             // no need to get a worker thread or task because WCF behavior UseSynchronizationContext = false
             // WCF will get a new thread when a client requests WCF services
             _server.initialize();
 
+            // https://stackoverflow.com/questions/21720638/using-bindingoperations-enablecollectionsynchronization
             //Enable the cross acces to this collection elsewhere
             BindingOperations.EnableCollectionSynchronization(_server._clientRequestValue, _itemsLock);
            
             // binding the WPF DataGrid to List<ClientRequestValue>
             dgServerRequest.ItemsSource = _server._clientRequestValue;
-
-            //DataContext = this;
-
         }
 
         /// <summary>

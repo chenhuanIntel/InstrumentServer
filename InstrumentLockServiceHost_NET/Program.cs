@@ -7,238 +7,25 @@ using System.ServiceModel.Description;
 using System.Text;
 using System.Threading;
 using System.Threading.Tasks;
-using InstrumentLockService;
-using InstrumentLockServiceHost;
+using InstrumentLockServices;
+using InstrumentLockServiceHosts;
 using NetFwTypeLib; // Located in FirewallAPI.dll
 
-namespace InstrumentLockServiceHost_NET
+// namespace name uses plural
+namespace InstrumentLockServiceHost_NETs
 {
-    public class InstrumentLockServiceHostConsole : IInstrumentLockServiceHost
-    {
-        // https://stackoverflow.com/questions/40591726/can-i-get-set-data-into-wcf-service-by-host
-        // in order to pass to host and show the client request value at host whenever there is a client request
-        // an event "RequestFromClient" is invoked within each service method
-        // the customized event arguments, CustomEventArgs, consisting of ClientRequestValue in the client request are associated with each RequestFromClient event
-        // a WCF service instance is defined with event handler; such a WCF service instance is used to define a service host 
-        // once the service host receives such an event, host's event handler will show the values in CustomEventArgs to console or WPF form
-
-        /// <summary>
-        /// a global variable of Service Host
-        /// </summary>
-        private ServiceHost _host;
-
-        Uri _baseAddress;
-
-        /// <summary>
-        /// a global variable of WCF service instance to work with event from client.
-        /// </summary>
-        //private static InstrumentLockService.InstrumentLockService _instance;
-
-        /// <summary>
-        /// Stop Host and dispose Instance
-        /// </summary>
-        public void Dispose()
-        {
-            try
-            {
-                //if (_instance != null)
-                //{
-                //    _instance.Dispose();
-                //}
-                _host.Close();
-            }
-            catch (Exception ex)
-            {
-                // Logging
-                Console.WriteLine(ex.Message);
-            }
-        }
-
-        /// <summary>
-        /// Host will handle the event from client here
-        /// </summary>
-        /// <param name="sender"></param>
-        /// <param name="e"></param>
-        public void HandleEventFromClient(object sender, CustomEventArgs e)
-        {
-            // do whatever you want here
-            // such as print the value on host console or WPF forms
-            var varValue = e.Value;
-            Console.WriteLine($"WCF client thread = {varValue.sClient}.");
-            Console.WriteLine($"\tinput A = {varValue.dInputA}.");
-            Console.WriteLine($"\tinput B = {varValue.dInputB}.");
-            Console.WriteLine($"\tservice = {varValue.sService}.");
-            Console.WriteLine($"\tresult Sum = {varValue.dResult}.");
-            Console.WriteLine($"\tServiceStart = {varValue.ServiceStart}.");
-            Console.WriteLine($"\tServiceFinish = {varValue.ServiceFinish}.");
-        }
-
-        private void wsHttpEndPoint()
-        {
-            // wsHttp
-            _baseAddress = new Uri("http://localhost:8080/");
-
-            //https://stackoverflow.com/questions/3469044/self-hosted-wcf-service-how-to-access-the-objects-implementing-the-service-co
-            // instead of using Singleton _instance of InstrumentLockService,
-            // we develop InstrumentLockServiceFacade to allow WCF Per Call behavior by using the Type, not an instance
-            _host = new ServiceHost(typeof(InstrumentLockServiceFacade), _baseAddress);
-
-            // Check to see if the service host already has a ServiceMetadataBehavior
-            ServiceMetadataBehavior smb = _host.Description.Behaviors.Find<ServiceMetadataBehavior>();
-            // If not, add one
-            if (smb == null)
-                smb = new ServiceMetadataBehavior();
-            // To avoid disclosing metadata information, set the values below to false before deployment
-            smb.HttpGetEnabled = true; // when using net tcp binding, HttpGetEnabled need to be false
-            smb.HttpsGetEnabled = true;
-            _host.Description.Behaviors.Add(smb);
-
-            // You can't actually ADD a ServiceDebugBehavior to a ServiceHost, what you have to do is modify the existing ServiceDebugBehavior (was having the same issue)
-            // https://stackoverflow.com/questions/21443347/how-to-programatically-add-servicedebug-behavior-with-endpoint
-            _host.Description.Behaviors.Find<ServiceDebugBehavior>().IncludeExceptionDetailInFaults = true;
-
-            //Add MEX metadata endpoint
-            _host.AddServiceEndpoint(
-                ServiceMetadataBehavior.MexContractName,
-                MetadataExchangeBindings.CreateMexHttpBinding(),
-                "mex"
-            );
-            // Add application endpoint
-            WSHttpBinding wsHttpBinding = new WSHttpBinding();
-            _host.AddServiceEndpoint(typeof(IInstrumentLockServiceFacade), wsHttpBinding, _baseAddress);
-
-            _host.Open();
-        }
-        private void netTcpEndPoint()
-        {
-            // net.tcp
-            _baseAddress = new Uri("net.tcp://localhost:8001/");
-
-            //https://stackoverflow.com/questions/3469044/self-hosted-wcf-service-how-to-access-the-objects-implementing-the-service-co
-            // instead of using Singleton _instance of InstrumentLockService,
-            // we develop InstrumentLockServiceFacade to allow WCF Per Call behavior by using the Type, not an instance
-            _host = new ServiceHost(typeof(InstrumentLockServiceFacade), _baseAddress);
-
-            // Check to see if the service host already has a ServiceMetadataBehavior
-            ServiceMetadataBehavior smb = _host.Description.Behaviors.Find<ServiceMetadataBehavior>();
-            // If not, add one
-            if (smb == null)
-                smb = new ServiceMetadataBehavior();
-            // To avoid disclosing metadata information, set the values below to false before deployment
-            smb.HttpGetEnabled = false; // when using net tcp binding, HttpGetEnabled need to be false
-            smb.HttpsGetEnabled = false;
-            _host.Description.Behaviors.Add(smb);
-
-            // You can't actually ADD a ServiceDebugBehavior to a ServiceHost, what you have to do is modify the existing ServiceDebugBehavior (was having the same issue)
-            // https://stackoverflow.com/questions/21443347/how-to-programatically-add-servicedebug-behavior-with-endpoint
-            _host.Description.Behaviors.Find<ServiceDebugBehavior>().IncludeExceptionDetailInFaults = true;
-
-            //Add MEX endpoint
-            _host.AddServiceEndpoint(
-              ServiceMetadataBehavior.MexContractName,
-              MetadataExchangeBindings.CreateMexTcpBinding(),
-              "mex"
-            );
-
-            // Add application endpoint
-            NetTcpBinding netTCPbinding = new NetTcpBinding();
-            _host.AddServiceEndpoint(typeof(IInstrumentLockServiceFacade), netTCPbinding, _baseAddress);
-
-            _host.Open();
-        }
-        /// <summary>
-        /// define the global variable of WCF service instance
-        /// and start the service host of the instance
-        /// </summary>
-        public void initialize()
-        {
-            try
-            {
-                //wsHttpEndPoint();
-                netTcpEndPoint();
-
-                // in InstrumentLockServiceFacade, we can still access the actual service class
-                var serviceInstance = InstrumentLockServiceFacade.ServiceInstance;
-                serviceInstance.EventFromClient += HandleEventFromClient;
-
-                // The service can now be accessed.
-                Console.WriteLine($"The service is ready at {_baseAddress}");
-            }
-            catch (TimeoutException timeProblem)
-            {
-                Console.WriteLine(timeProblem.Message);
-                Console.ReadLine();
-            }
-            catch (CommunicationException commProblem)
-            {
-                Console.WriteLine(commProblem.Message);
-                Console.ReadLine();
-            }
-            catch (Exception ex)
-            {
-                // Logging
-                Console.WriteLine(ex.Message);
-            }
-        }
-    }
     internal class Program
     {
-        // https://stackoverflow.com/questions/1242566/any-way-to-turn-the-internet-off-in-windows-using-c/1243026#1243026
-        // https://learn.microsoft.com/en-us/previous-versions/windows/desktop/ics/using-windows-firewall-with-advanced-security
-        private static void setFirewall()
-        {
-            INetFwPolicy2 firewallPolicy = (INetFwPolicy2)Activator.CreateInstance(Type.GetTypeFromProgID("HNetCfg.FwPolicy2"));
-
-            //// add application
-            //INetFwRule firewallAppRule = (INetFwRule)Activator.CreateInstance(Type.GetTypeFromProgID("HNetCfg.FWRule"));
-            //firewallAppRule.Name = "WCF_Tester_Client";
-            //firewallAppRule.Description = "Allow WCF Tester Client thru firewall";
-            //firewallAppRule.ApplicationName = @"C:\project\chenhuan\InstrumentServer\TesterClient_WPF\bin\Debug\TesterClient_WPF.exe";
-            //firewallAppRule.Action = NET_FW_ACTION_.NET_FW_ACTION_ALLOW;
-            //firewallAppRule.Enabled = true;
-            //firewallPolicy.Rules.Add(firewallAppRule);
-
-            // add inbound rules for TCP ports
-            // first to remove the rule with the same name
-            INetFwRule firewallRule = firewallPolicy.Rules.OfType<INetFwRule>().Where(x => x.Name == "WCF_inbound_rule").FirstOrDefault();
-            if (firewallRule != null)
-                firewallPolicy.Rules.Remove(firewallRule.Name);
-            INetFwRule firewallInRule = (INetFwRule)Activator.CreateInstance(Type.GetTypeFromProgID("HNetCfg.FWRule"));
-            firewallInRule.Name = "WCF_inbound_rule";
-            firewallInRule.Description = "WCF service port inbound rule";      
-            firewallInRule.Protocol = (int)NET_FW_IP_PROTOCOL_.NET_FW_IP_PROTOCOL_TCP;
-            firewallInRule.LocalPorts = "8001";
-            firewallInRule.Direction = NET_FW_RULE_DIRECTION_.NET_FW_RULE_DIR_IN;
-            firewallInRule.Action = NET_FW_ACTION_.NET_FW_ACTION_ALLOW;
-            firewallInRule.Enabled = true;       
-            firewallPolicy.Rules.Add(firewallInRule);
-
-            // add outbound rules for TCP ports
-            // first to remove the rule with the same name
-            firewallRule = firewallPolicy.Rules.OfType<INetFwRule>().Where(x => x.Name == "WCF_outbound_rule").FirstOrDefault();
-            if (firewallRule != null)
-                firewallPolicy.Rules.Remove(firewallRule.Name);
-            INetFwRule firewallOutRule = (INetFwRule)Activator.CreateInstance(Type.GetTypeFromProgID("HNetCfg.FWRule"));
-            firewallOutRule.Name = "WCF_outbound_rule";
-            firewallOutRule.Description = "WCF service port outbound rule";
-            firewallOutRule.Protocol = (int)NET_FW_IP_PROTOCOL_.NET_FW_IP_PROTOCOL_TCP;
-            firewallOutRule.LocalPorts = "8001";
-            firewallOutRule.Direction = NET_FW_RULE_DIRECTION_.NET_FW_RULE_DIR_OUT;
-            firewallOutRule.Action = NET_FW_ACTION_.NET_FW_ACTION_ALLOW;
-            firewallOutRule.Enabled = true;
-            firewallPolicy.Rules.Add(firewallOutRule);
-        }
-
         /// <summary>
         /// console app Main()
         /// </summary>
         /// <param name="args"></param>
         static void Main(string[] args)
         {
-            // create firewall rukes
-            setFirewall();
-
-            var myHost = new InstrumentLockServiceHostConsole();
+            var myHost = new InstrumentLockServiceHost();
+            // create firewall rules
+            myHost.setFirewall();
+            // initialize host
             myHost.initialize();
 
             // press ENTER to terminate

@@ -95,14 +95,14 @@
       <Generator>ResXFileCodeGenerator</Generator>
       <LastGenOutput>Resources.Designer.cs</LastGenOutput>
     </EmbeddedResource>
-    <None Include="Connected Services\InstrumentLockServiceFacadeClient\InstrumentLockService.xsd">
+    <None Include="Connected Services\InstrumentLockServiceFacadeClient\InstrumentLockServiceFacade.wsdl" />
+    <None Include="Connected Services\InstrumentLockServiceFacadeClient\item.xsd">
       <SubType>Designer</SubType>
     </None>
-    <None Include="Connected Services\InstrumentLockServiceFacadeClient\service.wsdl" />
-    <None Include="Connected Services\InstrumentLockServiceFacadeClient\service.xsd">
+    <None Include="Connected Services\InstrumentLockServiceFacadeClient\item1.xsd">
       <SubType>Designer</SubType>
     </None>
-    <None Include="Connected Services\InstrumentLockServiceFacadeClient\service1.xsd">
+    <None Include="Connected Services\InstrumentLockServiceFacadeClient\item2.xsd">
       <SubType>Designer</SubType>
     </None>
     <None Include="Properties\Settings.settings">
@@ -135,6 +135,9 @@
   </ItemGroup>
   <ItemGroup>
     <WCFMetadataStorage Include="Connected Services\InstrumentLockServiceFacadeClient\" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Connected Services\InstrumentLockServiceFacadeClient\item.disco" />
   </ItemGroup>
   <ItemGroup>
     <None Include="Connected Services\InstrumentLockServiceFacadeClient\configuration91.svcinfo" />

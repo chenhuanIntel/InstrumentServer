@@ -3,9 +3,10 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
-using InstrumentLockService;
+using InstrumentLockServices;
 
-namespace InstrumentLockServiceHost
+// namespace name uses plural
+namespace InstrumentLockServiceHosts
 {
     public interface IInstrumentLockServiceHost
     {
@@ -16,6 +17,11 @@ namespace InstrumentLockServiceHost
         void initialize();
 
         /// <summary>
+        /// Stop Host and dispose Instance
+        /// </summary>
+        void Dispose();
+
+        /// <summary>
         /// Host will handle the event from client here
         /// </summary>
         /// <param name="sender"></param>
@@ -23,8 +29,26 @@ namespace InstrumentLockServiceHost
         void HandleEventFromClient(object sender, CustomEventArgs e);
 
         /// <summary>
-        /// Stop Host and dispose Instance
+        /// https://stackoverflow.com/questions/1242566/any-way-to-turn-the-internet-off-in-windows-using-c/1243026#1243026
+        /// https://learn.microsoft.com/en-us/previous-versions/windows/desktop/ics/using-windows-firewall-with-advanced-security
+        /// programmably to set firewall rules
         /// </summary>
-        void Dispose();
+        void setFirewall();
+
+        /// <summary>
+        ///  https://stackoverflow.com/questions/6118221/how-do-i-add-wcf-client-endpoints-programmatically
+        ///  https://stackoverflow.com/questions/2943148/how-to-programmatically-connect-a-client-to-a-wcf-service
+        ///  programmably to set up endpoint for clients
+        ///  this method is to use wshttp
+        /// </summary>
+        void wsHttpEndPoint();
+
+        /// <summary>
+        ///  https://stackoverflow.com/questions/6118221/how-do-i-add-wcf-client-endpoints-programmatically
+        ///  https://stackoverflow.com/questions/2943148/how-to-programmatically-connect-a-client-to-a-wcf-service
+        ///  programmably to set up endpoint for clients
+        ///  this method is to use TCP
+        /// </summary>
+        void netTcpEndPoint();
     }
 }
