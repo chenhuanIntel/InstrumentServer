@@ -4,10 +4,10 @@
   <PropertyGroup>
     <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
     <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
-    <ProjectGuid>{EA726965-BDBC-4F67-93D2-67C6A23B39D8}</ProjectGuid>
+    <ProjectGuid>{62ED36B7-55E5-4131-B5CA-3B29D9BC9DB0}</ProjectGuid>
     <OutputType>Exe</OutputType>
-    <RootNamespace>InstrumentServiceHost_NET</RootNamespace>
-    <AssemblyName>InstrumentServiceHost_NET</AssemblyName>
+    <RootNamespace>TesterClient_Console</RootNamespace>
+    <AssemblyName>TesterClient_Console</AssemblyName>
     <TargetFrameworkVersion>v4.7.2</TargetFrameworkVersion>
     <FileAlignment>512</FileAlignment>
     <AutoGenerateBindingRedirects>true</AutoGenerateBindingRedirects>
@@ -35,6 +35,7 @@
   <ItemGroup>
     <Reference Include="System" />
     <Reference Include="System.Core" />
+    <Reference Include="System.Runtime.Serialization" />
     <Reference Include="System.ServiceModel" />
     <Reference Include="System.Xml.Linq" />
     <Reference Include="System.Data.DataSetExtensions" />
@@ -44,21 +45,29 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Connected Services\InstrumentLockServiceFacadeClient\Reference.cs">
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+      <DependentUpon>Reference.svcmap</DependentUpon>
+    </Compile>
     <Compile Include="Program.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>
     <None Include="App.config" />
+    <None Include="Connected Services\InstrumentLockServiceFacadeClient\InstrumentLockServiceFacade.wsdl" />
+    <None Include="Connected Services\InstrumentLockServiceFacadeClient\item.xsd">
+      <SubType>Designer</SubType>
+    </None>
+    <None Include="Connected Services\InstrumentLockServiceFacadeClient\item1.xsd">
+      <SubType>Designer</SubType>
+    </None>
+    <None Include="Connected Services\InstrumentLockServiceFacadeClient\item2.xsd">
+      <SubType>Designer</SubType>
+    </None>
   </ItemGroup>
   <ItemGroup>
-    <ProjectReference Include="..\InstrumentLockServiceHost\InstrumentLockServiceHost.csproj">
-      <Project>{3ff35aac-9f92-4671-980e-346b73beaecc}</Project>
-      <Name>InstrumentLockServiceHost</Name>
-    </ProjectReference>
-    <ProjectReference Include="..\InstrumentLockService\InstrumentLockService.csproj">
-      <Project>{e22bfb4c-2769-45a1-ac10-76cf2e8a4ad6}</Project>
-      <Name>InstrumentLockService</Name>
-    </ProjectReference>
+    <WCFMetadata Include="Connected Services\" />
   </ItemGroup>
   <ItemGroup>
     <COMReference Include="NetFwTypeLib">
@@ -70,6 +79,30 @@
       <Isolated>False</Isolated>
       <EmbedInteropTypes>True</EmbedInteropTypes>
     </COMReference>
+  </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\InstrumentLockService\InstrumentLockService.csproj">
+      <Project>{e22bfb4c-2769-45a1-ac10-76cf2e8a4ad6}</Project>
+      <Name>InstrumentLockService</Name>
+    </ProjectReference>
+  </ItemGroup>
+  <ItemGroup>
+    <WCFMetadataStorage Include="Connected Services\InstrumentLockServiceFacadeClient\" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Connected Services\InstrumentLockServiceFacadeClient\item.disco" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Connected Services\InstrumentLockServiceFacadeClient\configuration91.svcinfo" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Connected Services\InstrumentLockServiceFacadeClient\configuration.svcinfo" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Connected Services\InstrumentLockServiceFacadeClient\Reference.svcmap">
+      <Generator>WCF Proxy Generator</Generator>
+      <LastGenOutput>Reference.cs</LastGenOutput>
+    </None>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
 </Project>

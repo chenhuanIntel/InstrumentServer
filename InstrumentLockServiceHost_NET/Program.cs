@@ -12,7 +12,7 @@ using InstrumentLockServiceHosts;
 using NetFwTypeLib; // Located in FirewallAPI.dll
 
 // namespace name uses plural
-namespace InstrumentLockServiceHost_NETs
+namespace InstrumentLockServiceHost_Consoles
 {
     internal class Program
     {

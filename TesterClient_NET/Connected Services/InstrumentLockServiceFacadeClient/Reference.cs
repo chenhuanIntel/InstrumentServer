@@ -8,7 +8,7 @@
 // </auto-generated>
 //------------------------------------------------------------------------------
 
-namespace TesterClient_NET.InstrumentLockServiceFacadeClient {
+namespace TesterClient_Console.InstrumentLockServiceFacadeClient {
     
     
     [System.CodeDom.Compiler.GeneratedCodeAttribute("System.ServiceModel", "4.0.0.0")]
@@ -66,12 +66,12 @@ namespace TesterClient_NET.InstrumentLockServiceFacadeClient {
     }
     
     [System.CodeDom.Compiler.GeneratedCodeAttribute("System.ServiceModel", "4.0.0.0")]
-    public interface IInstrumentLockServiceFacadeChannel : TesterClient_NET.InstrumentLockServiceFacadeClient.IInstrumentLockServiceFacade, System.ServiceModel.IClientChannel {
+    public interface IInstrumentLockServiceFacadeChannel : TesterClient_Console.InstrumentLockServiceFacadeClient.IInstrumentLockServiceFacade, System.ServiceModel.IClientChannel {
     }
     
     [System.Diagnostics.DebuggerStepThroughAttribute()]
     [System.CodeDom.Compiler.GeneratedCodeAttribute("System.ServiceModel", "4.0.0.0")]
-    public partial class InstrumentLockServiceFacadeClient : System.ServiceModel.ClientBase<TesterClient_NET.InstrumentLockServiceFacadeClient.IInstrumentLockServiceFacade>, TesterClient_NET.InstrumentLockServiceFacadeClient.IInstrumentLockServiceFacade {
+    public partial class InstrumentLockServiceFacadeClient : System.ServiceModel.ClientBase<TesterClient_Console.InstrumentLockServiceFacadeClient.IInstrumentLockServiceFacade>, TesterClient_Console.InstrumentLockServiceFacadeClient.IInstrumentLockServiceFacade {
         
         public InstrumentLockServiceFacadeClient() {
         }

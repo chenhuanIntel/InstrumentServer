@@ -9,7 +9,8 @@ using System.Threading.Tasks;
 using InstrumentLockServices;
 using NetFwTypeLib; // Located in FirewallAPI.dll
 
-namespace TesterClient_NET
+// namespace name uses plural
+namespace TesterClient_Consoles
 {
     internal class Program
     {

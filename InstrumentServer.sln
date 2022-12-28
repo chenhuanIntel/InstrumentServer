@@ -5,7 +5,7 @@ VisualStudioVersion = 17.3.32929.385
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "InstrumentLockService", "InstrumentLockService\InstrumentLockService.csproj", "{E22BFB4C-2769-45A1-AC10-76CF2E8A4AD6}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "InstrumentLockServiceHost_NET", "InstrumentLockServiceHost_NET\InstrumentLockServiceHost_NET.csproj", "{EA726965-BDBC-4F67-93D2-67C6A23B39D8}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "InstrumentLockServiceHost_Console", "InstrumentLockServiceHost_NET\InstrumentLockServiceHost_Console.csproj", "{EA726965-BDBC-4F67-93D2-67C6A23B39D8}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "TesterClient_WPF", "TesterClient_WPF\TesterClient_WPF.csproj", "{6C8B8EA3-FB8F-45E1-A078-742AD24C48C2}"
 EndProject
@@ -13,7 +13,7 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "InstrumentLockServiceHost",
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "InstrumentLockServiceHost_WPF2", "InstrumentLockServiceHost_WPF2\InstrumentLockServiceHost_WPF2.csproj", "{2F232A4C-2706-4D7D-82E8-8359CE4906C7}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "TesterClient_NET", "TesterClient_NET\TesterClient_NET.csproj", "{62ED36B7-55E5-4131-B5CA-3B29D9BC9DB0}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "TesterClient_Console", "TesterClient_NET\TesterClient_Console.csproj", "{62ED36B7-55E5-4131-B5CA-3B29D9BC9DB0}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution

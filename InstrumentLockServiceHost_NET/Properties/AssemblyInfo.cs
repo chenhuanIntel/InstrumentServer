@@ -5,11 +5,11 @@ using System.Runtime.InteropServices;
 // General Information about an assembly is controlled through the following
 // set of attributes. Change these attribute values to modify the information
 // associated with an assembly.
-[assembly: AssemblyTitle("InstrumentServiceHost_NET")]
+[assembly: AssemblyTitle("InstrumentServiceHost_Console")]
 [assembly: AssemblyDescription("")]
 [assembly: AssemblyConfiguration("")]
 [assembly: AssemblyCompany("Intel Corporation")]
-[assembly: AssemblyProduct("InstrumentServiceHost_NET")]
+[assembly: AssemblyProduct("InstrumentServiceHost_Console")]
 [assembly: AssemblyCopyright("Copyright © Intel Corporation 2022")]
 [assembly: AssemblyTrademark("")]
 [assembly: AssemblyCulture("")]
