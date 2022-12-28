@@ -120,7 +120,7 @@ namespace InstrumentLockServiceHosts_WPF2
                 lock (_itemsLockMainWindow)
                 {
                     // Once locked, you can manipulate the collection safely from another thread
-                    _clientRequestValue.Add(new ClientRequestValue(dInputA: varValue.dInputA, dInputB: varValue.dInputB, dResult: varValue.dResult, sService: varValue.sService, sClient: varValue.sClient, ServiceStart: varValue.ServiceStart, ServiceFinish: varValue.ServiceFinish));
+                    _clientRequestValue.Add(new ClientRequestValue(dInputA: varValue.dInputA, dInputB: varValue.dInputB, delayInSec: 0, dResult: varValue.dResult, sService: varValue.sService, sThreadID: varValue.sThreadID, sMachineName: varValue.sMachineName, ServiceStart: varValue.ServiceStart, ServiceFinish: varValue.ServiceFinish));
                 }
                 // must refresh; otherwise ItemsSource will not be updated when the corresponding list (such as the above list) is updated
                 // https://stackoverflow.com/questions/7059070/why-does-the-datagrid-not-update-when-the-itemssource-is-changed
@@ -195,5 +195,9 @@ namespace InstrumentLockServiceHosts_WPF2
             _server.Dispose();
         }
 
+        private void dgServerRequest_SelectionChanged(object sender, SelectionChangedEventArgs e)
+        {
+
+        }
     }
 }

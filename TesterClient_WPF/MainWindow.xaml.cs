@@ -67,19 +67,20 @@ namespace TesterClient_WPF
             double a = double.Parse(aTextBox.Text);
             double b = double.Parse(bTextBox.Text);
             int delay = Int32.Parse(delayTextBox.Text);
-            string ThreadID = Process.GetCurrentProcess().Id.ToString();
+            string sThreadID = Process.GetCurrentProcess().Id.ToString();
+            string sMachineName = Environment.MachineName;
 
 
             try
             {
                 if (cmbService.SelectedItem == (Object)typeof(Service).GetProperty(Service.Add))
                 {
-                    double sum = _client.Add(a, b, ThreadID);
+                    double sum = _client.Add(a, b, sThreadID, sMachineName);
                     tbOut.Text = $"Add({a}, {b}) = {sum.ToString()}";
                 }
                 else if (cmbService.SelectedItem == (Object)typeof(Service).GetProperty(Service.AddAndDelay))
                 {
-                    double sum = _client.AddAndDelay(a, b, delay, ThreadID);
+                    double sum = _client.AddAndDelay(a, b, delay, sThreadID, sMachineName);
                     tbOut.Text = $"Add({a}, {b}) = {sum.ToString()}";
                 }
                 else if (cmbService.SelectedItem == (Object)typeof(Service).GetProperty(Service.IntDivide))
@@ -87,7 +88,7 @@ namespace TesterClient_WPF
                     try
                     {
                         tbOut.Text = $"intDivide({a}, {b})";
-                        int div0 = _client.intDivide(a, b, ThreadID);
+                        int div0 = _client.intDivide(a, b, sThreadID, sMachineName);
                         tbOut.Text = tbOut.Text + $" = {div0.ToString()}";
                     }
                     catch (FaultException<MathFault> error)
@@ -98,22 +99,22 @@ namespace TesterClient_WPF
                 }
                 else if (cmbService.SelectedItem == (Object)typeof(Service).GetProperty(Service.getInstrumentLock))
                 {
-                    bool ret = _client.getInstrumentLock(sharedInstrument.DCA, ThreadID);
+                    bool ret = _client.getInstrumentLock(sharedInstrument.DCA, sThreadID, sMachineName);
                     tbOut.Text = $"getInstrumentLock(sharedInstrument.DCA)";
                 }
                 else if (cmbService.SelectedItem == (Object)typeof(Service).GetProperty(Service.releaseInstrumentLock))
                 {
-                    bool ret = _client.releaseInstrumentLock(sharedInstrument.DCA, ThreadID);
+                    bool ret = _client.releaseInstrumentLock(sharedInstrument.DCA, sThreadID, sMachineName);
                     tbOut.Text = $"releaseInstrumentLock(sharedInstrument.DCA)";
                 }
                 else if (cmbService.SelectedItem == (Object)typeof(Service).GetProperty(Service.getProtocolLock))
                 {
-                    bool ret = _client.getProtocolLock(sharedProtocol.DiCon, ThreadID);
+                    bool ret = _client.getProtocolLock(sharedProtocol.DiCon, sThreadID, sMachineName);
                     tbOut.Text = $"getProtocolLock(sharedProtocol.DiCon)";
                 }
                 else if (cmbService.SelectedItem == (Object)typeof(Service).GetProperty(Service.releaseProtocolLock))
                 {
-                    bool ret = _client.releaseProtocolLock(sharedProtocol.DiCon, ThreadID);
+                    bool ret = _client.releaseProtocolLock(sharedProtocol.DiCon, sThreadID, sMachineName);
                     tbOut.Text = $"releaseProtocolLock(sharedProtocol.DiCon)";
                 }
             }

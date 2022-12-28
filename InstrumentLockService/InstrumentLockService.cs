@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Runtime.Serialization;
+using System.Security;
 using System.ServiceModel;
 using System.ServiceModel.Security;
 using System.Text;
@@ -145,47 +146,20 @@ namespace InstrumentLockServices
         public int delayInSec { get; set; }
         public double dResult { get; set; }
         public string sService { get; set; }
-        public string sClient { get; set; }
+        public string sThreadID { get; set; }
+        public string sMachineName { get; set; }
         public DateTime ServiceStart { get; set; }
         public DateTime ServiceFinish { get; set; }
 
-        public ClientRequestValue(double dInputA, double dInputB, double dResult, string sService, DateTime ServiceStart, DateTime ServiceFinish)
-        {
-            this.dInputA = dInputA;
-            this.dInputB = dInputB;     
-            this.dResult = dResult;
-            this.sService = sService;
-            this.ServiceStart = ServiceStart;
-            this.ServiceFinish = ServiceFinish;
-        }
-        public ClientRequestValue(double dInputA, double dInputB, double dResult, string sService, string sClient, DateTime ServiceStart, DateTime ServiceFinish)
-        {
-            this.dInputA = dInputA;
-            this.dInputB = dInputB;
-            this.dResult = dResult;
-            this.sService = sService;
-            this.sClient = sClient;
-            this.ServiceStart = ServiceStart;
-            this.ServiceFinish = ServiceFinish;
-        }
-        public ClientRequestValue(double dInputA, double dInputB, int delayInSec, double dResult, string sService, DateTime ServiceStart, DateTime ServiceFinish)
+        public ClientRequestValue(double dInputA, double dInputB, int delayInSec, double dResult, string sService, string sThreadID, string sMachineName, DateTime ServiceStart, DateTime ServiceFinish)
         {
             this.dInputA = dInputA;
             this.dInputB = dInputB;
             this.delayInSec = delayInSec;
             this.dResult = dResult;
             this.sService = sService;
-            this.ServiceStart = ServiceStart;
-            this.ServiceFinish = ServiceFinish;
-        }
-        public ClientRequestValue(double dInputA, double dInputB, int delayInSec, double dResult, string sService, string sClient, DateTime ServiceStart, DateTime ServiceFinish)
-        {
-            this.dInputA = dInputA;
-            this.dInputB = dInputB;
-            this.delayInSec = delayInSec;
-            this.dResult = dResult;
-            this.sService = sService;
-            this.sClient = sClient;
+            this.sThreadID = sThreadID;
+            this.sMachineName = sMachineName;
             this.ServiceStart = ServiceStart;
             this.ServiceFinish = ServiceFinish;
         }
@@ -221,15 +195,14 @@ namespace InstrumentLockServices
         /// </summary>
         public event EventHandler<CustomEventArgs> EventFromClient;
 
-        public double Add(double a, double b, string ThreadID)
+        public double Add(double a, double b, string sThreadID, string sMachineName)
         {
             double sum = -999;
             DateTime ServiceStart = DateTime.Now;
             DateTime ServiceFinish = new DateTime(1, 1, 1);
-            string sClient = ThreadID;
             string sService = "InstrumentLockService.null";
 
-            sum=_serviceInstance.Add(a, b, ThreadID);
+            sum=_serviceInstance.Add(a, b, sThreadID, sMachineName);
             if (sum != -999)
             {
                 sService = "InstrumentLockService.Add";
@@ -237,21 +210,20 @@ namespace InstrumentLockServices
 
             ServiceFinish = DateTime.Now;
             // contruct the client request values to be sent to host
-            var value = new ClientRequestValue(a, b, sum, sService, sClient, ServiceStart, ServiceFinish);
+            var value = new ClientRequestValue(dInputA:a, dInputB:b, delayInSec:0, dResult:sum, sService:sService, sThreadID:sThreadID, sMachineName:sMachineName, ServiceStart:ServiceStart, ServiceFinish:ServiceFinish);
             // each WCF service fires the event EventFromClient with the values from WCF client
             EventFromClient?.Invoke(this, new CustomEventArgs(value));
             return sum;
         }
 
-        public double AddAndDelay(double a, double b, int delayInSec, string ThreadID)
+        public double AddAndDelay(double a, double b, int delayInSec, string sThreadID, string sMachineName)
         {
             double sum = -999;
             DateTime ServiceStart = DateTime.Now;
             DateTime ServiceFinish = new DateTime(1, 1, 1); 
-            string sClient = ThreadID;
             string sService = "InstrumentLockService.null";
 
-            sum = _serviceInstance.AddAndDelay(a, b, delayInSec, ThreadID);
+            sum = _serviceInstance.AddAndDelay(a, b, delayInSec, sThreadID, sMachineName);
             if (sum != -999)
             {
                 sService = "InstrumentLockService.AddAndDelay";
@@ -259,7 +231,7 @@ namespace InstrumentLockServices
 
             ServiceFinish = DateTime.Now;
             // contruct the client request values to be sent to host
-            var value = new ClientRequestValue(a, b, sum, sService, sClient, ServiceStart, ServiceFinish);
+            var value = new ClientRequestValue(dInputA: a, dInputB: b, delayInSec: 0, dResult: sum, sService: sService, sThreadID: sThreadID, sMachineName: sMachineName, ServiceStart: ServiceStart, ServiceFinish: ServiceFinish);
             // each WCF service fires the event EventFromClient with the values from WCF client
             EventFromClient?.Invoke(this, new CustomEventArgs(value));
             return sum;
@@ -270,34 +242,45 @@ namespace InstrumentLockServices
             _serviceInstance.getConnectedInfo();
         }
 
-        public bool getInstrumentLock(sharedInstrument instr, string ThreadID)
+        public bool getInstrumentLock(sharedInstrument instr, string sThreadID, string sMachineName)
         {
-            return _serviceInstance.getInstrumentLock(instr, ThreadID);
+            return _serviceInstance.getInstrumentLock(instr, sThreadID, sMachineName);
         }
 
-        public bool releaseInstrumentLock(sharedInstrument instr, string ThreadID)
+        public bool releaseInstrumentLock(sharedInstrument instr, string sThreadID, string sMachineName)
         {
-            return _serviceInstance.releaseInstrumentLock(instr, ThreadID);
+            return _serviceInstance.releaseInstrumentLock(instr, sThreadID, sMachineName);
         }
 
-        public bool getProtocolLock(sharedProtocol protocol, string ThreadID)
+        public bool getProtocolLock(sharedProtocol protocol, string sThreadID, string sMachineName)
         {
-            return _serviceInstance.getProtocolLock(protocol, ThreadID);
+            return _serviceInstance.getProtocolLock(protocol, sThreadID, sMachineName);
         }
 
-        public bool releaseProtocolLock(sharedProtocol protocol, string ThreadID)
+        public bool releaseProtocolLock(sharedProtocol protocol, string sThreadID, string sMachineName)
         {
-            return _serviceInstance.releaseProtocolLock(protocol, ThreadID);
+            return _serviceInstance.releaseProtocolLock(protocol, sThreadID, sMachineName);
         }
 
-        public int intDivide(double a, double b, string ThreadID)
+        public int intDivide(double a, double b, string sThreadID, string sMachineName)
         {
-            return _serviceInstance.intDivide(a, b, ThreadID);
+            return _serviceInstance.intDivide(a, b, sThreadID, sMachineName);
         }
 
     }
 
-
+    public class SemaphoreOwner
+    {
+        public Semaphore mySemaphore { get; set; }
+        public string sMachineName { get; set; }
+        public string sThreadID { get; set; }
+        public SemaphoreOwner(Semaphore mySemaphore)
+        {
+            this.mySemaphore = mySemaphore;
+            sMachineName = null;
+            sThreadID = null;
+        }
+    }
 
     // Enable one of the following instance modes to compare instancing behaviors.
     //[ServiceBehavior(InstanceContextMode = InstanceContextMode.PerSession)]
@@ -316,7 +299,9 @@ namespace InstrumentLockServices
         private static Mutex mutexLockAddAndDelay = new Mutex();
         private static Mutex mutexLockintDivide = new Mutex();
         private static Semaphore semaphoreDCA = new Semaphore(initialCount: 1, maximumCount: 1);
+        private static SemaphoreOwner ownerSemaphoreDCA = new SemaphoreOwner(semaphoreDCA);
         private static Semaphore semaphoreDiCon = new Semaphore(initialCount: 1, maximumCount: 1);
+        private static SemaphoreOwner ownerSemaphoreDiCon = new SemaphoreOwner(semaphoreDiCon);
 
         /// <summary>
         /// WCF service will fire EventFromClient togerther with the values sent from WCF client
@@ -333,14 +318,12 @@ namespace InstrumentLockServices
         /// <param name="a"></param>
         /// <param name="b"></param>
         /// <returns></returns>
-        public double Add(double a, double b, string ThreadID)
+        public double Add(double a, double b, string sThreadID, string sMachineName)
         {
             double sum = -999;
             DateTime ServiceStart = DateTime.Now;
             DateTime ServiceFinish = new DateTime(1, 1, 1); 
-            string sClient = ThreadID;
             string sService = "InstrumentLockService.null";
-
 
             if (mutexLockAdd.WaitOne())
             {
@@ -352,13 +335,12 @@ namespace InstrumentLockServices
             }
             else
             {
-                Console.WriteLine($"{sClient} will not acquire the mutex");
+                Console.WriteLine($"{sThreadID} will not acquire the mutex");
             }
-
 
             ServiceFinish = DateTime.Now;
             // contruct the client request values to be sent to host
-            var value = new ClientRequestValue(a, b, sum, sService, sClient, ServiceStart, ServiceFinish);
+            var value = new ClientRequestValue(dInputA: a, dInputB: b, delayInSec: 0, dResult: sum, sService: sService, sThreadID: sThreadID, sMachineName: sMachineName, ServiceStart: ServiceStart, ServiceFinish: ServiceFinish);
             // each WCF service fires the event EventFromClient with the values from WCF client
             EventFromClient?.Invoke(this, new CustomEventArgs(value));
             return sum;
@@ -370,25 +352,18 @@ namespace InstrumentLockServices
         /// <param name="a"></param>
         /// <param name="b"></param>
         /// <returns></returns>
-        public double AddAndDelay(double a, double b, int delayInSec, string ThreadID)
+        public double AddAndDelay(double a, double b, int delayInSec, string sThreadID, string sMachineName)
         {
             double sum = -999;
             DateTime ServiceStart = DateTime.Now;
             DateTime ServiceFinish = new DateTime(1, 1, 1);
-            string sClient = ThreadID;
             string sService = "InstrumentLockService.null";
 
             if (mutexLockAddAndDelay.WaitOne())
             {
-                Console.WriteLine($"{ThreadID} InstrumentLockService.AddAndDelay");
+                Console.WriteLine($"{sThreadID} InstrumentLockService.AddAndDelay");
                 sService = "InstrumentLockService.AddAndDelay";
                 sum = a + b;
-
-                //// send an event before holding the resource
-                //// contruct the client request values to be sent to host
-                //var value1 = new ClientRequestValue(a, b, delayInSec, -888, sService, sClient, ServiceStart, ServiceFinish);
-                //// each WCF service fires the event EventFromClient with the values from WCF client
-                //EventFromClient?.Invoke(this, new CustomEventArgs(value1));
 
                 // delay to hold the mutex
                 Thread.Sleep(delayInSec * 1000);
@@ -397,11 +372,11 @@ namespace InstrumentLockServices
             }
             else
             {
-                Console.WriteLine($"{sClient} will not acquire the mutex");
+                Console.WriteLine($"{sThreadID} will not acquire the mutex");
             }      
             ServiceFinish = DateTime.Now;
             // contruct the client request values to be sent to host
-            var value = new ClientRequestValue(a, b, delayInSec, sum, sService, sClient, ServiceStart, ServiceFinish);
+            var value = new ClientRequestValue(dInputA: a, dInputB: b, delayInSec: delayInSec, dResult: sum, sService: sService, sThreadID: sThreadID, sMachineName: sMachineName, ServiceStart: ServiceStart, ServiceFinish: ServiceFinish);
             // each WCF service fires the event EventFromClient with the values from WCF client
             EventFromClient?.Invoke(this, new CustomEventArgs(value));
             return sum;
@@ -415,18 +390,18 @@ namespace InstrumentLockServices
         /// <param name="a"></param>
         /// <param name="b"></param>
         /// <returns></returns>
-        public int intDivide(double a, double b, string ThreadID)
+        public int intDivide(double a, double b, string sThreadID, string sMachineName)
         {
             int intDiv = -999;
             DateTime ServiceStart = DateTime.Now;
             DateTime ServiceFinish;
-            string sClient = ThreadID;
             string sService = "InstrumentLockService.null";
             if (mutexLockintDivide.WaitOne(10))
             {
                 try
                 {
                     Console.WriteLine("InstrumentLockService.intDivide");
+                    sService = "InstrumentLockService.intDivide";
                     intDiv = (int)a / (int)b;
                     // Release the Mutex.
                     mutexLockintDivide.ReleaseMutex();
@@ -438,7 +413,8 @@ namespace InstrumentLockServices
                     Console.WriteLine("exception=", e);
                     ServiceFinish = DateTime.Now;
                     // contruct the client request values to be sent to host
-                    var valueEx = new ClientRequestValue(a, b, a / b, "InstrumentLockService.intDivide" + " " + e.Message, sClient, ServiceStart, ServiceFinish);
+                    sService = sService + e.Message;
+                    var valueEx = new ClientRequestValue(dInputA: a, dInputB: b, delayInSec: 0, dResult: a / b, sService: sService, sThreadID: sThreadID, sMachineName: sMachineName, ServiceStart: ServiceStart, ServiceFinish: ServiceFinish);
                     // each WCF service fires the event EventFromClient with the values from WCF client
                     EventFromClient?.Invoke(this, new CustomEventArgs(valueEx));
                     MathFault mf = new MathFault();
@@ -449,11 +425,11 @@ namespace InstrumentLockServices
             }
             else
             {
-                Console.WriteLine($"{sClient} will not acquire the mutex");
+                Console.WriteLine($"{sThreadID} will not acquire the mutex");
             }
             ServiceFinish = DateTime.Now;
             // contruct the client request values to be sent to host
-            var value = new ClientRequestValue(a, b, intDiv, sService, sClient, ServiceStart, ServiceFinish);
+            var value = new ClientRequestValue(dInputA: a, dInputB: b, delayInSec: 0, dResult: intDiv, sService: sService, sThreadID: sThreadID, sMachineName: sMachineName, ServiceStart: ServiceStart, ServiceFinish: ServiceFinish);
             // each WCF service fires the event EventFromClient with the values from WCF client
             EventFromClient?.Invoke(this, new CustomEventArgs(value));
             return intDiv;
@@ -463,63 +439,77 @@ namespace InstrumentLockServices
         /// getInstrumentLock() of an instrument
         /// Such as getIntrumentLock(ATT1)
         /// </summary>
-        public bool getInstrumentLock(sharedInstrument instr, string ThreadID)
+        public bool getInstrumentLock(sharedInstrument instr, string sThreadID, string sMachineName)
         {
             bool ret = false;
             DateTime ServiceStart = DateTime.Now;
             DateTime ServiceFinish = new DateTime(1, 1, 1);
-            string sClient = ThreadID;
             string sService = "InstrumentLockService.null";
 
             try
             {
-                semaphoreDCA.WaitOne();
+                // check if the client already owns the semaphore
+                // if not the owner, WaitOne() which blocks the current thread until the current WaitHandle receives a signal.
+                if (!(ownerSemaphoreDCA.sThreadID == sThreadID && ownerSemaphoreDCA.sMachineName == sMachineName))          
+                    semaphoreDCA.WaitOne();
+
+                // if the client already owns the semaphore or just obtains via WaitOne() 
+                // first to re-assign the ownership
+                ownerSemaphoreDCA.sThreadID = sThreadID;
+                ownerSemaphoreDCA.sMachineName = sMachineName;
+                // then grant the InstrumentLock
+                Console.WriteLine("InstrumentLockService.getInstrumentLock");
+                sService = "InstrumentLockService.getInstrumentLock";
+                ret = true;
+
+                ServiceFinish = DateTime.Now;
+                // contruct the client request values to be sent to host
+                var value = new ClientRequestValue(dInputA: 0, dInputB: 0, delayInSec: 0, dResult: 0, sService: sService, sThreadID: sThreadID, sMachineName: sMachineName, ServiceStart: ServiceStart, ServiceFinish: ServiceFinish);
+                // each WCF service fires the event EventFromClient with the values from WCF client
+                EventFromClient?.Invoke(this, new CustomEventArgs(value));
             }
             catch (Exception ex)
             {
+                ret = false;
                 // Logging
                 Console.WriteLine(ex.Message);
             }
 
-            Console.WriteLine("InstrumentLockService.getInstrumentLock");
-            sService = "InstrumentLockService.getInstrumentLock";
-            ret = true;
-
-            ServiceFinish = DateTime.Now;
-            // contruct the client request values to be sent to host
-            var value = new ClientRequestValue(0, 0, 0, sService, sClient, ServiceStart, ServiceFinish);
-            // each WCF service fires the event EventFromClient with the values from WCF client
-            EventFromClient?.Invoke(this, new CustomEventArgs(value));
             return ret;
         }
 
-        public bool releaseInstrumentLock(sharedInstrument instr, string ThreadID)
+        public bool releaseInstrumentLock(sharedInstrument instr, string sThreadID, string sMachineName)
         {
             bool ret = false;
             DateTime ServiceStart = DateTime.Now;
             DateTime ServiceFinish = new DateTime(1, 1, 1);
-            string sClient = ThreadID;
             string sService = "InstrumentLockService.null";
       
             try
             {
+                // first to reset the ownership to null
+                ownerSemaphoreDCA.sThreadID = null;
+                ownerSemaphoreDCA.sMachineName = null;
+                // then release the semaphore
                 semaphoreDCA.Release();
+
+                Console.WriteLine("InstrumentLockService.releaseInstrumentLock");
+                sService = "InstrumentLockService.releaseInstrumentLock";
+                ret = true;
+
+                ServiceFinish = DateTime.Now;
+                // contruct the client request values to be sent to host
+                var value = new ClientRequestValue(dInputA: 0, dInputB: 0, delayInSec: 0, dResult: 0, sService: sService, sThreadID: sThreadID, sMachineName: sMachineName, ServiceStart: ServiceStart, ServiceFinish: ServiceFinish);
+                // each WCF service fires the event EventFromClient with the values from WCF client
+                EventFromClient?.Invoke(this, new CustomEventArgs(value));
             }
             catch (Exception ex)
             {
+                ret=false;
                 // Logging
                 Console.WriteLine(ex.Message);
             }
 
-            Console.WriteLine("InstrumentLockService.releaseInstrumentLock");
-            sService = "InstrumentLockService.releaseInstrumentLock";
-            ret = true;
-
-            ServiceFinish = DateTime.Now;
-            // contruct the client request values to be sent to host
-            var value = new ClientRequestValue(0, 0, 0, sService, sClient, ServiceStart, ServiceFinish);
-            // each WCF service fires the event EventFromClient with the values from WCF client
-            EventFromClient?.Invoke(this, new CustomEventArgs(value));
             return ret;
         }
 
@@ -529,63 +519,78 @@ namespace InstrumentLockServices
         /// Mutex of Dicon1 is shared by PM1, SW1 and ATT1
         /// Because the DiCon box contains 3 different functional instruments, SW, ATT and PowerMeter.
         /// </summary>
-        public bool getProtocolLock(sharedProtocol protocol, string ThreadID)
+        public bool getProtocolLock(sharedProtocol protocol, string sThreadID, string sMachineName)
         {
             bool ret = false;
             DateTime ServiceStart = DateTime.Now;
             DateTime ServiceFinish = new DateTime(1, 1, 1);
-            string sClient = ThreadID;
             string sService = "InstrumentLockService.null";
      
             try
             {
-                semaphoreDiCon.WaitOne();
+                // check if the client already owns the semaphore
+                // if not the owner, WaitOne() which blocks the current thread until the current WaitHandle receives a signal.
+                if (!(ownerSemaphoreDiCon.sThreadID == sThreadID && ownerSemaphoreDiCon.sMachineName == sMachineName))
+                    semaphoreDiCon.WaitOne();
+
+                // if the client already owns the semaphore or just obtains via WaitOne() 
+                // first to re-assign the ownership
+                ownerSemaphoreDiCon.sThreadID = sThreadID;
+                ownerSemaphoreDiCon.sMachineName = sMachineName;
+                // then grant the InstrumentLock
+                Console.WriteLine("InstrumentLockService.getProtocolLock");
+                sService = "InstrumentLockService.getProtocolLock";
+                ret = true;
+
+                ServiceFinish = DateTime.Now;
+                // contruct the client request values to be sent to host
+                var value = new ClientRequestValue(dInputA: 0, dInputB: 0, delayInSec: 0, dResult: 0, sService: sService, sThreadID: sThreadID, sMachineName: sMachineName, ServiceStart: ServiceStart, ServiceFinish: ServiceFinish);
+                // each WCF service fires the event EventFromClient with the values from WCF client
+                EventFromClient?.Invoke(this, new CustomEventArgs(value));
             }
             catch (Exception ex)
             {
+                ret = false;
                 // Logging
                 Console.WriteLine(ex.Message);
             }
 
-            Console.WriteLine("InstrumentLockService.getProtocolLock");
-            sService = "InstrumentLockService.getProtocolLock";
-            ret = true;
-
-            ServiceFinish = DateTime.Now;
-            // contruct the client request values to be sent to host
-            var value = new ClientRequestValue(0, 0, 0, sService, sClient, ServiceStart, ServiceFinish);
-            // each WCF service fires the event EventFromClient with the values from WCF client
-            EventFromClient?.Invoke(this, new CustomEventArgs(value));
             return ret;
         }
 
-        public bool releaseProtocolLock(sharedProtocol protocol, string ThreadID)
+        public bool releaseProtocolLock(sharedProtocol protocol, string sThreadID, string sMachineName)
         {
             bool ret = false;
             DateTime ServiceStart = DateTime.Now;
             DateTime ServiceFinish = new DateTime(1, 1, 1);
-            string sClient = ThreadID;
             string sService = "InstrumentLockService.null";
           
             try
             {
                 semaphoreDiCon.Release();
+                // first to reset the ownership to null
+                ownerSemaphoreDiCon.sThreadID = null;
+                ownerSemaphoreDiCon.sMachineName = null;
+                // then release the semaphore
+                semaphoreDiCon.Release();
+
+                Console.WriteLine("InstrumentLockService.releaseProtocolLock");
+                sService = "InstrumentLockService.releaseProtocolLock";
+                ret = true;
+
+                ServiceFinish = DateTime.Now;
+                // contruct the client request values to be sent to host
+                var value = new ClientRequestValue(dInputA: 0, dInputB: 0, delayInSec: 0, dResult: 0, sService: sService, sThreadID: sThreadID, sMachineName: sMachineName, ServiceStart: ServiceStart, ServiceFinish: ServiceFinish);
+                // each WCF service fires the event EventFromClient with the values from WCF client
+                EventFromClient?.Invoke(this, new CustomEventArgs(value));
             }
             catch (Exception ex)
             {
+                ret=false;
                 // Logging
                 Console.WriteLine(ex.Message);
             }
 
-            Console.WriteLine("InstrumentLockService.releaseProtocolLock");
-            sService = "InstrumentLockService.releaseProtocolLock";
-            ret = true;
-
-            ServiceFinish = DateTime.Now;
-            // contruct the client request values to be sent to host
-            var value = new ClientRequestValue(0, 0, 0, sService, sClient, ServiceStart, ServiceFinish);
-            // each WCF service fires the event EventFromClient with the values from WCF client
-            EventFromClient?.Invoke(this, new CustomEventArgs(value));
             return ret;
         }
 
