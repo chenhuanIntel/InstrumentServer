@@ -567,7 +567,6 @@ namespace InstrumentLockServices
           
             try
             {
-                semaphoreDiCon.Release();
                 // first to reset the ownership to null
                 ownerSemaphoreDiCon.sThreadID = null;
                 ownerSemaphoreDiCon.sMachineName = null;
