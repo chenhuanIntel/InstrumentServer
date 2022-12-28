@@ -4,15 +4,14 @@
   <PropertyGroup>
     <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
     <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
-    <ProjectGuid>{E22BFB4C-2769-45A1-AC10-76CF2E8A4AD6}</ProjectGuid>
+    <ProjectGuid>{3FF35AAC-9F92-4671-980E-346B73BEAECC}</ProjectGuid>
     <OutputType>Library</OutputType>
     <AppDesignerFolder>Properties</AppDesignerFolder>
-    <RootNamespace>InstrumentLockService</RootNamespace>
-    <AssemblyName>InstrumentLockService</AssemblyName>
+    <RootNamespace>InstrumentLockServiceHost</RootNamespace>
+    <AssemblyName>InstrumentLockServiceHost</AssemblyName>
     <TargetFrameworkVersion>v4.7.2</TargetFrameworkVersion>
     <FileAlignment>512</FileAlignment>
     <Deterministic>true</Deterministic>
-    <WcfConfigValidationEnabled>True</WcfConfigValidationEnabled>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
     <DebugSymbols>true</DebugSymbols>
@@ -34,8 +33,10 @@
   <ItemGroup>
     <Reference Include="System" />
     <Reference Include="System.Core" />
-    <Reference Include="System.Runtime.Serialization" />
     <Reference Include="System.ServiceModel" />
+    <Reference Include="System.Windows" />
+    <Reference Include="System.Windows.Controls.Ribbon" />
+    <Reference Include="System.Windows.Presentation" />
     <Reference Include="System.Xml.Linq" />
     <Reference Include="System.Data.DataSetExtensions" />
     <Reference Include="Microsoft.CSharp" />
@@ -44,12 +45,15 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="IInstrumentLockService.cs" />
+    <Compile Include="InstrumentLockServiceHost.cs" />
+    <Compile Include="IInstrumentLockServiceHost.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
-    <Compile Include="InstrumentLockService.cs" />
   </ItemGroup>
   <ItemGroup>
-    <None Include="app.config" />
+    <ProjectReference Include="..\InstrumentLockService\InstrumentLockService.csproj">
+      <Project>{e22bfb4c-2769-45a1-ac10-76cf2e8a4ad6}</Project>
+      <Name>InstrumentLockService</Name>
+    </ProjectReference>
   </ItemGroup>
   <ItemGroup>
     <COMReference Include="NetFwTypeLib">

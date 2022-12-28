@@ -4,10 +4,10 @@
   <PropertyGroup>
     <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
     <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
-    <ProjectGuid>{6C8B8EA3-FB8F-45E1-A078-742AD24C48C2}</ProjectGuid>
+    <ProjectGuid>{2F232A4C-2706-4D7D-82E8-8359CE4906C7}</ProjectGuid>
     <OutputType>WinExe</OutputType>
-    <RootNamespace>TesterClient_WPF</RootNamespace>
-    <AssemblyName>TesterClient_WPF</AssemblyName>
+    <RootNamespace>InstrumentLockServiceHost_WPF2</RootNamespace>
+    <AssemblyName>InstrumentLockServiceHost_WPF2</AssemblyName>
     <TargetFrameworkVersion>v4.7.2</TargetFrameworkVersion>
     <FileAlignment>512</FileAlignment>
     <ProjectTypeGuids>{60dc8134-eba5-43b8-bcc9-bb4bc16c2548};{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}</ProjectTypeGuids>
@@ -37,7 +37,6 @@
   <ItemGroup>
     <Reference Include="System" />
     <Reference Include="System.Data" />
-    <Reference Include="System.Runtime.Serialization" />
     <Reference Include="System.ServiceModel" />
     <Reference Include="System.Xml" />
     <Reference Include="Microsoft.CSharp" />
@@ -60,21 +59,14 @@
     <Page Include="MainWindow.xaml">
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
-      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Page>
     <Compile Include="App.xaml.cs">
       <DependentUpon>App.xaml</DependentUpon>
       <SubType>Code</SubType>
     </Compile>
-    <Compile Include="Connected Services\InstrumentLockServiceFacadeClient\Reference.cs">
-      <AutoGen>True</AutoGen>
-      <DesignTime>True</DesignTime>
-      <DependentUpon>Reference.svcmap</DependentUpon>
-    </Compile>
     <Compile Include="MainWindow.xaml.cs">
       <DependentUpon>MainWindow.xaml</DependentUpon>
       <SubType>Code</SubType>
-      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Compile>
   </ItemGroup>
   <ItemGroup>
@@ -95,16 +87,6 @@
       <Generator>ResXFileCodeGenerator</Generator>
       <LastGenOutput>Resources.Designer.cs</LastGenOutput>
     </EmbeddedResource>
-    <None Include="Connected Services\InstrumentLockServiceFacadeClient\InstrumentLockServiceFacade.wsdl" />
-    <None Include="Connected Services\InstrumentLockServiceFacadeClient\item.xsd">
-      <SubType>Designer</SubType>
-    </None>
-    <None Include="Connected Services\InstrumentLockServiceFacadeClient\item1.xsd">
-      <SubType>Designer</SubType>
-    </None>
-    <None Include="Connected Services\InstrumentLockServiceFacadeClient\item2.xsd">
-      <SubType>Designer</SubType>
-    </None>
     <None Include="Properties\Settings.settings">
       <Generator>SettingsSingleFileGenerator</Generator>
       <LastGenOutput>Settings.Designer.cs</LastGenOutput>
@@ -114,13 +96,14 @@
     <None Include="App.config" />
   </ItemGroup>
   <ItemGroup>
+    <ProjectReference Include="..\InstrumentLockServiceHost\InstrumentLockServiceHost.csproj">
+      <Project>{3ff35aac-9f92-4671-980e-346b73beaecc}</Project>
+      <Name>InstrumentLockServiceHost</Name>
+    </ProjectReference>
     <ProjectReference Include="..\InstrumentLockService\InstrumentLockService.csproj">
       <Project>{e22bfb4c-2769-45a1-ac10-76cf2e8a4ad6}</Project>
       <Name>InstrumentLockService</Name>
     </ProjectReference>
-  </ItemGroup>
-  <ItemGroup>
-    <WCFMetadata Include="Connected Services\" />
   </ItemGroup>
   <ItemGroup>
     <COMReference Include="NetFwTypeLib">
@@ -132,24 +115,6 @@
       <Isolated>False</Isolated>
       <EmbedInteropTypes>True</EmbedInteropTypes>
     </COMReference>
-  </ItemGroup>
-  <ItemGroup>
-    <WCFMetadataStorage Include="Connected Services\InstrumentLockServiceFacadeClient\" />
-  </ItemGroup>
-  <ItemGroup>
-    <None Include="Connected Services\InstrumentLockServiceFacadeClient\item.disco" />
-  </ItemGroup>
-  <ItemGroup>
-    <None Include="Connected Services\InstrumentLockServiceFacadeClient\configuration91.svcinfo" />
-  </ItemGroup>
-  <ItemGroup>
-    <None Include="Connected Services\InstrumentLockServiceFacadeClient\configuration.svcinfo" />
-  </ItemGroup>
-  <ItemGroup>
-    <None Include="Connected Services\InstrumentLockServiceFacadeClient\Reference.svcmap">
-      <Generator>WCF Proxy Generator</Generator>
-      <LastGenOutput>Reference.cs</LastGenOutput>
-    </None>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
 </Project>
