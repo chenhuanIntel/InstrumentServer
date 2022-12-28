@@ -109,7 +109,7 @@ namespace InstrumentLockServices
         /// </summary>
         public void netTcpClientEndPoint()
         {
-            Uri baseAddress = new Uri("net.tcp://localhost:8001/");
+            Uri baseAddress = new Uri("net.tcp://172.25.93.250:8001/");
 
             var myBinding = new NetTcpBinding();
             var myEndpoint = new EndpointAddress(baseAddress);
