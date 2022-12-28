@@ -42,8 +42,8 @@ namespace InstrumentLockServiceHosts
             try
             {
                 // programmably set endpoint, either wsHTTP or netTCP
-                wsHttpEndPoint();
-                //netTcpEndPoint();
+                //wsHttpEndPoint();
+                netTcpEndPoint();
 
                 // in InstrumentLockServiceFacade, we can still access the actual service class
                 var serviceInstance = InstrumentLockServiceFacade.ServiceInstance;

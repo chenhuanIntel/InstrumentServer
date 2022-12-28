@@ -57,6 +57,52 @@ namespace InstrumentLockServiceHosts_WPF2
         public Object _itemsLockMainWindow { get; set; }
 
         /// <summary>
+        /// define the global variable of WCF service instance
+        /// and start the service host of the instance
+        /// </summary>
+        //public void initialize(DataGrid dgFromMainWindow, TextBlock tbFromMainWindow)
+        public override void initialize()
+        {
+            try
+            {
+                // in MainWindow(), the Dispatcher and WPF DataGrid/TextBlock of the MainWindow class are assigned to this InstrumentLockServiceHost_WPF class
+                // _dpFromMainWindow, _dgFromMainWindow, _tbFromMainWindow
+
+                // init _clientRequestValue and baseAddress
+                _clientRequestValue = new ObservableCollection<ClientRequestValue>();
+
+                //wsHttpEndPoint();
+                netTcpEndPoint();
+
+                // in InstrumentLockServiceFacade, we can still access the actual service class
+                var serviceInstance = InstrumentLockServiceFacade.ServiceInstance;
+                serviceInstance.EventFromClient += HandleEventFromClient;
+
+                // The service can now be accessed.
+                //MessageBox.Show($"The service is ready at {baseAddress}.", "HOST");
+                _tbFromMainWindow.Text = $"The service host is ready at {_baseAddress}";
+            }
+            catch (TimeoutException timeProblem)
+            {
+                Console.WriteLine(timeProblem.Message);
+                Console.ReadLine();
+                _tbFromMainWindow.Text = timeProblem.Message;
+            }
+            catch (CommunicationException commProblem)
+            {
+                Console.WriteLine(commProblem.Message);
+                Console.ReadLine();
+                _tbFromMainWindow.Text = commProblem.Message;
+            }
+            catch (Exception ex)
+            {
+                // Logging
+                Console.WriteLine(ex.Message);
+                _tbFromMainWindow.Text = ex.Message;
+            }
+        }
+
+        /// <summary>
         /// Host will handle the event from client here
         /// </summary>
         /// <param name="sender"></param>

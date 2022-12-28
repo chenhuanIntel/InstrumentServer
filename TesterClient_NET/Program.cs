@@ -30,6 +30,7 @@ namespace TesterClient_Consoles
             int delay = 0;
             bool ret = false;
             string ThreadID = Process.GetCurrentProcess().Id.ToString();
+            ConsoleKey key;
 
             try
             {
@@ -41,8 +42,8 @@ namespace TesterClient_Consoles
                     // the reason to place the endpoint function within the do-while loop:
                     // if server restarts in between two loops, must set up endpoint again
                     // programmably set up EndPoint
-                    _clientFct.wshttpClientEndPoint();
-                    //_clientFct.netTcpClientEndPoint();
+                    //_clientFct.wshttpClientEndPoint();
+                    _clientFct.netTcpClientEndPoint();
 
                     // assign the _iClient obtained within the above Endpoint functions
                     _client = _clientFct._iClient;
@@ -77,7 +78,8 @@ namespace TesterClient_Consoles
 
 
                     Console.WriteLine($"Press ENTER to close the console window; other keys to repeat ...........");
-                } while (Console.ReadKey().Key != ConsoleKey.Enter);
+                    key = Console.ReadKey().Key;
+                } while (key != ConsoleKey.Enter);
             }
             catch (TimeoutException timeProblem)
             {
