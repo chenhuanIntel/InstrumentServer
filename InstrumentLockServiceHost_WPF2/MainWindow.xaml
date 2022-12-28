@@ -11,7 +11,7 @@
         Hello, world!
         </TextBlock>
 
-        <DataGrid Name="dgServerRequest" AutoGenerateColumns="False" ScrollViewer.CanContentScroll="True" Margin="0,29,0,20">
+        <DataGrid Name="dgServerRequest" AutoGenerateColumns="False" ScrollViewer.CanContentScroll="True" Margin="0,29,0,20" SelectionChanged="dgServerRequest_SelectionChanged">
             <DataGrid.Columns>
                 <DataGridTextColumn Header="A"
                                     Binding="{Binding Path=dInputA}"/>
@@ -23,8 +23,10 @@
                                     Binding="{Binding Path=dResult}"/>
                 <DataGridTextColumn Header="Service"
                                     Binding="{Binding Path=sService}"/>
-                <DataGridTextColumn Header="Client"
-                                    Binding="{Binding Path=sClient}"/>
+                <DataGridTextColumn Header="ThreadID"
+                                    Binding="{Binding Path=sThreadID}"/>
+                <DataGridTextColumn Header="MachineName"
+                                    Binding="{Binding Path=sMachineName}"/>
                 <DataGridTextColumn Header="ServiceStart"
                                     Binding="{Binding Path=ServiceStart}"/>
                 <DataGridTextColumn Header="ServiceFinish"

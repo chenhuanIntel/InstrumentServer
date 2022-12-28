@@ -29,7 +29,8 @@ namespace TesterClient_Consoles
             double sum = 0;
             int delay = 0;
             bool ret = false;
-            string ThreadID = Process.GetCurrentProcess().Id.ToString();
+            string sThreadID = Process.GetCurrentProcess().Id.ToString();
+            string sMachineName = Environment.MachineName;
             ConsoleKey key;
 
             try
@@ -48,33 +49,44 @@ namespace TesterClient_Consoles
                     // assign the _iClient obtained within the above Endpoint functions
                     _client = _clientFct._iClient;
 
-                    sum = _client.Add(a, b, ThreadID);
-                    Console.WriteLine($"\nThread={ThreadID} Add({a}, {b}) = {sum.ToString()}\n");
+                    sum = _client.Add(a, b, sThreadID, sMachineName);
+                    Console.WriteLine($"\nMachine={sMachineName}, Thread={sThreadID} Add({a}, {b}) = {sum.ToString()}\n");
 
                     delay = 1; //seconds
-                    Console.WriteLine($"Thread={ThreadID} AddAndDelay({a}, {b}) with delay = {delay.ToString()} seconds.");
-                    sum = _client.AddAndDelay(a, b, delay, ThreadID);
-                    Console.WriteLine($"Thread={ThreadID} AddAndDelay({a}, {b}) = {sum.ToString()} with delay = {delay.ToString()} seconds.\n");
+                    Console.WriteLine($"Machine={sMachineName}, Thread={sThreadID} AddAndDelay({a}, {b}) with delay = {delay.ToString()} seconds.");
+                    sum = _client.AddAndDelay(a, b, delay, sThreadID, sMachineName);
+                    Console.WriteLine($"Machine={sMachineName}, Thread={sThreadID} AddAndDelay({a}, {b}) = {sum.ToString()} with delay = {delay.ToString()} seconds.\n");
 
-                    ret = _client.getInstrumentLock(sharedInstrument.DCA, ThreadID);
-                    Console.WriteLine($"Thread={ThreadID} getInstrumentLock(sharedInstrument.DCA)");
+                    ret = _client.getInstrumentLock(sharedInstrument.DCA, sThreadID, sMachineName);
+                    Console.WriteLine($"Machine={sMachineName}, Thread={sThreadID} getInstrumentLock(sharedInstrument.DCA)");
 
                     // doing something with DCA
-                    Console.WriteLine($"Thread={ThreadID} doing something with DCA");
+                    Console.WriteLine($"Machine={sMachineName}, Thread={sThreadID} doing something with DCA");
+                    Thread.Sleep(5000);
+
+                    // nested DCA lock request
+                    ret = _client.getInstrumentLock(sharedInstrument.DCA, sThreadID, sMachineName);
+                    Console.WriteLine($"Machine={sMachineName}, Thread={sThreadID} getInstrumentLock(sharedInstrument.DCA)");
+
+                    // doing something with DCA
+                    Console.WriteLine($"Machine={sMachineName}, Thread={sThreadID} doing something with DCA");
                     Thread.Sleep(10000);
 
-                    ret = _client.releaseInstrumentLock(sharedInstrument.DCA, ThreadID);
-                    Console.WriteLine($"Thread={ThreadID} releaseInstrumentLock(sharedInstrument.DCA)\n");
+                    ret = _client.releaseInstrumentLock(sharedInstrument.DCA, sThreadID, sMachineName);
+                    Console.WriteLine($"Machine={sMachineName}, Thread={sThreadID} releaseInstrumentLock(sharedInstrument.DCA)");
 
-                    ret = _client.getProtocolLock(sharedProtocol.DiCon, ThreadID);
-                    Console.WriteLine($"Thread={ThreadID} getProtocolLock(sharedProtocol.DiCon)");
+                    ret = _client.releaseInstrumentLock(sharedInstrument.DCA, sThreadID, sMachineName);
+                    Console.WriteLine($"Machine={sMachineName}, Thread={sThreadID} releaseInstrumentLock(sharedInstrument.DCA)\n");
+
+                    ret = _client.getProtocolLock(sharedProtocol.DiCon, sThreadID, sMachineName);
+                    Console.WriteLine($"Machine={sMachineName}, Thread={sThreadID} getProtocolLock(sharedProtocol.DiCon)");
 
                     // doing something with DiCon
-                    Console.WriteLine($"Thread={ThreadID} doing something with DiCon");
+                    Console.WriteLine($"Machine={sMachineName}, Thread={sThreadID} doing something with DiCon");
                     Thread.Sleep(1000);
 
-                    ret = _client.releaseProtocolLock(sharedProtocol.DiCon, ThreadID);
-                    Console.WriteLine($"Thread={ThreadID} releaseProtocolLock(sharedProtocol.DiCon)\n");
+                    ret = _client.releaseProtocolLock(sharedProtocol.DiCon, sThreadID, sMachineName);
+                    Console.WriteLine($"Machine={sMachineName}, Thread={sThreadID} releaseProtocolLock(sharedProtocol.DiCon)\n");
 
 
                     Console.WriteLine($"Press ENTER to close the console window; other keys to repeat ...........");

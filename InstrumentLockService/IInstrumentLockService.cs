@@ -21,7 +21,7 @@ namespace InstrumentLockServices
         /// <param name="b"></param>
         /// <returns></returns>
         [OperationContract]
-        double Add(double a, double b, string ThreadID);
+        double Add(double a, double b, string ThreadID, string MachineName);
 
         /// <summary>
         /// demo/try-out WCF service
@@ -30,27 +30,27 @@ namespace InstrumentLockServices
         /// <param name="b"></param>
         /// <returns></returns>
         [OperationContract]
-        double AddAndDelay(double a, double b, int delayInSec, string ThreadID);
+        double AddAndDelay(double a, double b, int delayInSec, string ThreadID, string MachineName);
 
         // Arithmetic operations with the float and double types never throw an exception.
         // The result of arithmetic operations with those types can be one of special values that represent infinity and not-a-number:
         [OperationContract]
         [FaultContract(typeof(MathFault))]
-        int intDivide(double a, double b, string ThreadID);
+        int intDivide(double a, double b, string ThreadID, string MachineName);
 
         /// <summary>
         /// getInstrumentLock() of an instrument
         /// Such as getIntrumentLock(ATT1)
         /// </summary>
         [OperationContract]
-        bool getInstrumentLock(sharedInstrument instr, string ThreadID);
+        bool getInstrumentLock(sharedInstrument instr, string ThreadID, string MachineName);
 
         /// <summary>
         /// releaseInstrumentLock() of an instrument
         /// Such as getIntrumentLock(ATT1)
         /// </summary>
         [OperationContract]
-        bool releaseInstrumentLock(sharedInstrument instr, string ThreadID);
+        bool releaseInstrumentLock(sharedInstrument instr, string ThreadID, string MachineName);
 
         /// <summary>
         /// getProtocolLock() of a mutex
@@ -59,7 +59,7 @@ namespace InstrumentLockServices
         /// Because the DiCon box contains 3 different functional instruments, SW, ATT and PowerMeter.
         /// </summary>
         [OperationContract]
-        bool getProtocolLock(sharedProtocol protocol, string ThreadID);
+        bool getProtocolLock(sharedProtocol protocol, string ThreadID, string MachineName);
 
         /// <summary>
         /// releaseProtocolLock() of a mutex
@@ -68,7 +68,7 @@ namespace InstrumentLockServices
         /// Because the DiCon box contains 3 different functional instruments, SW, ATT and PowerMeter.
         /// </summary>
         [OperationContract]
-        bool releaseProtocolLock(sharedProtocol protocol, string ThreadID);
+        bool releaseProtocolLock(sharedProtocol protocol, string ThreadID, string MachineName);
 
         /// <summary>
         /// getConnectedInfo()

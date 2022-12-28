@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="utf-8"?>
-<ReferenceGroup xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" ID="817df123-d73c-4390-a4e9-a3024ced49aa" xmlns="urn:schemas-microsoft-com:xml-wcfservicemap">
+<ReferenceGroup xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" ID="931f37b9-c4a8-42f4-855e-4d4c9099f3d6" xmlns="urn:schemas-microsoft-com:xml-wcfservicemap">
   <ClientOptions>
     <GenerateAsynchronousMethods>false</GenerateAsynchronousMethods>
     <GenerateTaskBasedAsynchronousMethod>true</GenerateTaskBasedAsynchronousMethod>
@@ -19,14 +19,13 @@
     <ServiceContractMappings />
   </ClientOptions>
   <MetadataSources>
-    <MetadataSource Address="http://localhost:8080" Protocol="http" SourceId="1" />
+    <MetadataSource Address="net.tcp://localhost:8001/mex" Protocol="mex" SourceId="1" />
   </MetadataSources>
   <Metadata>
-    <MetadataFile FileName="item.disco" MetadataType="Disco" ID="71571d01-3b05-4801-88c5-9d1cf4a0a641" SourceId="1" SourceUrl="http://localhost:8080/?disco" />
-    <MetadataFile FileName="item.xsd" MetadataType="Schema" ID="df13c175-4208-4c17-af64-25033de06de9" SourceId="1" SourceUrl="http://localhost:8080/?xsd=xsd2" />
-    <MetadataFile FileName="item1.xsd" MetadataType="Schema" ID="9d0d4b8a-eb37-4517-a72d-d144cd89e7d7" SourceId="1" SourceUrl="http://localhost:8080/?xsd=xsd1" />
-    <MetadataFile FileName="item2.xsd" MetadataType="Schema" ID="506f1008-046a-41ff-b58c-07fd95ec875e" SourceId="1" SourceUrl="http://localhost:8080/?xsd=xsd0" />
-    <MetadataFile FileName="InstrumentLockServiceFacade.wsdl" MetadataType="Wsdl" ID="7b0f8cb0-9008-4975-ba38-0fce659c8989" SourceId="1" SourceUrl="http://localhost:8080/?wsdl" />
+    <MetadataFile FileName="service.wsdl" MetadataType="Wsdl" ID="f4051c3c-2c7e-43bb-90a8-1179412c0dac" SourceId="1" SourceUrl="net.tcp://localhost:8001/mex" />
+    <MetadataFile FileName="service.xsd" MetadataType="Schema" ID="81661527-6f14-48c0-84b1-e2927b0ef181" SourceId="1" SourceUrl="net.tcp://localhost:8001/mex" />
+    <MetadataFile FileName="service1.xsd" MetadataType="Schema" ID="740afd5e-aa92-4ccd-b14f-0aa144a38819" SourceId="1" SourceUrl="net.tcp://localhost:8001/mex" />
+    <MetadataFile FileName="InstrumentLockServices.xsd" MetadataType="Schema" ID="14bbc649-bce0-4e3b-9115-0770eef5d8a1" SourceId="1" SourceUrl="net.tcp://localhost:8001/mex" />
   </Metadata>
   <Extensions>
     <ExtensionFile FileName="configuration91.svcinfo" Name="configuration91.svcinfo" />

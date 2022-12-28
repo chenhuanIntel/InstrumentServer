@@ -95,7 +95,8 @@ namespace InstrumentLockServiceHosts
             // do whatever you want here
             // such as print the value on host console or WPF forms
             var varValue = e.Value;
-            Console.WriteLine($"WCF client thread = {varValue.sClient}.");
+            Console.WriteLine($"WCF client machine = {varValue.sMachineName}.");
+            Console.WriteLine($"WCF client thread = {varValue.sThreadID}.");
             Console.WriteLine($"\tinput A = {varValue.dInputA}.");
             Console.WriteLine($"\tinput B = {varValue.dInputB}.");
             Console.WriteLine($"\tservice = {varValue.sService}.");
