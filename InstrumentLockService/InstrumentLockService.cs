@@ -87,7 +87,7 @@ namespace InstrumentLockServices
         /// </summary>
         public void wshttpClientEndPoint()
         {
-            Uri baseAddress = new Uri("http://localhost:8080/");
+            Uri baseAddress = new Uri("http://172.25.93.250:8080/");
             var myBinding = new WSHttpBinding();
             var myEndpoint = new EndpointAddress(baseAddress);
             var myChannelFactory = new ChannelFactory<IInstrumentLockServiceFacade>(myBinding, myEndpoint);
@@ -110,7 +110,7 @@ namespace InstrumentLockServices
         /// </summary>
         public void netTcpClientEndPoint()
         {
-            Uri baseAddress = new Uri("net.tcp://localhost:8001/");
+            Uri baseAddress = new Uri("net.tcp://172.25.93.250:8001/");
 
             var myBinding = new NetTcpBinding();
             var myEndpoint = new EndpointAddress(baseAddress);
