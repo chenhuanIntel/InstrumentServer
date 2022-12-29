@@ -87,7 +87,7 @@ namespace InstrumentLockServices
         /// </summary>
         public void wshttpClientEndPoint()
         {
-            Uri baseAddress = new Uri("http://localhost:8080/");
+            Uri baseAddress = new Uri("http://172.25.93.250:8080/");
             var myBinding = new WSHttpBinding();
             var myEndpoint = new EndpointAddress(baseAddress);
             var myChannelFactory = new ChannelFactory<IInstrumentLockServiceFacade>(myBinding, myEndpoint);
@@ -272,11 +272,13 @@ namespace InstrumentLockServices
     public class SemaphoreOwner
     {
         public Semaphore mySemaphore { get; set; }
+        public int nestedCount { get; set; }
         public string sMachineName { get; set; }
         public string sThreadID { get; set; }
         public SemaphoreOwner(Semaphore mySemaphore)
         {
             this.mySemaphore = mySemaphore;
+            nestedCount = 0;
             sMachineName = null;
             sThreadID = null;
         }
@@ -453,8 +455,10 @@ namespace InstrumentLockServices
                 if (!(ownerSemaphoreDCA.sThreadID == sThreadID && ownerSemaphoreDCA.sMachineName == sMachineName))          
                     semaphoreDCA.WaitOne();
 
-                // if the client already owns the semaphore or just obtains via WaitOne() 
-                // first to re-assign the ownership
+                // if the client already owns the semaphore , no need to obtain semaphore again
+                // or if the client just obtains the semaphore via WaitOne() 
+                // we will first re-afrim or re-assign the ownership and increase nestedCount
+                ownerSemaphoreDCA.nestedCount++;
                 ownerSemaphoreDCA.sThreadID = sThreadID;
                 ownerSemaphoreDCA.sMachineName = sMachineName;
                 // then grant the InstrumentLock
@@ -487,11 +491,18 @@ namespace InstrumentLockServices
       
             try
             {
-                // first to reset the ownership to null
-                ownerSemaphoreDCA.sThreadID = null;
-                ownerSemaphoreDCA.sMachineName = null;
-                // then release the semaphore
-                semaphoreDCA.Release();
+                // first to descrease nestedCount
+                ownerSemaphoreDCA.nestedCount--;
+
+                // if nestedCount==0, then reset the ownership to null
+                // otherwise, keep the sThreadID and sMachineName as owner of the semaphore; i.e., no release of semaphore
+                if (ownerSemaphoreDCA.nestedCount == 0)
+                {
+                    ownerSemaphoreDCA.sThreadID = null;
+                    ownerSemaphoreDCA.sMachineName = null;
+                    // then release the semaphore
+                    semaphoreDCA.Release();
+                }            
 
                 Console.WriteLine("InstrumentLockService.releaseInstrumentLock");
                 sService = "InstrumentLockService.releaseInstrumentLock";
@@ -533,8 +544,10 @@ namespace InstrumentLockServices
                 if (!(ownerSemaphoreDiCon.sThreadID == sThreadID && ownerSemaphoreDiCon.sMachineName == sMachineName))
                     semaphoreDiCon.WaitOne();
 
-                // if the client already owns the semaphore or just obtains via WaitOne() 
-                // first to re-assign the ownership
+                // if the client already owns the semaphore , no need to obtain semaphore again
+                // or if the client just obtains the semaphore via WaitOne() 
+                // we will first re-afrim or re-assign the ownership and increase nestedCount
+                ownerSemaphoreDiCon.nestedCount++;
                 ownerSemaphoreDiCon.sThreadID = sThreadID;
                 ownerSemaphoreDiCon.sMachineName = sMachineName;
                 // then grant the InstrumentLock
@@ -567,11 +580,18 @@ namespace InstrumentLockServices
           
             try
             {
-                // first to reset the ownership to null
-                ownerSemaphoreDiCon.sThreadID = null;
-                ownerSemaphoreDiCon.sMachineName = null;
-                // then release the semaphore
-                semaphoreDiCon.Release();
+                // first to descrease nestedCount
+                ownerSemaphoreDiCon.nestedCount--;
+
+                // if nestedCount==0, then reset the ownership to null
+                // otherwise, keep the sThreadID and sMachineName as owner of the semaphore; i.e., no release of semaphore
+                if (ownerSemaphoreDiCon.nestedCount == 0)
+                {
+                    ownerSemaphoreDiCon.sThreadID = null;
+                    ownerSemaphoreDiCon.sMachineName = null;
+                    // then release the semaphore
+                    semaphoreDiCon.Release();
+                }
 
                 Console.WriteLine("InstrumentLockService.releaseProtocolLock");
                 sService = "InstrumentLockService.releaseProtocolLock";
