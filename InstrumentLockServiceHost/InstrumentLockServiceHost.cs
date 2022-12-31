@@ -37,13 +37,13 @@ namespace InstrumentLockServiceHosts
         /// define the global variable of WCF service instance
         /// and start the service host of the instance
         /// </summary>
-        public virtual void initialize()
+        public virtual void initialize(Uri baseAddress)
         {
             try
             {
                 // programmably set endpoint, either wsHTTP or netTCP
-                //wsHttpEndPoint();
-                netTcpEndPoint();
+                //wsHttpEndPoint(baseAddress);
+                netTcpEndPoint(baseAddress);
 
                 // in InstrumentLockServiceFacade, we can still access the actual service class
                 var serviceInstance = InstrumentLockServiceFacade.ServiceInstance;
@@ -160,10 +160,10 @@ namespace InstrumentLockServiceHosts
         ///  programmably to set up endpoint for clients
         ///  this method is to use wshttp
         /// </summary>
-        public void wsHttpEndPoint()
+        public void wsHttpEndPoint(Uri baseAddress)
         {
             // wsHttp
-            _baseAddress = new Uri("http://localhost:8080/");
+            _baseAddress = baseAddress;  
 
             //https://stackoverflow.com/questions/3469044/self-hosted-wcf-service-how-to-access-the-objects-implementing-the-service-co
             // instead of using Singleton _instance of InstrumentLockService,
@@ -203,10 +203,10 @@ namespace InstrumentLockServiceHosts
         ///  programmably to set up endpoint for clients
         ///  this method is to use TCP
         /// </summary>
-        public void netTcpEndPoint()
+        public void netTcpEndPoint(Uri baseAddress)
         {
             // net.tcp
-            _baseAddress = new Uri("net.tcp://localhost:8001/");
+            _baseAddress = baseAddress;
 
             //https://stackoverflow.com/questions/3469044/self-hosted-wcf-service-how-to-access-the-objects-implementing-the-service-co
             // instead of using Singleton _instance of InstrumentLockService,

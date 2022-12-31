@@ -32,6 +32,8 @@ namespace TesterClient_Consoles
             string sThreadID = Process.GetCurrentProcess().Id.ToString();
             string sMachineName = Environment.MachineName;
             ConsoleKey key;
+            Uri baseAddress = new Uri("net.tcp://localhost:8001/");
+           // Uri baseAddress = new Uri("http://172.25.93.250:8080/");
 
             try
             {
@@ -43,8 +45,9 @@ namespace TesterClient_Consoles
                     // the reason to place the endpoint function within the do-while loop:
                     // if server restarts in between two loops, must set up endpoint again
                     // programmably set up EndPoint
-                    //_clientFct.wshttpClientEndPoint();
-                    _clientFct.netTcpClientEndPoint();
+                    TimeSpan myTS = TimeSpan.FromMinutes(20);
+                    //_clientFct.wshttpClientEndPoint(baseAddress, myTS);
+                    _clientFct.netTcpClientEndPoint(baseAddress, myTS);
 
                     // assign the _iClient obtained within the above Endpoint functions
                     _client = _clientFct._iClient;
@@ -62,7 +65,7 @@ namespace TesterClient_Consoles
 
                     // doing something with DCA
                     Console.WriteLine($"Machine={sMachineName}, Thread={sThreadID} doing something with DCA");
-                    Thread.Sleep(5000);
+                    Thread.Sleep(2 * 60000);
 
                     // nested DCA lock request
                     ret = _client.getInstrumentLock(sharedInstrument.DCA, sThreadID, sMachineName);
@@ -70,7 +73,7 @@ namespace TesterClient_Consoles
 
                     // doing something with DCA
                     Console.WriteLine($"Machine={sMachineName}, Thread={sThreadID} doing something with DCA");
-                    Thread.Sleep(10000);
+                    Thread.Sleep(5 * 60000);
 
                     ret = _client.releaseInstrumentLock(sharedInstrument.DCA, sThreadID, sMachineName);
                     Console.WriteLine($"Machine={sMachineName}, Thread={sThreadID} releaseInstrumentLock(sharedInstrument.DCA)");

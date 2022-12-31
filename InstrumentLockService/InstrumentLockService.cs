@@ -85,15 +85,17 @@ namespace InstrumentLockServices
         ///  https://stackoverflow.com/questions/6118221/how-do-i-add-wcf-client-endpoints-programmatically
         ///  https://stackoverflow.com/questions/2943148/how-to-programmatically-connect-a-client-to-a-wcf-service
         /// </summary>
-        public void wshttpClientEndPoint()
+        public void wshttpClientEndPoint(Uri baseAddress, TimeSpan TimeOutSpan)
         {
-            Uri baseAddress = new Uri("http://172.25.93.250:8080/");
-            var myBinding = new WSHttpBinding();
-            var myEndpoint = new EndpointAddress(baseAddress);
-            var myChannelFactory = new ChannelFactory<IInstrumentLockServiceFacade>(myBinding, myEndpoint);
-
             try
             {
+                var myBinding = new WSHttpBinding();
+                myBinding.SendTimeout = TimeOutSpan;
+                myBinding.ReceiveTimeout = TimeOutSpan;
+                myBinding.OpenTimeout = TimeOutSpan;
+
+                var myEndpoint = new EndpointAddress(baseAddress);
+                var myChannelFactory = new ChannelFactory<IInstrumentLockServiceFacade>(myBinding, myEndpoint);
                 _iClient = myChannelFactory.CreateChannel();
                 //((ICommunicationObject)_client).Close();
                 //myChannelFactory.Close();
@@ -108,16 +110,20 @@ namespace InstrumentLockServices
         ///  https://stackoverflow.com/questions/6118221/how-do-i-add-wcf-client-endpoints-programmatically
         ///  https://stackoverflow.com/questions/2943148/how-to-programmatically-connect-a-client-to-a-wcf-service
         /// </summary>
-        public void netTcpClientEndPoint()
+        public void netTcpClientEndPoint(Uri baseAddress, TimeSpan TimeOutSpan)
         {
-            Uri baseAddress = new Uri("net.tcp://172.25.93.250:8001/");
-
-            var myBinding = new NetTcpBinding();
-            var myEndpoint = new EndpointAddress(baseAddress);
-            var myChannelFactory = new ChannelFactory<IInstrumentLockServiceFacade>(myBinding, myEndpoint);
-
             try
             {
+                var myBinding = new NetTcpBinding();
+                // to avoid net.tcp OperationTimeout
+                // https://social.msdn.microsoft.com/Forums/vstudio/en-US/dc4a6bdc-4dd7-4e68-b24d-cd83a3bfece5/nettcp-operationtimeout-question?forum=wcf
+                myBinding.SendTimeout = TimeOutSpan;
+                myBinding.ReceiveTimeout = TimeOutSpan;
+                myBinding.ReliableSession.InactivityTimeout = TimeOutSpan;
+
+                var myEndpoint = new EndpointAddress(baseAddress);
+                var myChannelFactory = new ChannelFactory<IInstrumentLockServiceFacade>(myBinding, myEndpoint);
+
                 _iClient = myChannelFactory.CreateChannel();
                 //((ICommunicationObject)_client).Close();
                 //myChannelFactory.Close();
