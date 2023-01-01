@@ -44,6 +44,10 @@ namespace TesterClient_WPF
         private static clientFunctions _clientFct = new clientFunctions();
         public MainWindow()
         {
+            Uri baseAddress = new Uri("net.tcp://172.25.93.250:8001/");
+            // Uri baseAddress = new Uri("http://172.25.93.250:8080/");
+            TimeSpan myTS = TimeSpan.FromMinutes(2);
+
             // auto-generated via xaml
             InitializeComponent();
 
@@ -51,8 +55,8 @@ namespace TesterClient_WPF
             _clientFct.setFirewall();
 
             // programmably set up EndPoint
-            _clientFct.wshttpClientEndPoint();
-            //_clientFct.netTcpClientEndPoint();
+            _clientFct.wshttpClientEndPoint(baseAddress, myTS);
+            //_clientFct.netTcpClientEndPoint(baseAddress, myTS);
 
             // assign the _iClient obtained within the above Endpoint functions
             _client = _clientFct._iClient;

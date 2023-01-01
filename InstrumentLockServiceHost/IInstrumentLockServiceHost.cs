@@ -14,7 +14,7 @@ namespace InstrumentLockServiceHosts
         /// define the global variable of WCF service instance
         /// and start the service host of the instance
         /// </summary>
-        void initialize();
+        void initialize(Uri baseAddress);
 
         /// <summary>
         /// Stop Host and dispose Instance
@@ -41,7 +41,7 @@ namespace InstrumentLockServiceHosts
         ///  programmably to set up endpoint for clients
         ///  this method is to use wshttp
         /// </summary>
-        void wsHttpEndPoint();
+        void wsHttpEndPoint(Uri baseAddress);
 
         /// <summary>
         ///  https://stackoverflow.com/questions/6118221/how-do-i-add-wcf-client-endpoints-programmatically
@@ -49,6 +49,6 @@ namespace InstrumentLockServiceHosts
         ///  programmably to set up endpoint for clients
         ///  this method is to use TCP
         /// </summary>
-        void netTcpEndPoint();
+        void netTcpEndPoint(Uri baseAddress);
     }
 }

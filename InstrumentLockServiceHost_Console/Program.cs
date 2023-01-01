@@ -26,7 +26,9 @@ namespace InstrumentLockServiceHost_Consoles
             // create firewall rules
             myHost.setFirewall();
             // initialize host
-            myHost.initialize();
+            Uri baseAddress = new Uri("net.tcp://localhost:8001/");
+            // Uri baseAddress = new Uri("http://172.25.93.250:8080/");
+            myHost.initialize(baseAddress);
 
             // press ENTER to terminate
             Console.WriteLine("Press <ENTER> to terminate service.");

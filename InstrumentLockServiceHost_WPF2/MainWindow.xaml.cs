@@ -61,7 +61,7 @@ namespace InstrumentLockServiceHosts_WPF2
         /// and start the service host of the instance
         /// </summary>
         //public void initialize(DataGrid dgFromMainWindow, TextBlock tbFromMainWindow)
-        public override void initialize()
+        public override void initialize(Uri baseAddress)
         {
             try
             {
@@ -71,8 +71,8 @@ namespace InstrumentLockServiceHosts_WPF2
                 // init _clientRequestValue and baseAddress
                 _clientRequestValue = new ObservableCollection<ClientRequestValue>();
 
-                //wsHttpEndPoint();
-                netTcpEndPoint();
+                //wsHttpEndPoint(baseAddress);
+                netTcpEndPoint(baseAddress);
 
                 // in InstrumentLockServiceFacade, we can still access the actual service class
                 var serviceInstance = InstrumentLockServiceFacade.ServiceInstance;
@@ -169,7 +169,9 @@ namespace InstrumentLockServiceHosts_WPF2
             _server._itemsLockMainWindow = _itemsLock; // synchronization lock defined above
             // no need to get a worker thread or task because WCF behavior UseSynchronizationContext = false
             // WCF will get a new thread when a client requests WCF services
-            _server.initialize();
+            Uri baseAddress = new Uri("net.tcp://172.25.93.250:8001/");
+            // Uri baseAddress = new Uri("http://172.25.93.250:8080/");
+            _server.initialize(baseAddress);
 
             // https://stackoverflow.com/questions/21720638/using-bindingoperations-enablecollectionsynchronization
             //Enable the cross acces to this collection elsewhere
