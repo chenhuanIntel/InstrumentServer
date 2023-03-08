@@ -21,6 +21,7 @@ using System.Reflection.Emit;
 using NetFwTypeLib; // Located in FirewallAPI.dll
 using System.ServiceModel.Description;
 using System.Collections.ObjectModel;
+using InstrumentsLib;
 
 
 namespace InstrumentLockServiceHosts_WPF2
@@ -149,6 +150,10 @@ namespace InstrumentLockServiceHosts_WPF2
 
         //lock object for synchronization;
         private static object _itemsLock = new object();
+        /// <summary>
+        /// Station instance for TEC temperature indicator
+        /// </summary>
+        protected StationHardware _stationInstance;
 
         public MainWindow()
         {
@@ -156,6 +161,12 @@ namespace InstrumentLockServiceHosts_WPF2
             // needs to be placed in front of the rest of codes in MainWindow()
             InitializeComponent();
 
+            // initialize station config file
+            //Get station instance
+            _stationInstance = StationHardware.Instance();
+            _stationInstance.Initialize();
+
+            // initialize server
             _server = new InstrumentLockServiceHost_WPF();
             _server.setFirewall();
             // init/assign all class variables of _server            
