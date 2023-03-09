@@ -1,0 +1,20 @@
+﻿<?xml version="1.0"?>
+<DotNETComponent xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
+  <Visible>true</Visible>
+  <SupportedProjectTypes>
+    <string>WindowsFormsApplication2008</string> 
+  </SupportedProjectTypes>
+  <SelectedByDefault>true</SelectedByDefault>
+  <Title>Vision Class Library</Title>
+  <Description>Contains the Vision algorithms functionality.</Description>
+  <Name2008>NationalInstruments.Vision</Name2008>
+  <Licensed>false</Licensed>
+  <Dependencies>
+    <DotNETAssembly>
+      <Name>NationalInstruments.Vision.Common</Name>
+    </DotNETAssembly>
+  </Dependencies>
+  <Namespaces>
+    <string>NationalInstruments.Vision.Analysis</string>
+  </Namespaces>
+</DotNETComponent>

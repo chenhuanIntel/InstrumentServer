@@ -1,0 +1,20 @@
+<?xml version="1.0"?>
+<DotNETComponent xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
+  <Visible>true</Visible>
+  <SupportedProjectTypes>
+    <string>WindowsFormsApplication2008</string>
+  </SupportedProjectTypes>
+  <SelectedByDefault>true</SelectedByDefault>
+  <Title>Measurement Studio Hardware Class Libraries/NI-IMAQ Library</Title>
+  <Description>Contains objects to access the functionality available in NI-IMAQ for acquiring images using NI frame grabbers.</Description>
+  <Name2008>NationalInstruments.Vision.Acquisition.Imaq</Name2008>
+  <Licensed>false</Licensed>
+  <Dependencies>
+    <DotNETAssembly>
+      <Name>NationalInstruments.Vision.Common</Name>
+    </DotNETAssembly>
+  </Dependencies>
+  <Namespaces>
+    <string>NationalInstruments.Vision.Acquisition.Imaq</string>
+  </Namespaces>
+</DotNETComponent>

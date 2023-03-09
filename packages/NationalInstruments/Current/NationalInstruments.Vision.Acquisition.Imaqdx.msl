@@ -1,0 +1,20 @@
+<?xml version="1.0"?>
+<DotNETComponent xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
+  <Visible>true</Visible>
+  <SupportedProjectTypes>
+    <string>WindowsFormsApplication2008</string>
+  </SupportedProjectTypes>
+  <SelectedByDefault>true</SelectedByDefault>
+  <Title>Measurement Studio Hardware Class Libraries/NI-IMAQdx Library</Title>
+  <Description>Contains objects to access the functionality available in NI-IMAQdx for acquiring images from a GigE, IEEE 1394, or USB camera.</Description>
+  <Name2008>NationalInstruments.Vision.Acquisition.Imaqdx</Name2008>
+  <Licensed>false</Licensed>
+  <Dependencies>
+    <DotNETAssembly>
+      <Name>NationalInstruments.Vision.Common</Name>
+    </DotNETAssembly>
+  </Dependencies>
+  <Namespaces>
+    <string>NationalInstruments.Vision.Acquisition.Imaqdx</string>
+  </Namespaces>
+</DotNETComponent>
