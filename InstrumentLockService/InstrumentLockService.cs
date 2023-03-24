@@ -662,7 +662,7 @@ namespace InstrumentLockServices
         /// Mutex of Dicon1 is shared by PM1, SW1 and ATT1
         /// Because the DiCon box contains 3 different functional instruments, SW, ATT and PowerMeter.
         /// </summary>
-        public bool getProtocolLock(sharedProtocol protocol, string sThreadID, string sMachineName, WCFMapSwitchConfig TxSwitch)
+        public bool getProtocolLock(sharedProtocol protocol, string sThreadID, string sMachineName, WCFMapSwitchConfig TxSwitch, WCFProtocolXConfig ProtocolX)
         {
             bool ret = false;
             DateTime ServiceStart = DateTime.Now;

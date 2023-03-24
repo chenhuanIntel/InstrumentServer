@@ -9,6 +9,7 @@ using System.Runtime.Serialization;
 using System.ServiceModel;
 using System.Text;
 using System.Threading;
+using Utility;
 
 // namespace name uses plural
 namespace InstrumentLockServices
@@ -105,6 +106,53 @@ namespace InstrumentLockServices
     public interface IInstrumentLockServiceFacade : IInstrumentLockService
     {
 
+    }
+
+    [DataContract]
+    /// <summary>
+    /// 
+    /// </summary>
+    public class WCFProtocolXConfig
+    {
+        /// <summary>
+        /// 
+        /// </summary>
+        public bool bSimulation { get; set; }
+
+        /// <summary>
+        /// 
+        /// </summary>
+        public bool bVerbose { get; set; }
+
+        /// <summary>
+        /// 
+        /// </summary>
+        public bool bUseSimData { get; set; }
+
+        /// <summary>
+        /// 
+        /// </summary>
+        public CSimData mySimData { get; set; }
+
+        /// <summary>
+        /// 
+        /// </summary>
+        public int MaxRetries { get; set; }
+
+        /// <summary>
+        /// Take Screen Shot while has exception
+        /// </summary>
+        public bool bTakeScreenShot { get; set; }
+
+        /// <summary>
+        /// Contructor of ProtocolXConfig
+        /// </summary>
+        public WCFProtocolXConfig()
+        {
+            //buildTargetClassInfo(typeof(ProtocolX));
+            MaxRetries = 6;
+            bTakeScreenShot = false;
+        }
     }
 
     [DataContract]
