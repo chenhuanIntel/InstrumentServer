@@ -181,7 +181,7 @@ namespace InstrumentLockServiceHosts_WPF2
             // no need to get a worker thread or task because WCF behavior UseSynchronizationContext = false
             // WCF will get a new thread when a client requests WCF services
             Uri baseAddress = new Uri("net.tcp://172.25.93.250:8001/");
-            // Uri baseAddress = new Uri("http://172.25.93.250:8080/");
+            //Uri baseAddress = new Uri("http://172.25.93.250:8080/");
             _server.initialize(baseAddress);
 
             // https://stackoverflow.com/questions/21720638/using-bindingoperations-enablecollectionsynchronization

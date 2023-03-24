@@ -50,6 +50,16 @@ namespace InstrumentsLib
     public class StationHardware
     {
         /// <summary>
+        /// TxSwitchName
+        /// </summary>
+        public string TxSwitchName = "TxSwitch";//{ get; set; }
+
+        /// <summary>
+        /// TxSwitchName
+        /// </summary>
+        public string DCAName = "DCA";//{ get; set; }
+
+        /// <summary>
         /// The config file for this station
         /// </summary>
         protected StationInstrumentConfig _config;

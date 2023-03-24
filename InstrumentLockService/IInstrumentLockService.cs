@@ -1,4 +1,7 @@
-﻿using NetFwTypeLib;
+﻿using InstrumentsLib.Tools.Core;
+using InstrumentsLib.Tools.Instruments.Oscilloscope;
+using InstrumentsLib.Tools.Instruments.Switch;
+using NetFwTypeLib;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -38,12 +41,19 @@ namespace InstrumentLockServices
         [FaultContract(typeof(MathFault))]
         int intDivide(double a, double b, string ThreadID, string MachineName);
 
+        ///// <summary>
+        ///// getInstrumentLock() of an instrument
+        ///// Such as getIntrumentLock(ATT1)
+        ///// </summary>
+        //[OperationContract]
+        //bool getInstrumentLock(sharedInstrument instr, string ThreadID, string MachineName);
+
         /// <summary>
         /// getInstrumentLock() of an instrument
         /// Such as getIntrumentLock(ATT1)
         /// </summary>
         [OperationContract]
-        bool getInstrumentLock(sharedInstrument instr, string ThreadID, string MachineName);
+        bool getInstrumentLock(sharedInstrument instr, string sThreadID, string sMachineName, ref WCFScopeConfig DCA);
 
         /// <summary>
         /// releaseInstrumentLock() of an instrument
@@ -52,6 +62,15 @@ namespace InstrumentLockServices
         [OperationContract]
         bool releaseInstrumentLock(sharedInstrument instr, string ThreadID, string MachineName);
 
+        ///// <summary>
+        ///// getProtocolLock() of a mutex
+        ///// Such as getProtocolLock(Dicon1)
+        ///// Mutex of Dicon1 is shared by PM1, SW1 and ATT1
+        ///// Because the DiCon box contains 3 different functional instruments, SW, ATT and PowerMeter.
+        ///// </summary>
+        //[OperationContract]
+        //bool getProtocolLock(sharedProtocol protocol, string ThreadID, string MachineName);
+
         /// <summary>
         /// getProtocolLock() of a mutex
         /// Such as getProtocolLock(Dicon1)
@@ -59,7 +78,7 @@ namespace InstrumentLockServices
         /// Because the DiCon box contains 3 different functional instruments, SW, ATT and PowerMeter.
         /// </summary>
         [OperationContract]
-        bool getProtocolLock(sharedProtocol protocol, string ThreadID, string MachineName);
+        bool getProtocolLock(sharedProtocol protocol, string sThreadID, string sMachineName, WCFMapSwitchConfig TxSwitch);
 
         /// <summary>
         /// releaseProtocolLock() of a mutex
@@ -78,11 +97,58 @@ namespace InstrumentLockServices
         void getConnectedInfo();
     }
 
+    /// <summary>
+    /// IInstrumentLockServiceFacade
+    /// The issue of the (singleton instance with event handler) is that the service contract is limited to “singleton” as well. It means the behavior of the WCF service is single; that is, once WCF service is used by one client, no other clients can use it. The mutex implemented inside WCF service can never be used. There are a few solutions, such as creating a facade
+    /// </summary>
     [ServiceContract]
     public interface IInstrumentLockServiceFacade : IInstrumentLockService
     {
 
     }
+
+    [DataContract]
+    /// <summary>
+    /// 
+    /// </summary>
+    public class WCFMapSwitchConfig
+    {
+        /// <summary>
+        /// 
+        /// </summary>
+        public int nSlotAddr { get; set; }
+        /// <summary>
+        /// 
+        /// </summary>
+        public int nDeviceAddr { get; set; }
+        /// <summary>
+        /// 
+        /// </summary>
+        public Dictionary<string, int> channelMap { get; set; }
+
+        /// <summary>
+        /// 
+        /// </summary>
+        public WCFMapSwitchConfig()
+        {
+            channelMap = new Dictionary<string, int>();
+            //buildTargetClassInfo(typeof(MapSwitch));
+        }
+    }
+
+
+    [DataContract]
+    public class WCFScopeConfig
+    {
+        [DataMember]
+        public string strWCFScopeClassType
+        {
+            get { return strWCFScopeClassType; }
+            set { strWCFScopeClassType = value; }
+        }
+
+    }
+
 
     [DataContract]
     public class MathFault

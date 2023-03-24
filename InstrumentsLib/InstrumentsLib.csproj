@@ -45,7 +45,8 @@
     <CodeAnalysisRuleSet>AllRules.ruleset</CodeAnalysisRuleSet>
     <Prefer32Bit>false</Prefer32Bit>
     <TreatWarningsAsErrors>true</TreatWarningsAsErrors>
-    <DocumentationFile>bin\Debug\InstrumentsLib.xml</DocumentationFile>
+    <DocumentationFile>
+    </DocumentationFile>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
     <DebugType>pdbonly</DebugType>
@@ -131,6 +132,18 @@
     <Compile Include="Tools\Core\InstrumentX.cs" />
     <Compile Include="Tools\Core\ProtocolX.cs" />
     <Compile Include="Tools\Instruments\Misc\Message.cs" />
+    <Compile Include="Tools\Instruments\Oscilloscope\Anritsu_BertWave_MP2110A.cs" />
+    <Compile Include="Tools\Instruments\Oscilloscope\CChannelConfigParallel.cs" />
+    <Compile Include="Tools\Instruments\Oscilloscope\CChannelSettings.cs" />
+    <Compile Include="Tools\Instruments\Oscilloscope\CChannelsGroupParallel.cs" />
+    <Compile Include="Tools\Instruments\Oscilloscope\DCASettings.cs" />
+    <Compile Include="Tools\Instruments\Oscilloscope\DCA_A86100C_Flex_400G.cs" />
+    <Compile Include="Tools\Instruments\Oscilloscope\DCA_A86100C_Flex_400G_V2.cs" />
+    <Compile Include="Tools\Instruments\Oscilloscope\DCA_A86100C_Flex_400G_V3.cs" />
+    <Compile Include="Tools\Instruments\Oscilloscope\IScope.cs" />
+    <Compile Include="Tools\Instruments\Oscilloscope\Keysight_DCAM_N1092.cs" />
+    <Compile Include="Tools\Instruments\Oscilloscope\ScopeCommands.cs" />
+    <Compile Include="Tools\Instruments\Oscilloscope\ScopeConst.cs" />
     <Compile Include="Tools\Instruments\Switch\Map_DICON_GP750.cs" />
     <Compile Include="Tools\Instruments\Switch\Map_DICON_GP750_v2.cs" />
     <Compile Include="Tools\Instruments\Switch\Map_DICON_GP750_v3.cs" />
@@ -171,6 +184,7 @@
       <Install>true</Install>
     </BootstrapperPackage>
   </ItemGroup>
+  <ItemGroup />
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <Import Project="$(SolutionDir)\.nuget\NuGet.targets" Condition="Exists('$(SolutionDir)\.nuget\NuGet.targets')" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 

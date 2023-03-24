@@ -3,11 +3,18 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Runtime.Serialization;
 using System.Security;
+using System.Security.Cryptography;
 using System.ServiceModel;
 using System.ServiceModel.Security;
 using System.Text;
 using System.Threading;
 using NetFwTypeLib; // Located in FirewallAPI.dll
+using InstrumentsLib;
+using InstrumentsLib.Tools.Instruments.Switch;
+using InstrumentsLib.Tools.Instruments.Oscilloscope;
+using System.Diagnostics;
+using Utility;
+using Newtonsoft.Json;
 
 // namespace name uses plural
 namespace InstrumentLockServices
@@ -248,19 +255,29 @@ namespace InstrumentLockServices
             _serviceInstance.getConnectedInfo();
         }
 
-        public bool getInstrumentLock(sharedInstrument instr, string sThreadID, string sMachineName)
+        //public bool getInstrumentLock(sharedInstrument instr, string sThreadID, string sMachineName)
+        //{
+        //    return _serviceInstance.getInstrumentLock(instr, sThreadID, sMachineName);
+        //}
+        public bool getInstrumentLock(sharedInstrument instr, string sThreadID, string sMachineName, ref WCFScopeConfig DCA)
         {
-            return _serviceInstance.getInstrumentLock(instr, sThreadID, sMachineName);
+            return _serviceInstance.getInstrumentLock(instr, sThreadID, sMachineName, ref DCA);
         }
+
 
         public bool releaseInstrumentLock(sharedInstrument instr, string sThreadID, string sMachineName)
         {
             return _serviceInstance.releaseInstrumentLock(instr, sThreadID, sMachineName);
         }
 
-        public bool getProtocolLock(sharedProtocol protocol, string sThreadID, string sMachineName)
+        //public bool getProtocolLock(sharedProtocol protocol, string sThreadID, string sMachineName)
+        //{
+        //    return _serviceInstance.getProtocolLock(protocol, sThreadID, sMachineName);
+        //}
+
+        public bool getProtocolLock(sharedProtocol protocol, string sThreadID, string sMachineName, WCFMapSwitchConfig TxSwitch)
         {
-            return _serviceInstance.getProtocolLock(protocol, sThreadID, sMachineName);
+            return _serviceInstance.getProtocolLock(protocol, sThreadID, sMachineName, TxSwitch);
         }
 
         public bool releaseProtocolLock(sharedProtocol protocol, string sThreadID, string sMachineName)
@@ -443,22 +460,79 @@ namespace InstrumentLockServices
             return intDiv;
         }
 
+        ///// <summary>
+        ///// getInstrumentLock() of an instrument
+        ///// Such as getIntrumentLock(ATT1)
+        ///// </summary>
+        //public bool getInstrumentLock(sharedInstrument instr, string sThreadID, string sMachineName)
+        //{
+        //    bool ret = false;
+        //    DateTime ServiceStart = DateTime.Now;
+        //    DateTime ServiceFinish = new DateTime(1, 1, 1);
+        //    string sService = "InstrumentLockService.null";
+
+        //    try
+        //    {
+        //        // check if the client already owns the semaphore
+        //        // if not the owner, WaitOne() which blocks the current thread until the current WaitHandle receives a signal.
+        //        if (!(ownerSemaphoreDCA.sThreadID == sThreadID && ownerSemaphoreDCA.sMachineName == sMachineName))          
+        //            semaphoreDCA.WaitOne();
+
+        //        // if the client already owns the semaphore , no need to obtain semaphore again
+        //        // or if the client just obtains the semaphore via WaitOne() 
+        //        // we will first re-afrim or re-assign the ownership and increase nestedCount
+        //        ownerSemaphoreDCA.nestedCount++;
+        //        ownerSemaphoreDCA.sThreadID = sThreadID;
+        //        ownerSemaphoreDCA.sMachineName = sMachineName;
+        //        // then grant the InstrumentLock
+        //        Console.WriteLine("InstrumentLockService.getInstrumentLock");
+        //        sService = "InstrumentLockService.getInstrumentLock";
+        //        ret = true;
+
+        //        ServiceFinish = DateTime.Now;
+        //        // contruct the client request values to be sent to host
+        //        var value = new ClientRequestValue(dInputA: 0, dInputB: 0, delayInSec: 0, dResult: 0, sService: sService, sThreadID: sThreadID, sMachineName: sMachineName, ServiceStart: ServiceStart, ServiceFinish: ServiceFinish);
+        //        // each WCF service fires the event EventFromClient with the values from WCF client
+        //        EventFromClient?.Invoke(this, new CustomEventArgs(value));
+        //    }
+        //    catch (Exception ex)
+        //    {
+        //        ret = false;
+        //        // Logging
+        //        Console.WriteLine(ex.Message);
+        //    }
+
+        //    return ret;
+        //}
+
         /// <summary>
         /// getInstrumentLock() of an instrument
         /// Such as getIntrumentLock(ATT1)
         /// </summary>
-        public bool getInstrumentLock(sharedInstrument instr, string sThreadID, string sMachineName)
+        public bool getInstrumentLock(sharedInstrument instr, string sThreadID, string sMachineName, ref WCFScopeConfig DCA)
         {
             bool ret = false;
             DateTime ServiceStart = DateTime.Now;
             DateTime ServiceFinish = new DateTime(1, 1, 1);
             string sService = "InstrumentLockService.null";
+            // set StationHardware.Instance
+            _stationInstance = StationHardware.Instance();
+            string sDCA = "DCA";
 
             try
             {
+                if (_stationInstance.MapInst.ContainsKey(sDCA))
+                {
+                    //Get the DCA
+                    //DCA = JsonConvert.DeserializeObject<WCFScopeConfig>(JsonConvert.SerializeObject(_stationInstance.myConfig.arInstConfig[0]));
+                    
+                    // now only need to pass the scope class type name, not the whole class
+                    DCA.strWCFScopeClassType = _stationInstance.myConfig.arInstConfig[0].GetType().Name;
+                }
+
                 // check if the client already owns the semaphore
                 // if not the owner, WaitOne() which blocks the current thread until the current WaitHandle receives a signal.
-                if (!(ownerSemaphoreDCA.sThreadID == sThreadID && ownerSemaphoreDCA.sMachineName == sMachineName))          
+                if (!(ownerSemaphoreDCA.sThreadID == sThreadID && ownerSemaphoreDCA.sMachineName == sMachineName))
                     semaphoreDCA.WaitOne();
 
                 // if the client already owns the semaphore , no need to obtain semaphore again
@@ -531,6 +605,11 @@ namespace InstrumentLockServices
         }
 
         /// <summary>
+        /// My station config
+        /// </summary>
+        protected StationHardware _stationInstance;
+
+        /// <summary>
         /// getProtocolLock() of a mutex
         /// Such as getProtocolLock(Dicon1)
         /// Mutex of Dicon1 is shared by PM1, SW1 and ATT1
@@ -542,9 +621,67 @@ namespace InstrumentLockServices
             DateTime ServiceStart = DateTime.Now;
             DateTime ServiceFinish = new DateTime(1, 1, 1);
             string sService = "InstrumentLockService.null";
-     
+
             try
             {
+                // check if the client already owns the semaphore
+                // if not the owner, WaitOne() which blocks the current thread until the current WaitHandle receives a signal.
+                if (!(ownerSemaphoreDiCon.sThreadID == sThreadID && ownerSemaphoreDiCon.sMachineName == sMachineName))
+                semaphoreDiCon.WaitOne();
+
+                // if the client already owns the semaphore , no need to obtain semaphore again
+                // or if the client just obtains the semaphore via WaitOne() 
+                // we will first re-afrim or re-assign the ownership and increase nestedCount
+                ownerSemaphoreDiCon.nestedCount++;
+                ownerSemaphoreDiCon.sThreadID = sThreadID;
+                ownerSemaphoreDiCon.sMachineName = sMachineName;
+                // then grant the InstrumentLock
+                Console.WriteLine("InstrumentLockService.getProtocolLock");
+                sService = "InstrumentLockService.getProtocolLock";
+                ret = true;
+
+                ServiceFinish = DateTime.Now;
+                // contruct the client request values to be sent to host
+                var value = new ClientRequestValue(dInputA: 0, dInputB: 0, delayInSec: 0, dResult: 0, sService: sService, sThreadID: sThreadID, sMachineName: sMachineName, ServiceStart: ServiceStart, ServiceFinish: ServiceFinish);
+                // each WCF service fires the event EventFromClient with the values from WCF client
+                EventFromClient?.Invoke(this, new CustomEventArgs(value));
+            }
+            catch (Exception ex)
+            {
+                ret = false;
+                // Logging
+                Console.WriteLine(ex.Message);
+            }
+
+            return ret;
+        }
+
+        /// <summary>
+        /// getProtocolLock() of a mutex
+        /// Such as getProtocolLock(Dicon1)
+        /// Mutex of Dicon1 is shared by PM1, SW1 and ATT1
+        /// Because the DiCon box contains 3 different functional instruments, SW, ATT and PowerMeter.
+        /// </summary>
+        public bool getProtocolLock(sharedProtocol protocol, string sThreadID, string sMachineName, WCFMapSwitchConfig TxSwitch)
+        {
+            bool ret = false;
+            DateTime ServiceStart = DateTime.Now;
+            DateTime ServiceFinish = new DateTime(1, 1, 1);
+            string sService = "InstrumentLockService.null";
+            // set StationHardware.Instance
+            _stationInstance = StationHardware.Instance();
+            string sTxSwitch = "TxSwitch";
+
+            try
+            {
+                if (_stationInstance.MapInst.ContainsKey(sTxSwitch))
+                {
+                    //Get the Tx switch configuration
+                    //TxSwitch = (myMapSwitch_DICON_GP750_Config)_stationInstance.myConfig.arInstConfig[0];
+
+                    TxSwitch = JsonConvert.DeserializeObject<WCFMapSwitchConfig>(JsonConvert.SerializeObject(_stationInstance.myConfig.arInstConfig[0]));
+                }
+
                 // check if the client already owns the semaphore
                 // if not the owner, WaitOne() which blocks the current thread until the current WaitHandle receives a signal.
                 if (!(ownerSemaphoreDiCon.sThreadID == sThreadID && ownerSemaphoreDiCon.sMachineName == sMachineName))
