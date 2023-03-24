@@ -528,6 +528,8 @@ namespace InstrumentLockServices
                     
                     // now only need to pass the scope class type name, not the whole class
                     DCA.strWCFScopeClassType = _stationInstance.myConfig.arInstConfig[0].GetType().Name;
+
+                    Protocol = JsonConvert.DeserializeObject<WCFProtocolXConfig>(JsonConvert.SerializeObject(_stationInstance.myConfig.arProtocolConfig[0]));
                 }
 
                 // check if the client already owns the semaphore
