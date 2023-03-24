@@ -163,8 +163,8 @@ namespace InstrumentLockServiceHosts_WPF2
 
             // initialize station config file
             //Get station instance
-            _stationInstance = StationHardware.Instance();
-            _stationInstance.Initialize();
+            //_stationInstance = StationHardware.Instance();
+            //_stationInstance.Initialize();
 
             // initialize server
             _server = new InstrumentLockServiceHost_WPF();

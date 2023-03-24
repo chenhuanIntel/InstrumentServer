@@ -46,15 +46,15 @@ namespace InstrumentLockServices
         ///// getInstrumentLock() of an instrument
         ///// Such as getIntrumentLock(ATT1)
         ///// </summary>
-        //[OperationContract]
-        //bool getInstrumentLock(sharedInstrument instr, string ThreadID, string MachineName);
+        [OperationContract]
+        bool getInstrumentLock(sharedInstrument instr, string ThreadID, string MachineName);
 
         /// <summary>
         /// getInstrumentLock() of an instrument
         /// Such as getIntrumentLock(ATT1)
         /// </summary>
         [OperationContract]
-        bool getInstrumentLock(sharedInstrument instr, string sThreadID, string sMachineName, ref WCFScopeConfig DCA);
+        bool getInstrumentLockWithReturn(sharedInstrument instr, string sThreadID, string sMachineName, ref WCFScopeConfig DCA, ref WCFProtocolXConfig Protocol);
 
         /// <summary>
         /// releaseInstrumentLock() of an instrument
@@ -69,8 +69,8 @@ namespace InstrumentLockServices
         ///// Mutex of Dicon1 is shared by PM1, SW1 and ATT1
         ///// Because the DiCon box contains 3 different functional instruments, SW, ATT and PowerMeter.
         ///// </summary>
-        //[OperationContract]
-        //bool getProtocolLock(sharedProtocol protocol, string ThreadID, string MachineName);
+        [OperationContract]
+        bool getProtocolLock(sharedProtocol protocol, string ThreadID, string MachineName);
 
         /// <summary>
         /// getProtocolLock() of a mutex
@@ -78,8 +78,8 @@ namespace InstrumentLockServices
         /// Mutex of Dicon1 is shared by PM1, SW1 and ATT1
         /// Because the DiCon box contains 3 different functional instruments, SW, ATT and PowerMeter.
         /// </summary>
-        [OperationContract]
-        bool getProtocolLock(sharedProtocol protocol, string sThreadID, string sMachineName, WCFMapSwitchConfig TxSwitch);
+        //[OperationContract]
+        //bool getProtocolLock(sharedProtocol protocol, string sThreadID, string sMachineName, WCFMapSwitchConfig TxSwitch);
 
         /// <summary>
         /// releaseProtocolLock() of a mutex
