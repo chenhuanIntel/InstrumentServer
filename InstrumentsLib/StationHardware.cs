@@ -190,7 +190,6 @@ namespace InstrumentsLib
                 this._mapInst.Add(_config.arInstConfig[nIdx].strName, InstRef);
             }
 
-
             //For each Protocol, call initialize
             foreach (ProtocolX refProtocol in this._mapProtocol.Values)
             {

@@ -10,22 +10,28 @@ using System.IO;
 using NationalInstruments.VisaNS;
 using System.Text.RegularExpressions;
 using System.Windows.Forms;
-
+using System.Runtime.Serialization;
+using System.ServiceModel;
 
 namespace InstrumentsLib.Tools.Instruments.Oscilloscope
 {
     #region DCA COMMAND FUNCTORS
 
+    // data contract must be applied to any class that is intended to be seralized, even in the all parent classes
+    // data member must also be applied to any property of any class if the property is intended to be serialed
+    [DataContract]
     /// <summary>
     /// 
     /// </summary>
     public class DCASetupcmd : MeasurementCmd
     {
+        [DataMember]
         /// <summary>
         /// 
         /// </summary>
         public List<string> arCustomCmds { get; set; }
 
+        [IgnoreDataMember]
         /// <summary>
         /// 
         /// </summary>
@@ -130,77 +136,82 @@ namespace InstrumentsLib.Tools.Instruments.Oscilloscope
 
     }
 
-
+    // data contract must be applied to any class that is intended to be seralized, even in the all parent classes
+    // data member must also be applied to any property of any class if the property is intended to be serialed
+    [DataContract]
     /// <summary>
     /// 
     /// </summary>
     public class PAMSetupcmd : DCASetupcmd
     {
+        [DataMember]
         /// <summary>
         /// 
         /// </summary>
         public string EYE_ESTiming { get; set; }
 
+        [DataMember]
         /// <summary>
         /// 
         /// </summary>
         public string EYE_ELMethod { get; set; }
 
+        [DataMember]
         /// <summary>
         /// 
         /// </summary>
         public string EYE_PPERcent { get; set; }
-
+        [DataMember]
         /// <summary>
         /// 
         /// </summary>
         public string EYE_TIME_LTDefinition { get; set; }
-
+        [DataMember]
         /// <summary>
         /// 
         /// </summary>
         public string EYE_TIME_UNITs { get; set; }
-
+        [DataMember]
         /// <summary>
         /// 
         /// </summary>
         public string AMPL_UNITs { get; set; }
-
+        [DataMember]
         /// <summary>
         /// 
         /// </summary>
         public string TDEQ_PRESets { get; set; }
-
+        [DataMember]
         /// <summary>
         /// 
         /// </summary>
         public string TDEQ_TSER { get; set; }
-
+        [DataMember]
         /// <summary>
         /// 
         /// </summary>
         public string TDEQ_HWIDth { get; set; }
-
+        [DataMember]
         /// <summary>
         /// 
         /// </summary>
         public string TDEQ_OHTime { get; set; }
-
+        [DataMember]
         /// <summary>
         /// 
         /// </summary>
         public string TDEQ_OHSeparation { get; set; }
-
+        [DataMember]
         /// <summary>
         /// 
         /// </summary>
         public string TDEQ_OHTHresholds { get; set; }
-
+        [DataMember]
         /// <summary>
         /// 
         /// </summary>
         public string TDEQ_TALimit { get; set; }
-
+        [DataMember]
         /// <summary>
         /// 
         /// </summary>
@@ -290,68 +301,85 @@ namespace InstrumentsLib.Tools.Instruments.Oscilloscope
         }
     }
 
+    // data contract must be applied to any class that is intended to be seralized, even in the all parent classes
+    // data member must also be applied to any property of any class if the property is intended to be serialed
+    [DataContract]
     /// <summary>
     /// 
     /// </summary>
     public class TEQualizerSetupcmd : DCASetupcmd
     {
+        [DataMember]
         /// <summary>
         /// 
         /// </summary>
         public bool bOffloadCompute { get; set; }
+        [DataMember]
         /// <summary>
         /// 
         /// </summary>
         public bool bSeperateAcqTEQ { get; set; }
+        [DataMember]
         /// <summary>
         /// 
         /// </summary>
         public int TapsPerUI { get; set; }
+        [DataMember]
         /// <summary>
         /// 
         /// </summary>
         public int NumOfTaps { get; set; }
+        [DataMember]
         /// <summary>
         /// 
         /// </summary>
         public int MaxPrecursors { get; set; }
+        [DataMember]
         /// <summary>
         /// 
         /// </summary>
         public int AverageCount { get; set; }
+        [DataMember]
         /// <summary>
         /// this var determines how many of available DCA channels are used. even though DCA has dual channel, we may only want to use 1 channel.
         /// </summary>
         public int nChannelUsed { get; set; }
+        [DataMember]
         /// <summary>
         /// 
         /// </summary>
         public EnumDCAOptions TDEQThresholdOptimization { get; set; }
-
+        [DataMember]
         /// <summary>
         /// what channels used for DCA measurement; for example, DR4 2-ch DCAM { "CHAN1A", "CHAN1B" }; FR1 1-ch DCAM { "CHAN1A" }
         /// </summary>
         public List<string> DCAMeasureChannels  { get; set; }
+        [DataMember]
         /// <summary>
         /// 
         /// </summary>
         public EnumTEQualizerPreset TdecqConfigurationPreset { get; set; }
+        [DataMember]
         /// <summary>
         /// 
         /// </summary>
         public EnumTEQualizerPreset TdecqEqualizerPreset { get; set; }
+        [DataMember]
         /// <summary>
         /// 
         /// </summary>
         public EnumDCAOptions IterativeOptimization { get; set; }
+        [DataMember]
         /// <summary>
         /// 
         /// </summary>
         public EnumEyeLinearityDefinition EyeLinearityDefinition { get; set; }
+        [DataMember]
         /// <summary>
         /// 
         /// </summary>
         public EnumEyeWidthOpeningDefinition EyeWidthOpeningDefinition { get; set; }
+        [DataMember]
         /// <summary>
         /// 
         /// </summary>
@@ -392,46 +420,51 @@ namespace InstrumentsLib.Tools.Instruments.Oscilloscope
             EyeWidthOpeningProbability = 1e-6;
         }
     }
+
+    // data contract must be applied to any class that is intended to be seralized, even in the all parent classes
+    // data member must also be applied to any property of any class if the property is intended to be serialed
+    [DataContract]
     /// <summary>
     /// 
     /// </summary>
     public class CRUSetupcmd : DCASetupcmd
     {
+        [DataMember]
         /// <summary>
         /// 
         /// </summary>
         public string SLOT { get; set; }
-
+        [DataMember]
         /// <summary>
         /// 
         /// </summary>
         public string ODRatioAUTO { get; set; }
-
+        [DataMember]
         /// <summary>
         /// 
         /// </summary>
         public string SOURCE { get; set; }
-
+        [DataMember]
         /// <summary>
         /// 
         /// </summary>
         public string CRATE { get; set; }
-
+        [DataMember]
         /// <summary>
         /// 
         /// </summary>
         public string ODRatio { get; set; }
-
+        [DataMember]
         /// <summary>
         /// 
         /// </summary>
         public string EHGain { get; set; }
-
+        [DataMember]
         /// <summary>
         /// 
         /// </summary>
         public string Preset { get; set; }
-
+        [DataMember]
         /// <summary>
         /// 
         /// </summary>

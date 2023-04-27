@@ -1,0 +1,98 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<xs:schema xmlns:tns="http://schemas.datacontract.org/2004/07/InstrumentsLib.Tools.Core" elementFormDefault="qualified" targetNamespace="http://schemas.datacontract.org/2004/07/InstrumentsLib.Tools.Core" xmlns:xs="http://www.w3.org/2001/XMLSchema">
+  <xs:import namespace="http://schemas.datacontract.org/2004/07/Utility" />
+  <xs:import namespace="http://schemas.microsoft.com/2003/10/Serialization/Arrays" />
+  <xs:complexType name="InstrumentXConfig">
+    <xs:complexContent mixed="false">
+      <xs:extension xmlns:q1="http://schemas.datacontract.org/2004/07/Utility" base="q1:CDynamicConfig">
+        <xs:sequence>
+          <xs:element minOccurs="0" name="ChanVariant" nillable="true" type="xs:string" />
+          <xs:element minOccurs="0" name="DUTVariant" nillable="true" type="xs:string" />
+          <xs:element minOccurs="0" name="MaxRetries" type="xs:int" />
+          <xs:element minOccurs="0" name="ProtocolObjectRefName" nillable="true" type="xs:string" />
+          <xs:element minOccurs="0" name="bCreateProtocol" type="xs:boolean" />
+          <xs:element minOccurs="0" name="bIsPooled" type="xs:boolean" />
+          <xs:element minOccurs="0" name="bIsRef" type="xs:boolean" />
+          <xs:element minOccurs="0" name="bSimulation" type="xs:boolean" />
+          <xs:element minOccurs="0" name="bTempCompensate" type="xs:boolean" />
+          <xs:element minOccurs="0" name="bVerbose" type="xs:boolean" />
+          <xs:element minOccurs="0" name="dAttenOffset" type="xs:double" />
+          <xs:element minOccurs="0" name="nAdditionalRead" type="xs:int" />
+          <xs:element minOccurs="0" name="nRetry" type="xs:int" />
+          <xs:element minOccurs="0" name="protocolCfg" nillable="true" type="tns:ProtocolXConfig" />
+          <xs:element minOccurs="0" name="standardDeviation" type="xs:double" />
+        </xs:sequence>
+      </xs:extension>
+    </xs:complexContent>
+  </xs:complexType>
+  <xs:element name="InstrumentXConfig" nillable="true" type="tns:InstrumentXConfig" />
+  <xs:complexType name="ProtocolXConfig">
+    <xs:complexContent mixed="false">
+      <xs:extension xmlns:q2="http://schemas.datacontract.org/2004/07/Utility" base="q2:CDynamicConfig">
+        <xs:sequence>
+          <xs:element minOccurs="0" name="MaxRetries" type="xs:int" />
+          <xs:element minOccurs="0" name="bSimulation" type="xs:boolean" />
+          <xs:element minOccurs="0" name="bTakeScreenShot" type="xs:boolean" />
+          <xs:element minOccurs="0" name="bUseSimData" type="xs:boolean" />
+          <xs:element minOccurs="0" name="bVerbose" type="xs:boolean" />
+          <xs:element minOccurs="0" name="mySimData" nillable="true" type="tns:CSimData" />
+        </xs:sequence>
+      </xs:extension>
+    </xs:complexContent>
+  </xs:complexType>
+  <xs:element name="ProtocolXConfig" nillable="true" type="tns:ProtocolXConfig" />
+  <xs:complexType name="CSimData">
+    <xs:sequence>
+      <xs:element minOccurs="0" name="DoubleData" nillable="true" type="tns:CSimGenericDataOfdouble" />
+      <xs:element minOccurs="0" name="IntData" nillable="true" type="tns:CSimGenericDataOfint" />
+      <xs:element minOccurs="0" name="StringData" nillable="true" type="tns:CSimGenericDataOfstring" />
+    </xs:sequence>
+  </xs:complexType>
+  <xs:element name="CSimData" nillable="true" type="tns:CSimData" />
+  <xs:complexType name="CSimGenericDataOfdouble">
+    <xs:annotation>
+      <xs:appinfo>
+        <GenericType Name="CSimGenericDataOf{0}{#}" Namespace="http://schemas.datacontract.org/2004/07/InstrumentsLib.Tools.Core" xmlns="http://schemas.microsoft.com/2003/10/Serialization/">
+          <GenericParameter Name="double" Namespace="http://www.w3.org/2001/XMLSchema">
+          </GenericParameter>
+        </GenericType>
+      </xs:appinfo>
+    </xs:annotation>
+    <xs:sequence>
+      <xs:element xmlns:q3="http://schemas.microsoft.com/2003/10/Serialization/Arrays" minOccurs="0" name="DataList" nillable="true" type="q3:ArrayOfdouble" />
+    </xs:sequence>
+  </xs:complexType>
+  <xs:element name="CSimGenericDataOfdouble" nillable="true" type="tns:CSimGenericDataOfdouble" />
+  <xs:complexType name="CSimGenericDataOfint">
+    <xs:annotation>
+      <xs:appinfo>
+        <GenericType Name="CSimGenericDataOf{0}{#}" Namespace="http://schemas.datacontract.org/2004/07/InstrumentsLib.Tools.Core" xmlns="http://schemas.microsoft.com/2003/10/Serialization/">
+          <GenericParameter Name="int" Namespace="http://www.w3.org/2001/XMLSchema">
+          </GenericParameter>
+        </GenericType>
+      </xs:appinfo>
+    </xs:annotation>
+    <xs:sequence>
+      <xs:element xmlns:q4="http://schemas.microsoft.com/2003/10/Serialization/Arrays" minOccurs="0" name="DataList" nillable="true" type="q4:ArrayOfint" />
+    </xs:sequence>
+  </xs:complexType>
+  <xs:element name="CSimGenericDataOfint" nillable="true" type="tns:CSimGenericDataOfint" />
+  <xs:complexType name="CSimGenericDataOfstring">
+    <xs:annotation>
+      <xs:appinfo>
+        <GenericType Name="CSimGenericDataOf{0}{#}" Namespace="http://schemas.datacontract.org/2004/07/InstrumentsLib.Tools.Core" xmlns="http://schemas.microsoft.com/2003/10/Serialization/">
+          <GenericParameter Name="string" Namespace="http://www.w3.org/2001/XMLSchema">
+          </GenericParameter>
+        </GenericType>
+      </xs:appinfo>
+    </xs:annotation>
+    <xs:sequence>
+      <xs:element xmlns:q5="http://schemas.microsoft.com/2003/10/Serialization/Arrays" minOccurs="0" name="DataList" nillable="true" type="q5:ArrayOfstring" />
+    </xs:sequence>
+  </xs:complexType>
+  <xs:element name="CSimGenericDataOfstring" nillable="true" type="tns:CSimGenericDataOfstring" />
+  <xs:complexType name="MeasurementCmd">
+    <xs:sequence />
+  </xs:complexType>
+  <xs:element name="MeasurementCmd" nillable="true" type="tns:MeasurementCmd" />
+</xs:schema>

@@ -5,54 +5,62 @@ using Ivi.Visa;
 using Utility;
 using System.Collections.Generic;
 using System.Text;
+using System.Runtime.Serialization;
 
 namespace InstrumentsLib.Tools.Core
 {
     /// <summary>
     /// 
     /// </summary>
-    [Serializable]
+    [DataContract]
     public class ProtocolVISADotNetConfig : ProtocolXConfig
     {
+        [DataMember]
         /// <summary>
         /// 
         /// </summary>
         public string Resource { get; set; }
+        [DataMember]
         /// <summary>
         /// 
         /// </summary>
         public int nTimeout { get; set; }
+        [DataMember]
         /// <summary>
         /// Flag to interpret nTerminationCharacter as end of received message
         /// </summary>
         public bool bRxTerminationCharacterEnabled { get; set; }
+        [DataMember]
         /// <summary>
         /// Flag to interpret nTerminationCharacter as end of sent message
         /// </summary>
         public bool bTxTerminationCharacterEnabled { get; set; }
+        [DataMember]
         /// <summary>
         /// Termination character used at the end of a received message.  Requires bTerminationCharacterEnabled = true
         /// </summary>
         public byte nTerminationCharacter { get; set; }
+        [DataMember]
         /// <summary>
         /// Write buffer size in bytes
         /// </summary>
         public int nWriteBufferSize { get; set; }
+        [DataMember]
         /// <summary>
         /// Read buffer size in bytes
         /// </summary>
         public int nReadBufferSize { get; set; }
-
+        [DataMember]
         /// <summary>
         /// 
         /// </summary>
         public bool bAppendStringToCmd { get; set; }
-
+        [DataMember]
         /// <summary>
         /// 
         /// </summary>
         public string strToAppend { get; set; }
-
+        [DataMember]
         /// <summary>
         /// 
         /// </summary>

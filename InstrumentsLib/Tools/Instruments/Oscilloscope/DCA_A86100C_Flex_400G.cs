@@ -13,138 +13,184 @@ using System.Globalization;
 using System.Threading;
 using System.Threading.Tasks;
 using System.Windows.Forms;
+using System.Runtime.Serialization;
+using System.Runtime.InteropServices;
 
 namespace InstrumentsLib.Tools.Instruments.Oscilloscope
 {
+    [Serializable]
+    // data contract must be applied to any class that is intended to be seralized, even in the all parent classes
+    // data member must also be applied to any property of any class if the property is intended to be serialed
+    [DataContract]
     /// <summary>
     /// Generic Scope Configuration Property Class
     /// </summary>
     public abstract class ScopeConfig : InstrumentXConfig
     {
+        [DataMember]
         /// <summary>
         /// 
         /// </summary>
         public double dMaxBusyTimeoutSecs { get; set; }
+        
+        [DataMember]
         /// <summary>
         /// 
         /// </summary>
         public double dMaxCRULockTimeoutSecs { get; set; }
+
+        [DataMember]
         /// <summary>
         /// 
         /// </summary>
         public double dMaxLoadSetupTimeoutSecs { get; set; }
+
+        [DataMember]
         /// <summary>
         /// 
         /// </summary>
         public double iMaxCRULockRetry { get; set; }
 
+        [DataMember]
         /// <summary>
         /// 
         /// </summary>
         public string strDCA_ID { get; set; }
 
+        [DataMember]
         /// <summary>
         /// 
         /// </summary>
         public List<string> arChannels { get; set; }
 
+        [DataMember]
         /// <summary>
         /// 
         /// </summary>
         public double dImageSaveWaitTime { get; set; }
 
+        [DataMember]
         /// <summary>
         /// 
         /// </summary>
         public string sRFSwitchNameForTrigger { get; set; }
 
+        [DataMember]
         /// <summary>
         /// 
         /// </summary>
         public bool bShrinkEyeFile { get; set; }
 
+        [DataMember]
         /// <summary>
         /// Checks if pattern lock is completed using the much more slower OPC command.  
         /// Please set to false if we only want to check if the pattern is locked
         /// </summary>
         public bool bCheckBusyAfterPatternLock { get; set; }
 
+        [DataMember]
         /// <summary>
         /// 
         /// </summary>
         public long CompressLevel { get; set; }
 
+        [DataMember]
         /// <summary>
         /// 
         /// </summary>
         public Dictionary<string, DCASettings> mapDCASettings { get; set; }
 
+        [DataMember]
         /// <summary>
         /// 
         /// </summary>
         public Dictionary<string, MeasurementCmd> mapOverridenMeasCmds { get; set; }
 
+        [DataMember]
         /// <summary>
         /// 
         /// </summary>
         public double TDECQOffset { get; set; }
 
+        [DataMember]
         /// <summary>
         /// 
         /// </summary>
         public List<string> OERFactor { get; set; }
 
+        [DataMember]
         /// <summary>
         /// TDECQ minimum offset limit
         /// </summary>
         public double OffsetTDECQMinLimit { get; set; }
 
+        [DataMember]
         /// <summary>
         /// 
         /// </summary>
         public List<DCA_A86100C_Flex400G_V3.ComputeInstrumentBase> arDCAMHost { get; set; }
+
+        [DataMember]
         /// <summary>
         /// 
         /// </summary>
         public List<DCA_A86100C_Flex400G_V3.ComputeInstrumentBase> arComputeHost { get; set; }
+
+        [DataMember]
         /// <summary>
         /// 
         /// </summary>
         public bool bTakeScreenShot { get; set; }
+
+        [DataMember]
         /// <summary>
         /// 
         /// </summary>
         public bool bAutoScaleScreenShot { get; set; }
+
+        [DataMember]
         /// <summary>
         /// 
         /// </summary>
         public bool bDCAMWithDedicatedPC { get; set; }
+
+        [DataMember]
         /// <summary>
         /// 
         /// </summary>
         public int nRetryAutoScale { get; set; }
+
+        [DataMember]
         /// <summary>
         /// 
         /// </summary>
         public bool bAutoScaleScreenShotWhenException { get; set; }
+
+        [DataMember]
         /// <summary>
         /// 
         /// </summary>
         public bool bRelaunchDCAWhenException { get; set; }
+
+        [DataMember]
         /// <summary>
         /// 
         /// </summary>
         public int iRelaunchDCATimeOut_min { get; set; }
+
+        [DataMember]
         /// <summary>
         /// 
         /// </summary>
         public bool bDebugRelaunchDCA { get; set; }
 
+        [DataMember]
         /// <summary>
         /// Linar fit dictionary of X, Y points
         /// </summary>
         public Dictionary<double, double> mapTDECQPiecewiseLinearFit { get; set; }
 
+        [DataMember]
         /// <summary>
         /// Flag to use AOP and OER to calculate to get OOMA
         /// </summary>
@@ -172,9 +218,9 @@ namespace InstrumentsLib.Tools.Instruments.Oscilloscope
         {
             arChannels = new List<string>
             {
-                "1A",
+                "1Ax",
                 "1B",
-                "1C",
+                "1Cx",
                 "1D"
             };
 

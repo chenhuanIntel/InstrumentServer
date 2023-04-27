@@ -6,40 +6,50 @@ using System.Text;
 using System.Threading;
 using Utility;
 using System.IO;
+using System.Runtime.Serialization;
 
 namespace InstrumentsLib.Tools.Core
 {
+    // data contract must be applied to any class that is intended to be seralized, even in the all parent classes
+    // data member must also be applied to any property of any class if the property is intended to be serialed
+    [DataContract] // must declar DataContract to allow JSON to serialize it in WCF
     /// <summary>
     /// 
     /// </summary>
     [Serializable]
     public class ProtocolXConfig : CDynamicConfig
     {
+        [DataMember]
         /// <summary>
         /// 
         /// </summary>
         public bool bSimulation { get; set; }
 
+        [DataMember]
         /// <summary>
         /// 
         /// </summary>
         public bool bVerbose { get; set; }
 
+        [DataMember]
         /// <summary>
         /// 
         /// </summary>
         public bool bUseSimData { get; set; }
 
+        [DataMember]
         /// <summary>
         /// 
         /// </summary>
         public CSimData mySimData { get; set; }
 
+        [DataMember]
         /// <summary>
         /// 
         /// </summary>
         public int MaxRetries { get; set; }
 
+        [DataMember]
         /// <summary>
         /// Take Screen Shot while has exception
         /// </summary>

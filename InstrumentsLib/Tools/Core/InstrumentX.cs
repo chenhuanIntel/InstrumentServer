@@ -8,30 +8,40 @@ using NationalInstruments.VisaNS;
 using System.Threading;
 using InstrumentsLib.Tools.Instruments.Misc;
 using Utility;
+using System.Runtime.Serialization;
+using System.ServiceModel;
 
 namespace InstrumentsLib.Tools.Core
 {
+    // data contract must be applied to any class that is intended to be seralized, even in the all parent classes
+    // data member must also be applied to any property of any class if the property is intended to be serialed
+    [DataContract]
     /// <summary>
     /// 
     /// </summary>
     public class MeasurementCmd
     {
+        [IgnoreDataMember]
         /// <summary>
         /// 
         /// </summary>
         public Func<string, bool> Write;
+        [IgnoreDataMember]
         /// <summary>
         /// 
         /// </summary>
         public Func<string, string> Query;
+        [IgnoreDataMember]
         /// <summary>
         /// 
         /// </summary>
         public Func<string, string> QueryNoRetry;
+        [IgnoreDataMember]
         /// <summary>
         /// 
         /// </summary>
         public Func<string, double> QueryDouble;
+        [IgnoreDataMember]
         /// <summary>
         /// 
         /// </summary>
@@ -66,79 +76,99 @@ namespace InstrumentsLib.Tools.Core
         }
     }
 
+    // data contract must be applied to any class that is intended to be seralized, even in the all parent classes
+    // data member must also be applied to any property of any class if the property is intended to be serialed
     /// <summary>
     /// 
     /// </summary>
-    [Serializable]
+    [DataContract] // must declar DataContract to allow JSON to serialize it in WCF
     public class InstrumentXConfig : CDynamicConfig
     {
+        [DataMember]
         /// <summary>
         /// 
         /// </summary>
         public bool bSimulation { get; set; }
 
+        [DataMember]
         /// <summary>
         /// 
         /// </summary>
         public bool bVerbose { get; set; }
 
+        [DataMember]
         /// <summary>
         /// 
         /// </summary>
         public bool bCreateProtocol { get; set; }
 
+        [DataMember]
         /// <summary>
         /// 
         /// </summary>
         public bool bIsPooled { get; set; }
 
+        [DataMember]
         /// <summary>
         /// 
         /// </summary>
         public ProtocolXConfig protocolCfg { get; set; }
 
+        [DataMember]
         /// <summary>
         /// 
         /// </summary>
         public string ProtocolObjectRefName { get; set; }
 
+        [DataMember]
         /// <summary>
         /// 
         /// </summary>
         public bool bTempCompensate { get; set; }
 
+        [DataMember]
         /// <summary>
         /// 
         /// </summary>
         public int nRetry { get; set; }
 
+        [DataMember]
         /// <summary>
         /// 
         /// </summary>
         public int MaxRetries { get; set; }
 
+        [DataMember]
         /// <summary>
         /// 
         /// </summary>
         public double dAttenOffset { get; set; }
 
+        [DataMember]
         /// <summary>
         /// 
         /// </summary>
         public string DUTVariant { get; set; }
 
+        [DataMember]
         /// <summary>
         /// 
         /// </summary>
         public string ChanVariant { get; set; }
+
+        [DataMember]
         /// <summary>
         /// 
         /// </summary>
         public bool bIsRef { get; set; }
+
+        [DataMember]
         /// <summary>
         /// standardDeviation for nReTry power meter readings
         /// </summary>
         public double standardDeviation { get; set; }
+
+        [DataMember]
         /// <summary>
         /// max number of additional reads in the sliding window method as timeout for power meter reading
         /// </summary>

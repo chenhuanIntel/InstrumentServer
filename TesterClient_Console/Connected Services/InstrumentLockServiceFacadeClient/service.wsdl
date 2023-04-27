@@ -38,6 +38,10 @@
       <xsd:import namespace="http://tempuri.org/" />
       <xsd:import namespace="http://schemas.microsoft.com/2003/10/Serialization/" />
       <xsd:import namespace="http://schemas.datacontract.org/2004/07/InstrumentLockServices" />
+      <xsd:import namespace="http://schemas.datacontract.org/2004/07/InstrumentsLib.Tools.Instruments.Oscilloscope" />
+      <xsd:import namespace="http://schemas.datacontract.org/2004/07/InstrumentsLib.Tools.Core" />
+      <xsd:import namespace="http://schemas.datacontract.org/2004/07/Utility" />
+      <xsd:import namespace="http://schemas.microsoft.com/2003/10/Serialization/Arrays" />
     </xsd:schema>
   </wsdl:types>
   <wsdl:message name="IInstrumentLockServiceFacade_Add_InputMessage">
@@ -66,6 +70,12 @@
   </wsdl:message>
   <wsdl:message name="IInstrumentLockServiceFacade_getInstrumentLock_OutputMessage">
     <wsdl:part name="parameters" element="tns:getInstrumentLockResponse" />
+  </wsdl:message>
+  <wsdl:message name="IInstrumentLockServiceFacade_getInstrumentLockWithReturn_InputMessage">
+    <wsdl:part name="parameters" element="tns:getInstrumentLockWithReturn" />
+  </wsdl:message>
+  <wsdl:message name="IInstrumentLockServiceFacade_getInstrumentLockWithReturn_OutputMessage">
+    <wsdl:part name="parameters" element="tns:getInstrumentLockWithReturnResponse" />
   </wsdl:message>
   <wsdl:message name="IInstrumentLockServiceFacade_releaseInstrumentLock_InputMessage">
     <wsdl:part name="parameters" element="tns:releaseInstrumentLock" />
@@ -108,6 +118,10 @@
     <wsdl:operation name="getInstrumentLock">
       <wsdl:input wsaw:Action="http://tempuri.org/IInstrumentLockService/getInstrumentLock" message="tns:IInstrumentLockServiceFacade_getInstrumentLock_InputMessage" />
       <wsdl:output wsaw:Action="http://tempuri.org/IInstrumentLockService/getInstrumentLockResponse" message="tns:IInstrumentLockServiceFacade_getInstrumentLock_OutputMessage" />
+    </wsdl:operation>
+    <wsdl:operation name="getInstrumentLockWithReturn">
+      <wsdl:input wsaw:Action="http://tempuri.org/IInstrumentLockService/getInstrumentLockWithReturn" message="tns:IInstrumentLockServiceFacade_getInstrumentLockWithReturn_InputMessage" />
+      <wsdl:output wsaw:Action="http://tempuri.org/IInstrumentLockService/getInstrumentLockWithReturnResponse" message="tns:IInstrumentLockServiceFacade_getInstrumentLockWithReturn_OutputMessage" />
     </wsdl:operation>
     <wsdl:operation name="releaseInstrumentLock">
       <wsdl:input wsaw:Action="http://tempuri.org/IInstrumentLockService/releaseInstrumentLock" message="tns:IInstrumentLockServiceFacade_releaseInstrumentLock_InputMessage" />
@@ -169,6 +183,15 @@
         <soap12:body use="literal" />
       </wsdl:output>
     </wsdl:operation>
+    <wsdl:operation name="getInstrumentLockWithReturn">
+      <soap12:operation soapAction="http://tempuri.org/IInstrumentLockService/getInstrumentLockWithReturn" style="document" />
+      <wsdl:input>
+        <soap12:body use="literal" />
+      </wsdl:input>
+      <wsdl:output>
+        <soap12:body use="literal" />
+      </wsdl:output>
+    </wsdl:operation>
     <wsdl:operation name="releaseInstrumentLock">
       <soap12:operation soapAction="http://tempuri.org/IInstrumentLockService/releaseInstrumentLock" style="document" />
       <wsdl:input>
@@ -208,9 +231,9 @@
   </wsdl:binding>
   <wsdl:service name="InstrumentLockServiceFacade">
     <wsdl:port name="NetTcpBinding_IInstrumentLockServiceFacade" binding="tns:NetTcpBinding_IInstrumentLockServiceFacade">
-      <soap12:address location="net.tcp://localhost:8001/" />
+      <soap12:address location="net.tcp://172.25.93.250:8001/" />
       <wsa10:EndpointReference>
-        <wsa10:Address>net.tcp://localhost:8001/</wsa10:Address>
+        <wsa10:Address>net.tcp://172.25.93.250:8001/</wsa10:Address>
         <Identity xmlns="http://schemas.xmlsoap.org/ws/2006/02/addressingidentity">
           <Upn>lab_spsgtest@amr.corp.intel.com</Upn>
         </Identity>

@@ -112,48 +112,16 @@ namespace InstrumentLockServices
     /// <summary>
     /// 
     /// </summary>
-    public class WCFProtocolXConfig
+    public class WCFProtocolXConfig : ProtocolVISADotNetConfig
     {
-        /// <summary>
-        /// 
-        /// </summary>
-        public bool bSimulation { get; set; }
-
-        /// <summary>
-        /// 
-        /// </summary>
-        public bool bVerbose { get; set; }
-
-        /// <summary>
-        /// 
-        /// </summary>
-        public bool bUseSimData { get; set; }
-
-        /// <summary>
-        /// 
-        /// </summary>
-        public CSimData mySimData { get; set; }
-
-        /// <summary>
-        /// 
-        /// </summary>
-        public int MaxRetries { get; set; }
-
-        /// <summary>
-        /// Take Screen Shot while has exception
-        /// </summary>
-        public bool bTakeScreenShot { get; set; }
-
         /// <summary>
         /// Contructor of ProtocolXConfig
         /// </summary>
         public WCFProtocolXConfig()
         {
-            //buildTargetClassInfo(typeof(ProtocolX));
-            MaxRetries = 6;
-            bTakeScreenShot = false;
         }
     }
+
 
     [DataContract]
     /// <summary>
@@ -161,14 +129,19 @@ namespace InstrumentLockServices
     /// </summary>
     public class WCFMapSwitchConfig
     {
+        [DataMember]
         /// <summary>
         /// 
         /// </summary>
         public int nSlotAddr { get; set; }
+
+        [DataMember]
         /// <summary>
         /// 
         /// </summary>
         public int nDeviceAddr { get; set; }
+
+        [DataMember]
         /// <summary>
         /// 
         /// </summary>
@@ -184,17 +157,127 @@ namespace InstrumentLockServices
         }
     }
 
+    //[DataContract]
+    ///// <summary>
+    ///// 
+    ///// </summary>
+    //public class parentCmd
+    //{
+    //    [DataMember]
+    //    /// <summary>
+    //    /// 
+    //    /// </summary>
+    //    public string pSLOT { get; set; }
+    //    [DataMember]
+    //    /// <summary>
+    //    /// 
+    //    /// </summary>
+    //    public string pSOURCE { get; set; }
+    //    [DataMember]
+    //    /// <summary>
+    //    /// 
+    //    /// </summary>
+    //    public string pPreset { get; set; }
+    //    [DataMember]
+    //    /// <summary>
+    //    /// 
+    //    /// </summary>
+    //    public double pdMaxBusyTimeoutSecs { get; set; }
 
+
+    //    /// <summary>
+    //    /// 
+    //    /// </summary>
+    //    /// <param name="bReLock"></param>
+    //    /// <returns></returns>
+    //    public bool pSetup()
+    //    {
+
+    //        return true;
+    //    }
+
+
+    //}
+
+    //[DataContract]
+    ///// <summary>
+    ///// 
+    ///// </summary>
+    //public class tstCRUSetupcmd : parentCmd
+    //{
+    //    [DataMember]
+    //    /// <summary>
+    //    /// 
+    //    /// </summary>
+    //    public string SLOT { get; set; }
+    //    [DataMember]
+    //    /// <summary>
+    //    /// 
+    //    /// </summary>
+    //    public string SOURCE { get; set; }
+    //    [DataMember]
+    //    /// <summary>
+    //    /// 
+    //    /// </summary>
+    //    public string Preset { get; set; }
+    //    [DataMember]
+    //    /// <summary>
+    //    /// 
+    //    /// </summary>
+    //    public double dMaxBusyTimeoutSecs { get; set; }
+
+
+    //    /// <summary>
+    //    /// 
+    //    /// </summary>
+    //    /// <param name="bReLock"></param>
+    //    /// <returns></returns>
+    //    public bool Setup()
+    //    {
+
+    //        return true;
+    //    }
+
+
+    //}
+
+    //[DataContract]
+    //public class myTestSettings
+    //{
+    //    [DataMember]
+    //    /// <summary>
+    //    /// 
+    //    /// </summary>
+    //    public const string INIT_SETTING = "INIT_SETTING";
+    //    [DataMember]
+    //    /// <summary>
+    //    /// 
+    //    /// </summary>
+    //    public tstCRUSetupcmd test { get; set; }
+    //}
+
+
+    // data contract must be applied to any class that is intended to be seralized, even in all the parent classes
+    // data member must also be applied to any property of any class if the property is intended to be serialed
     [DataContract]
-    public class WCFScopeConfig
+    /// <summary>
+    /// Generic Scope Configuration Property Class
+    /// </summary>
+    public class WCFScopeConfig : ScopeConfig
     {
-        [DataMember]
-        public string strWCFScopeClassType
-        {
-            get { return strWCFScopeClassType; }
-            set { strWCFScopeClassType = value; }
-        }
 
+        //[DataMember]
+        ///// <summary>
+        ///// 
+        ///// </summary>
+        //public Dictionary<string, myTestSettings> mapTestSettings { get; set; }
+
+        /// <summary>
+        /// Default constructor for ScopeConfig
+        /// </summary>
+        public WCFScopeConfig()
+        {
+        }
     }
 
 

@@ -69,10 +69,30 @@
       </xs:sequence>
     </xs:complexType>
   </xs:element>
-  <xs:element name="releaseInstrumentLock">
+  <xs:element name="getInstrumentLockWithReturn">
     <xs:complexType>
       <xs:sequence>
         <xs:element xmlns:q2="http://schemas.datacontract.org/2004/07/InstrumentLockServices" minOccurs="0" name="instr" type="q2:sharedInstrument" />
+        <xs:element minOccurs="0" name="sThreadID" nillable="true" type="xs:string" />
+        <xs:element minOccurs="0" name="sMachineName" nillable="true" type="xs:string" />
+        <xs:element xmlns:q3="http://schemas.datacontract.org/2004/07/InstrumentLockServices" minOccurs="0" name="DCA" nillable="true" type="q3:WCFScopeConfig" />
+        <xs:element xmlns:q4="http://schemas.datacontract.org/2004/07/InstrumentLockServices" minOccurs="0" name="Protocol" nillable="true" type="q4:WCFProtocolXConfig" />
+      </xs:sequence>
+    </xs:complexType>
+  </xs:element>
+  <xs:element name="getInstrumentLockWithReturnResponse">
+    <xs:complexType>
+      <xs:sequence>
+        <xs:element minOccurs="0" name="getInstrumentLockWithReturnResult" type="xs:boolean" />
+        <xs:element xmlns:q5="http://schemas.datacontract.org/2004/07/InstrumentLockServices" minOccurs="0" name="DCA" nillable="true" type="q5:WCFScopeConfig" />
+        <xs:element xmlns:q6="http://schemas.datacontract.org/2004/07/InstrumentLockServices" minOccurs="0" name="Protocol" nillable="true" type="q6:WCFProtocolXConfig" />
+      </xs:sequence>
+    </xs:complexType>
+  </xs:element>
+  <xs:element name="releaseInstrumentLock">
+    <xs:complexType>
+      <xs:sequence>
+        <xs:element xmlns:q7="http://schemas.datacontract.org/2004/07/InstrumentLockServices" minOccurs="0" name="instr" type="q7:sharedInstrument" />
         <xs:element minOccurs="0" name="ThreadID" nillable="true" type="xs:string" />
         <xs:element minOccurs="0" name="MachineName" nillable="true" type="xs:string" />
       </xs:sequence>
@@ -88,7 +108,7 @@
   <xs:element name="getProtocolLock">
     <xs:complexType>
       <xs:sequence>
-        <xs:element xmlns:q3="http://schemas.datacontract.org/2004/07/InstrumentLockServices" minOccurs="0" name="protocol" type="q3:sharedProtocol" />
+        <xs:element xmlns:q8="http://schemas.datacontract.org/2004/07/InstrumentLockServices" minOccurs="0" name="protocol" type="q8:sharedProtocol" />
         <xs:element minOccurs="0" name="ThreadID" nillable="true" type="xs:string" />
         <xs:element minOccurs="0" name="MachineName" nillable="true" type="xs:string" />
       </xs:sequence>
@@ -104,7 +124,7 @@
   <xs:element name="releaseProtocolLock">
     <xs:complexType>
       <xs:sequence>
-        <xs:element xmlns:q4="http://schemas.datacontract.org/2004/07/InstrumentLockServices" minOccurs="0" name="protocol" type="q4:sharedProtocol" />
+        <xs:element xmlns:q9="http://schemas.datacontract.org/2004/07/InstrumentLockServices" minOccurs="0" name="protocol" type="q9:sharedProtocol" />
         <xs:element minOccurs="0" name="ThreadID" nillable="true" type="xs:string" />
         <xs:element minOccurs="0" name="MachineName" nillable="true" type="xs:string" />
       </xs:sequence>

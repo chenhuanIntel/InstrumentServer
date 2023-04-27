@@ -15,18 +15,22 @@ using InstrumentsLib.Tools.Instruments.Oscilloscope;
 using System.Diagnostics;
 using Utility;
 using Newtonsoft.Json;
+using InstrumentsLib.Tools.Core;
 
 // namespace name uses plural
 namespace InstrumentLockServices
 {
-    public enum sharedInstrument
-    {
-        DCA
-    }
     public enum sharedProtocol
     {
         DiCon
     }
+
+    public enum sharedInstrument
+    {
+        DCA
+    }
+
+
 
     /// <summary>
     /// this clientFunctions class contains all the functions that are common to all clients
@@ -191,7 +195,6 @@ namespace InstrumentLockServices
         }
     }
 
-
     // https://stackoverflow.com/questions/3469044/self-hosted-wcf-service-how-to-access-the-objects-implementing-the-service-co
     // dummy Facade
     // PerCall creates a new instance for each operation.
@@ -307,13 +310,12 @@ namespace InstrumentLockServices
         }
     }
 
-    // Enable one of the following instance modes to compare instancing behaviors.
+
+    // Enable one of the following instance modes to compare instancing behaviors: per session, per call or single
     //[ServiceBehavior(InstanceContextMode = InstanceContextMode.PerSession)]
-
     // PerCall creates a new instance for each operation.
-    [ServiceBehavior(InstanceContextMode = InstanceContextMode.PerCall, ConcurrencyMode = ConcurrencyMode.Multiple, UseSynchronizationContext = false)]
-    //[ServiceBehavior(InstanceContextMode = InstanceContextMode.PerCall, ConcurrencyMode = ConcurrencyMode.Multiple, UseSynchronizationContext = true)]
-
+    [ServiceBehavior(InstanceContextMode = InstanceContextMode.PerCall, ConcurrencyMode = ConcurrencyMode.Multiple, UseSynchronizationContext = false)] //UseSynchronizationContext = false will generate a new work thread for the service, regardless if the previous thread is completed or not
+    //[ServiceBehavior(InstanceContextMode = InstanceContextMode.PerCall, ConcurrencyMode = ConcurrencyMode.Multiple, UseSynchronizationContext = true)] // UseSynchronizationContext = true will wait for the previous service to finish and use the same thread
     // Singleton creates a single instance for application lifetime.
     //[ServiceBehavior(InstanceContextMode = InstanceContextMode.Single)]
     // NOTE: You can use the "Rename" command on the "Refactor" menu to change the class name "Service1" in both code and config file together.
@@ -518,18 +520,16 @@ namespace InstrumentLockServices
             // set StationHardware.Instance
             _stationInstance = StationHardware.Instance();
             string sDCA = "DCA";
-
+            DCA = new WCFScopeConfig();
+            Protocol = new WCFProtocolXConfig();    
             try
             {
                 if (_stationInstance.MapInst.ContainsKey(sDCA))
                 {
-                    //Get the DCA
-                    //DCA = JsonConvert.DeserializeObject<WCFScopeConfig>(JsonConvert.SerializeObject(_stationInstance.myConfig.arInstConfig[0]));
-                    
-                    // now only need to pass the scope class type name, not the whole class
-                    DCA.strWCFScopeClassType = _stationInstance.myConfig.arInstConfig[0].GetType().Name;
-
+                    //Get the DCA and its protocol
+                    DCA = JsonConvert.DeserializeObject<WCFScopeConfig>(JsonConvert.SerializeObject(_stationInstance.myConfig.arInstConfig[0]));
                     Protocol = JsonConvert.DeserializeObject<WCFProtocolXConfig>(JsonConvert.SerializeObject(_stationInstance.myConfig.arProtocolConfig[0]));
+                    //_ProtocolX = StationHardware.Instance().MapProtocol[_config.ProtocolObjectRefName];
                 }
 
                 // check if the client already owns the semaphore
