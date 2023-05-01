@@ -20,6 +20,21 @@ using InstrumentsLib.Tools.Core;
 // namespace name uses plural
 namespace InstrumentLockServices
 {
+
+    public class DCAQueue
+    {
+        public WCFScopeConfig DCA { get; set; }
+        public WCFProtocolXConfig Protocol { get; set; }
+        public DCAQueue(WCFScopeConfig DCAConfig, WCFProtocolXConfig ProtocolConfig)
+        {
+            DCA = new WCFScopeConfig();
+            DCA = DCAConfig;
+            Protocol = new WCFProtocolXConfig();
+            Protocol = ProtocolConfig;
+        }
+    }
+
+
     public enum sharedProtocol
     {
         DiCon
@@ -468,6 +483,9 @@ namespace InstrumentLockServices
         ///// </summary>
         public bool getInstrumentLock(sharedInstrument instr, string sThreadID, string sMachineName)
         {
+            if (_arDCAQueue==null)
+                buildDCAandProtocolQueue();
+
             bool ret = false;
             DateTime ServiceStart = DateTime.Now;
             DateTime ServiceFinish = new DateTime(1, 1, 1);
@@ -513,24 +531,21 @@ namespace InstrumentLockServices
         /// </summary>
         public bool getInstrumentLockWithReturn(sharedInstrument instr, string sThreadID, string sMachineName, ref WCFScopeConfig DCA, ref WCFProtocolXConfig Protocol)
         {
+            if (_arDCAQueue == null)
+                buildDCAandProtocolQueue();
+
             bool ret = false;
             DateTime ServiceStart = DateTime.Now;
             DateTime ServiceFinish = new DateTime(1, 1, 1);
             string sService = "InstrumentLockService.null";
-            // set StationHardware.Instance
-            _stationInstance = StationHardware.Instance();
-            string sDCA = "DCA";
-            DCA = new WCFScopeConfig();
-            Protocol = new WCFProtocolXConfig();    
+  
             try
             {
-                if (_stationInstance.MapInst.ContainsKey(sDCA))
-                {
-                    //Get the DCA and its protocol
-                    DCA = JsonConvert.DeserializeObject<WCFScopeConfig>(JsonConvert.SerializeObject(_stationInstance.myConfig.arInstConfig[0]));
-                    Protocol = JsonConvert.DeserializeObject<WCFProtocolXConfig>(JsonConvert.SerializeObject(_stationInstance.myConfig.arProtocolConfig[0]));
-                    //_ProtocolX = StationHardware.Instance().MapProtocol[_config.ProtocolObjectRefName];
-                }
+
+                //Get the DCA and its protocol
+                DCA = _arDCAQueue[0].DCA;
+                Protocol = _arDCAQueue[0].Protocol;
+
 
                 // check if the client already owns the semaphore
                 // if not the owner, WaitOne() which blocks the current thread until the current WaitHandle receives a signal.
@@ -610,6 +625,39 @@ namespace InstrumentLockServices
         /// My station config
         /// </summary>
         protected StationHardware _stationInstance;
+        public List<DCAQueue> _arDCAQueue;
+
+        /// <summary>
+        /// build a queue of all DCAs and their corresponding Protocols in the server station config file
+        /// </summary>
+        protected void buildDCAandProtocolQueue()
+        {
+            // set StationHardware.Instance
+            _stationInstance = StationHardware.Instance();
+
+            string sDCA = "DCA";
+            _arDCAQueue = new List<DCAQueue>();
+            WCFScopeConfig DCAConfig;
+            WCFProtocolXConfig ProtocolConfig;
+
+            foreach (var instrument in _stationInstance.myConfig.arInstConfig)
+            {
+                DCAConfig = JsonConvert.DeserializeObject<WCFScopeConfig>(JsonConvert.SerializeObject(instrument));
+                if (DCAConfig.strName.Contains(sDCA)) // the key of the current instrument in _stationInstance.myConfig.arInstConfig is a DCA
+                {
+                    // DCAConfig.ProtocolObjectRefName is the key to use to look up the associated protocol of the current DCA instrument
+                    foreach (var protocol in _stationInstance.myConfig.arProtocolConfig)
+                    {
+                        ProtocolConfig = JsonConvert.DeserializeObject<WCFProtocolXConfig>(JsonConvert.SerializeObject(protocol));
+                        if (ProtocolConfig.strName.Equals(DCAConfig.ProtocolObjectRefName)) // if the current protocol strName matches the one of the DCA
+                        {
+                            DCAQueue element = new DCAQueue(DCAConfig, ProtocolConfig);
+                            _arDCAQueue.Add(element);
+                        }
+                    }
+                }
+            }
+        }
 
         /// <summary>
         /// getProtocolLock() of a mutex
@@ -619,6 +667,9 @@ namespace InstrumentLockServices
         /// </summary>
         public bool getProtocolLock(sharedProtocol protocol, string sThreadID, string sMachineName)
         {
+            if (_arDCAQueue == null)
+                buildDCAandProtocolQueue();
+
             bool ret = false;
             DateTime ServiceStart = DateTime.Now;
             DateTime ServiceFinish = new DateTime(1, 1, 1);
