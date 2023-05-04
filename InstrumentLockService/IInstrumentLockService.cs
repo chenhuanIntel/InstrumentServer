@@ -49,12 +49,13 @@ namespace InstrumentLockServices
         [OperationContract]
         bool getInstrumentLock(sharedInstrument instr, string ThreadID, string MachineName);
 
+
         /// <summary>
         /// getInstrumentLock() of an instrument
         /// Such as getIntrumentLock(ATT1)
         /// </summary>
-        [OperationContract]
-        bool getInstrumentLockWithReturn(sharedInstrument instr, string sThreadID, string sMachineName, ref WCFScopeConfig DCA, ref WCFProtocolXConfig Protocol);
+        [OperationContract]   
+        bool getInstrumentLockWithReturn(sharedInstrument instr, string sThreadID, string sMachineName, ref WCFScopeConfig DCA, ref WCFProtocolXConfig Protocol, int nChannelInEachMeasurementGroup, ref string[] arDCAChannelName);
 
         /// <summary>
         /// releaseInstrumentLock() of an instrument
