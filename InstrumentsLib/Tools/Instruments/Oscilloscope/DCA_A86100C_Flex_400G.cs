@@ -29,6 +29,11 @@ namespace InstrumentsLib.Tools.Instruments.Oscilloscope
     {
         [DataMember]
         /// <summary>
+        /// true for embedded CRU; false for external CRU
+        /// </summary>
+        public bool bEmbCRU { get; set; }
+        [DataMember]
+        /// <summary>
         /// 
         /// </summary>
         public double dMaxBusyTimeoutSecs { get; set; }
