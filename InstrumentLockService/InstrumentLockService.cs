@@ -593,9 +593,10 @@ namespace InstrumentLockServices
                     if ((dca.ownerSemaphoreDCA.sThreadID == sThreadID && dca.ownerSemaphoreDCA.sMachineName == sMachineName))
                     {
                         bOwnSemaphore = true;
-                        //Get the DCA and its protocol
+                        //Get the DCA and its protocol and DCA channel name
                         DCA = _arDCAQueue[i].DCA;
                         Protocol = _arDCAQueue[i].Protocol;
+                        arDCAChannelName = DCA.arChannels.ToArray();
                         break;
                     }
                 }
@@ -624,9 +625,10 @@ namespace InstrumentLockServices
                             dca.ownerSemaphoreDCA.nestedCount++;
                             dca.ownerSemaphoreDCA.sThreadID = sThreadID;
                             dca.ownerSemaphoreDCA.sMachineName = sMachineName;
-                            //Get the DCA and its protocol
+                            //Get the DCA and its protocol and DCA channel name
                             DCA = _arDCAQueue[i].DCA;
                             Protocol = _arDCAQueue[i].Protocol;
+                            arDCAChannelName = DCA.arChannels.ToArray();
                             break;
                         }
                         if (i == _arDCAQueue.Count - 1)
