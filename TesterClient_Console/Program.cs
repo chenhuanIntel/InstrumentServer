@@ -64,8 +64,7 @@ namespace TesterClient_Consoles
                     WCFProtocolXConfig WCFProtocol = null;
                     WCFScopeConfig WCFDCA = null;
                     int nChannelInEachMeasurementGroup = 2;
-                    string[] arDCAChannelName = null; 
-                    ret = _client.getInstrumentLockWithReturn(sharedInstrument.DCA, sThreadID, sMachineName, ref WCFDCA, ref WCFProtocol, nChannelInEachMeasurementGroup, ref arDCAChannelName);
+                    ret = _client.getInstrumentLockWithReturn(sharedInstrument.DCA, sThreadID, sMachineName, ref WCFDCA, ref WCFProtocol, nChannelInEachMeasurementGroup);
                     Console.WriteLine($"Machine={sMachineName}, Thread={sThreadID} getInstrumentLock(sharedInstrument.DCA)");
 
                     ret = _client.getInstrumentLock(sharedInstrument.DCA, sThreadID, sMachineName);
