@@ -35,7 +35,8 @@
         </DataGrid>
 
 
-        <Button x:Name="btnCloseServer" Content="Close WCF Server" HorizontalAlignment="Left" Height="35" Margin="310,369,0,0" VerticalAlignment="Top" Width="170" Click="btnClose_Click"/>
+        <Button x:Name="btnCloseServer" Content="Close WCF Server" HorizontalAlignment="Left" Height="35" Margin="470,369,0,0" VerticalAlignment="Top" Width="170" Click="btnClose_Click"/>
+        <Button x:Name="btnResetServer" Content="Reset WCF Server" HorizontalAlignment="Left" Height="35" Margin="155,369,0,0" VerticalAlignment="Top" Width="164" Click="btnReset_Click"/>
 
     </Grid>
 </Window>
