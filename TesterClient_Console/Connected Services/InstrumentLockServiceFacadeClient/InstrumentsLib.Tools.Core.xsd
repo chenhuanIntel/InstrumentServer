@@ -95,4 +95,23 @@
     <xs:sequence />
   </xs:complexType>
   <xs:element name="MeasurementCmd" nillable="true" type="tns:MeasurementCmd" />
+  <xs:complexType name="ProtocolVISADotNetConfig">
+    <xs:complexContent mixed="false">
+      <xs:extension base="tns:ProtocolXConfig">
+        <xs:sequence>
+          <xs:element minOccurs="0" name="Resource" nillable="true" type="xs:string" />
+          <xs:element minOccurs="0" name="bAppendStringToCmd" type="xs:boolean" />
+          <xs:element minOccurs="0" name="bClearSessionOnQuery" type="xs:boolean" />
+          <xs:element minOccurs="0" name="bRxTerminationCharacterEnabled" type="xs:boolean" />
+          <xs:element minOccurs="0" name="bTxTerminationCharacterEnabled" type="xs:boolean" />
+          <xs:element minOccurs="0" name="nReadBufferSize" type="xs:int" />
+          <xs:element minOccurs="0" name="nTerminationCharacter" type="xs:unsignedByte" />
+          <xs:element minOccurs="0" name="nTimeout" type="xs:int" />
+          <xs:element minOccurs="0" name="nWriteBufferSize" type="xs:int" />
+          <xs:element minOccurs="0" name="strToAppend" nillable="true" type="xs:string" />
+        </xs:sequence>
+      </xs:extension>
+    </xs:complexContent>
+  </xs:complexType>
+  <xs:element name="ProtocolVISADotNetConfig" nillable="true" type="tns:ProtocolVISADotNetConfig" />
 </xs:schema>

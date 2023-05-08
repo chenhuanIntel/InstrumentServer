@@ -20,6 +20,18 @@ namespace TesterClient_Consoles
         private static IInstrumentLockServiceFacade _client;
         private static clientFunctions _clientFct = new clientFunctions();
 
+
+        protected static string getThreadID()
+        {
+            int nProcessID = Process.GetCurrentProcess().Id; // one FG-SPAN process will hold many threads, including all DUT threads
+            //Thread thread = Thread.CurrentThread;
+            //int nManagedID = thread.ManagedThreadId; //https://learn.microsoft.com/en-us/dotnet/api/system.threading.thread.managedthreadid?view=net-8.0
+            int nManagedID = System.Environment.CurrentManagedThreadId; //https://learn.microsoft.com/en-us/dotnet/fundamentals/code-analysis/quality-rules/ca1840
+            // OS thread is no longer easy to get, hence, use process ID + managed thread ID
+            // https://github.com/dotnet/runtime/issues/63535
+            return (nProcessID.ToString() + "-" + nManagedID.ToString());
+        }
+
         static void Main(string[] args)
         {
 
@@ -29,7 +41,7 @@ namespace TesterClient_Consoles
             double sum = 0;
             int delay = 0;
             bool ret = false;
-            string sThreadID = Process.GetCurrentProcess().Id.ToString();
+            string sThreadID = getThreadID();
             string sMachineName = Environment.MachineName;
             ConsoleKey key;
             //Uri baseAddress = new Uri("net.tcp://localhost:8001/");
@@ -53,13 +65,13 @@ namespace TesterClient_Consoles
                     // assign the _iClient obtained within the above Endpoint functions
                     _client = _clientFct._iClient;
 
-                    sum = _client.Add(a, b, sThreadID, sMachineName);
-                    Console.WriteLine($"\nMachine={sMachineName}, Thread={sThreadID} Add({a}, {b}) = {sum.ToString()}\n");
+                    //sum = _client.Add(a, b, sThreadID, sMachineName);
+                    //Console.WriteLine($"\nMachine={sMachineName}, Thread={sThreadID} Add({a}, {b}) = {sum.ToString()}\n");
 
-                    delay = 1; //seconds
-                    Console.WriteLine($"Machine={sMachineName}, Thread={sThreadID} AddAndDelay({a}, {b}) with delay = {delay.ToString()} seconds.");
-                    sum = _client.AddAndDelay(a, b, delay, sThreadID, sMachineName);
-                    Console.WriteLine($"Machine={sMachineName}, Thread={sThreadID} AddAndDelay({a}, {b}) = {sum.ToString()} with delay = {delay.ToString()} seconds.\n");
+                    //delay = 1; //seconds
+                    //Console.WriteLine($"Machine={sMachineName}, Thread={sThreadID} AddAndDelay({a}, {b}) with delay = {delay.ToString()} seconds.");
+                    //sum = _client.AddAndDelay(a, b, delay, sThreadID, sMachineName);
+                    //Console.WriteLine($"Machine={sMachineName}, Thread={sThreadID} AddAndDelay({a}, {b}) = {sum.ToString()} with delay = {delay.ToString()} seconds.\n");
 
                     WCFProtocolXConfig WCFProtocol = null;
                     WCFScopeConfig WCFDCA = null;
@@ -70,24 +82,6 @@ namespace TesterClient_Consoles
                     ret = _client.getInstrumentLock(sharedInstrument.DCA, sThreadID, sMachineName);
                     Console.WriteLine($"Machine={sMachineName}, Thread={sThreadID} getInstrumentLock(sharedInstrument.DCA)");
 
-                    // doing something with DCA
-                    Console.WriteLine($"Machine={sMachineName}, Thread={sThreadID} doing something with DCA");
-                    Thread.Sleep(2 * 60000);
-
-                    // nested DCA lock request
-                    ret = _client.getInstrumentLock(sharedInstrument.DCA, sThreadID, sMachineName);
-                    Console.WriteLine($"Machine={sMachineName}, Thread={sThreadID} getInstrumentLock(sharedInstrument.DCA)");
-
-                    // doing something with DCA
-                    Console.WriteLine($"Machine={sMachineName}, Thread={sThreadID} doing something with DCA");
-                    Thread.Sleep(5 * 60000);
-
-                    ret = _client.releaseInstrumentLock(sharedInstrument.DCA, sThreadID, sMachineName);
-                    Console.WriteLine($"Machine={sMachineName}, Thread={sThreadID} releaseInstrumentLock(sharedInstrument.DCA)");
-
-                    ret = _client.releaseInstrumentLock(sharedInstrument.DCA, sThreadID, sMachineName);
-                    Console.WriteLine($"Machine={sMachineName}, Thread={sThreadID} releaseInstrumentLock(sharedInstrument.DCA)\n");
-
                     ret = _client.getProtocolLock(sharedProtocol.DiCon, sThreadID, sMachineName);
                     Console.WriteLine($"Machine={sMachineName}, Thread={sThreadID} getProtocolLock(sharedProtocol.DiCon)");
 
@@ -97,6 +91,21 @@ namespace TesterClient_Consoles
 
                     ret = _client.releaseProtocolLock(sharedProtocol.DiCon, sThreadID, sMachineName);
                     Console.WriteLine($"Machine={sMachineName}, Thread={sThreadID} releaseProtocolLock(sharedProtocol.DiCon)\n");
+
+                    // nested DCA lock request
+                    ret = _client.getInstrumentLock(sharedInstrument.DCA, sThreadID, sMachineName);
+                    Console.WriteLine($"Machine={sMachineName}, Thread={sThreadID} getInstrumentLock(sharedInstrument.DCA)");
+
+                    // doing something with DCA
+                    Console.WriteLine($"Machine={sMachineName}, Thread={sThreadID} doing something with DCA");
+                    Thread.Sleep(3 * 10000);
+
+                    ret = _client.releaseInstrumentLock(sharedInstrument.DCA, sThreadID, sMachineName);
+                    Console.WriteLine($"Machine={sMachineName}, Thread={sThreadID} releaseInstrumentLock(sharedInstrument.DCA)");
+
+                    ret = _client.releaseInstrumentLock(sharedInstrument.DCA, sThreadID, sMachineName);
+                    Console.WriteLine($"Machine={sMachineName}, Thread={sThreadID} releaseInstrumentLock(sharedInstrument.DCA)\n");
+
 
 
                     Console.WriteLine($"Press ENTER to close the console window; other keys to repeat ...........");

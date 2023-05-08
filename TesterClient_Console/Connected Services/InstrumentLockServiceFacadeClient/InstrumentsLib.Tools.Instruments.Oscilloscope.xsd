@@ -18,6 +18,7 @@
           <xs:element minOccurs="0" name="bCheckBusyAfterPatternLock" type="xs:boolean" />
           <xs:element minOccurs="0" name="bDCAMWithDedicatedPC" type="xs:boolean" />
           <xs:element minOccurs="0" name="bDebugRelaunchDCA" type="xs:boolean" />
+          <xs:element minOccurs="0" name="bEmbCRU" type="xs:boolean" />
           <xs:element minOccurs="0" name="bRelaunchDCAWhenException" type="xs:boolean" />
           <xs:element minOccurs="0" name="bShrinkEyeFile" type="xs:boolean" />
           <xs:element minOccurs="0" name="bTakeScreenShot" type="xs:boolean" />

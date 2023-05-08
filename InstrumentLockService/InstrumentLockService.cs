@@ -27,6 +27,7 @@ namespace InstrumentLockServices
         public WCFScopeConfig DCA { get; set; }
         public WCFProtocolXConfig Protocol { get; set; }
         public SemaphoreOwner ownerSemaphoreDCA { get; set; }
+        public Semaphore semaphoreDCA { get; set; }
         public DCAQueue(WCFScopeConfig DCAConfig, WCFProtocolXConfig ProtocolConfig)
         {
             DCA = new WCFScopeConfig();
@@ -34,6 +35,7 @@ namespace InstrumentLockServices
             Protocol = new WCFProtocolXConfig();
             Protocol = ProtocolConfig;
             ownerSemaphoreDCA= new SemaphoreOwner();
+            semaphoreDCA = new Semaphore(initialCount: 1, maximumCount: 1); // one semaphore per DCA
         }
     }
 
@@ -349,7 +351,7 @@ namespace InstrumentLockServices
         private static Mutex mutexLockAdd = new Mutex();
         private static Mutex mutexLockAddAndDelay = new Mutex();
         private static Mutex mutexLockintDivide = new Mutex();
-        private static Semaphore semaphoreDCA;// = new Semaphore(initialCount: 1, maximumCount: 1);
+        //private static Semaphore semaphoreDCA;// = new Semaphore(initialCount: 1, maximumCount: 1);
         //private static SemaphoreOwner ownerSemaphoreDCA = new SemaphoreOwner(semaphoreDCA);
         private static Semaphore semaphoreDiCon = new Semaphore(initialCount: 1, maximumCount: 1);
         private static SemaphoreOwner ownerSemaphoreDiCon = new SemaphoreOwner();
@@ -503,7 +505,7 @@ namespace InstrumentLockServices
             try
             {
                 DCAQueue dca = null;
-                // traverse arDCAQueue to see if the client already owns one of the semaphore
+                // first, to traverse arDCAQueue to see if the client already owns one of the semaphore
                 for (int i = 0; i < _arDCAQueue.Count; i++)
                 {
                     dca = _arDCAQueue[i];
@@ -514,6 +516,9 @@ namespace InstrumentLockServices
                         break;
                     }
                 }
+                // secondly, depending if the clients already owns a semaphore or not
+                // if yes, add nested count
+                // if not, find a first available semaphore
                 if (bOwnSemaphore)
                 {
                     // if the client already owns the semaphore , no need to obtain semaphore again
@@ -526,24 +531,30 @@ namespace InstrumentLockServices
                 else
                 {
                     // if not the owner, WaitOne() which blocks the current thread until the current WaitHandle receives a signal.
-                    semaphoreDCA.WaitOne();
+                    //semaphoreDCA.WaitOne();
 
-                    // in the arDCAQueue to find an available one and claim the semaphore ownership of that DCA
-                    for (int i = 0; i < _arDCAQueue.Count; i++)
+                    // if not a semaphore owner, in the arDCAQueue to find a first available one and claim the semaphore ownership of that DCA
+                    while (bOwnSemaphore == false)
                     {
-                        dca = _arDCAQueue[i];
-                        // to find an available one
-                        if ((dca.ownerSemaphoreDCA.sThreadID == null && dca.ownerSemaphoreDCA.sMachineName == null))
+                        for (int i = 0; i < _arDCAQueue.Count; i++)
                         {
-                            // assign the ownership and increase nestedCount
-                            dca.ownerSemaphoreDCA.nestedCount++;
-                            dca.ownerSemaphoreDCA.sThreadID = sThreadID;
-                            dca.ownerSemaphoreDCA.sMachineName = sMachineName;
-                            break;
-                        }
-                        if (i== _arDCAQueue.Count-1)
-                        {
-                            throw new Exception();
+                            dca = _arDCAQueue[i];
+                            // to find an available one
+                            if ((dca.ownerSemaphoreDCA.sThreadID == null && dca.ownerSemaphoreDCA.sMachineName == null))
+                            {
+                                // claim the semaphore
+                                dca.semaphoreDCA.WaitOne();
+                                // assign the ownership and increase nestedCount
+                                dca.ownerSemaphoreDCA.nestedCount++;
+                                dca.ownerSemaphoreDCA.sThreadID = sThreadID;
+                                dca.ownerSemaphoreDCA.sMachineName = sMachineName;
+                                bOwnSemaphore = true;
+                                break;
+                            }
+                            if (i == _arDCAQueue.Count - 1) // no DCA is available
+                            {
+                                Console.WriteLine("no DCA available, keep waiting");
+                            }
                         }
                     }
                 }
@@ -585,7 +596,7 @@ namespace InstrumentLockServices
             try
             {
                 DCAQueue dca = null;
-                // traverse arDCAQueue to see if the client already owns one of the semaphore
+                // first to traverse arDCAQueue to see if the client already owns one of the semaphore
                 for (int i = 0; i < _arDCAQueue.Count; i++)
                 {
                     dca = _arDCAQueue[i];
@@ -596,9 +607,14 @@ namespace InstrumentLockServices
                         //Get the DCA and its protocol
                         DCA = _arDCAQueue[i].DCA;
                         Protocol = _arDCAQueue[i].Protocol;
+                        clog.Log($"Thread {sThreadID} already owned a semaphore");
+                        Console.WriteLine($"Thread {sThreadID} already owned a semaphore");
                         break;
                     }
                 }
+                // secondly, depending if the clients already owns a semaphore or not
+                // if yes, add nested count
+                // if not, find a first available semaphore
                 if (bOwnSemaphore)
                 {
                     // if the client already owns the semaphore , no need to obtain semaphore again
@@ -607,31 +623,44 @@ namespace InstrumentLockServices
                     dca.ownerSemaphoreDCA.nestedCount++;
                     dca.ownerSemaphoreDCA.sThreadID = sThreadID;
                     dca.ownerSemaphoreDCA.sMachineName = sMachineName;
+                    clog.Log($"Thread {sThreadID} increases nestedCount");
+                    Console.WriteLine($"Thread {sThreadID} increases nestedCount");
                 }
                 else
                 {
                     // if not the owner, WaitOne() which blocks the current thread until the current WaitHandle receives a signal.
-                    semaphoreDCA.WaitOne();
+                    //semaphoreDCA.WaitOne();
 
-                    // in the arDCAQueue to find an available one and claim the semaphore ownership of that DCA
-                    for (int i = 0; i < _arDCAQueue.Count; i++)
+                    // if not a semaphore owner, in the arDCAQueue to find a first available one and claim the semaphore ownership of that DCA
+                    while (bOwnSemaphore == false)
                     {
-                        dca = _arDCAQueue[i];
-                        // to find an available one
-                        if ((dca.ownerSemaphoreDCA.sThreadID == null && dca.ownerSemaphoreDCA.sMachineName == null))
+                        for (int i = 0; i < _arDCAQueue.Count; i++)
                         {
-                            // assign the ownership and increase nestedCount
-                            dca.ownerSemaphoreDCA.nestedCount++;
-                            dca.ownerSemaphoreDCA.sThreadID = sThreadID;
-                            dca.ownerSemaphoreDCA.sMachineName = sMachineName;
-                            //Get the DCA and its protocol
-                            DCA = _arDCAQueue[i].DCA;
-                            Protocol = _arDCAQueue[i].Protocol;
-                            break;
-                        }
-                        if (i == _arDCAQueue.Count - 1)
-                        {
-                            throw new Exception();
+                            dca = _arDCAQueue[i];
+                            // to find an available one
+                            // first to check if number of channels matches
+                            if (nChannelInEachMeasurementGroup == dca.DCA.arChannels.Count)
+                            {
+                                if ((dca.ownerSemaphoreDCA.sThreadID == null && dca.ownerSemaphoreDCA.sMachineName == null))
+                                {
+                                    // assign the ownership and increase nestedCount
+                                    dca.ownerSemaphoreDCA.nestedCount++;
+                                    dca.ownerSemaphoreDCA.sThreadID = sThreadID;
+                                    dca.ownerSemaphoreDCA.sMachineName = sMachineName;
+                                    bOwnSemaphore = true; ;
+                                    //Get the DCA and its protocol
+                                    DCA = _arDCAQueue[i].DCA;
+                                    Protocol = _arDCAQueue[i].Protocol;
+                                    clog.Log($"Thread {sThreadID} claiming a semaphore");
+                                    Console.WriteLine($"Thread {sThreadID} claiming a semaphore");
+                                    break;
+                                }
+                                if (i == _arDCAQueue.Count - 1)
+                                {
+                                    clog.Log($"Thread {sThreadID} no DCA available, keep waiting");
+                                    Console.WriteLine($"Thread {sThreadID} no DCA available, keep waiting");
+                                }
+                            }
                         }
                     }
                 }
@@ -688,7 +717,8 @@ namespace InstrumentLockServices
                     dca.ownerSemaphoreDCA.sThreadID = null;
                     dca.ownerSemaphoreDCA.sMachineName = null;
                     // then release the semaphore
-                    semaphoreDCA.Release();
+                    //semaphoreDCA.Release();
+                    dca.semaphoreDCA.Release();
                 }            
 
                 Console.WriteLine("InstrumentLockService.releaseInstrumentLock");
@@ -749,7 +779,7 @@ namespace InstrumentLockServices
             }
 
             // according to the number of DCA in the queue, set the semaphore
-            semaphoreDCA = new Semaphore(initialCount: _arDCAQueue.Count, maximumCount: _arDCAQueue.Count);
+            //semaphoreDCA = new Semaphore(initialCount: _arDCAQueue.Count, maximumCount: _arDCAQueue.Count);
     }
 
         /// <summary>

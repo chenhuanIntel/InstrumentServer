@@ -170,24 +170,23 @@ namespace InstrumentLockServiceHosts_WPF2
             _stationInstance = StationHardware.Instance();
             _stationInstance.Initialize();
 
-            ITraceWriter traceWriter = new MemoryTraceWriter();
-            var temp = JsonConvert.SerializeObject(_stationInstance.myConfig.arInstConfig[0], new JsonSerializerSettings { TraceWriter = traceWriter, Converters = { new JavaScriptDateTimeConverter() } });
-            Console.WriteLine(traceWriter);
-            ITraceWriter traceWriter1 = new MemoryTraceWriter();
-            var temp1 = JsonConvert.DeserializeObject<InstrumentLockServices.WCFScopeConfig>(temp, new JsonSerializerSettings { TraceWriter = traceWriter1, Converters = { new JavaScriptDateTimeConverter() } });
-            Console.WriteLine(traceWriter1);
-            ITraceWriter traceWriter2 = new MemoryTraceWriter();
-            var temp2 = JsonConvert.DeserializeObject<InstrumentsLib.Tools.Instruments.Oscilloscope.DCA_A86100CFlex400GConfig>(temp, new JsonSerializerSettings { TraceWriter = traceWriter2, Converters = { new JavaScriptDateTimeConverter() } });
-            Console.WriteLine(traceWriter2);
-
-            ITraceWriter traceWriter3 = new MemoryTraceWriter();
-            var temp3 = JsonConvert.SerializeObject(temp1, new JsonSerializerSettings { TraceWriter = traceWriter3, Converters = { new JavaScriptDateTimeConverter() } });
-            Console.WriteLine(traceWriter);
-            ITraceWriter traceWriter4 = new MemoryTraceWriter();
-            var temp4 = JsonConvert.DeserializeObject<InstrumentsLib.Tools.Instruments.Oscilloscope.DCA_A86100CFlex400GConfig>(temp, new JsonSerializerSettings { TraceWriter = traceWriter4, Converters = { new JavaScriptDateTimeConverter() } });
-            // cannot deserialized to ScopeConfig which is an abstract class
-            //var temp5 = JsonConvert.DeserializeObject<InstrumentsLib.Tools.Instruments.Oscilloscope.ScopeConfig>(temp, new JsonSerializerSettings { TraceWriter = traceWriter4, Converters = { new JavaScriptDateTimeConverter() } });
-            Console.WriteLine(traceWriter4);
+            //ITraceWriter traceWriter = new MemoryTraceWriter();
+            //var temp = JsonConvert.SerializeObject(_stationInstance.myConfig.arInstConfig[0], new JsonSerializerSettings { TraceWriter = traceWriter, Converters = { new JavaScriptDateTimeConverter() } });
+            //Console.WriteLine(traceWriter);
+            //ITraceWriter traceWriter1 = new MemoryTraceWriter();
+            //var temp1 = JsonConvert.DeserializeObject<InstrumentLockServices.WCFScopeConfig>(temp, new JsonSerializerSettings { TraceWriter = traceWriter1, Converters = { new JavaScriptDateTimeConverter() } });
+            //Console.WriteLine(traceWriter1);
+            //ITraceWriter traceWriter2 = new MemoryTraceWriter();
+            //var temp2 = JsonConvert.DeserializeObject<InstrumentsLib.Tools.Instruments.Oscilloscope.DCA_A86100CFlex400GConfig>(temp, new JsonSerializerSettings { TraceWriter = traceWriter2, Converters = { new JavaScriptDateTimeConverter() } });
+            //Console.WriteLine(traceWriter2);
+            //ITraceWriter traceWriter3 = new MemoryTraceWriter();
+            //var temp3 = JsonConvert.SerializeObject(temp1, new JsonSerializerSettings { TraceWriter = traceWriter3, Converters = { new JavaScriptDateTimeConverter() } });
+            //Console.WriteLine(traceWriter);
+            //ITraceWriter traceWriter4 = new MemoryTraceWriter();
+            //var temp4 = JsonConvert.DeserializeObject<InstrumentsLib.Tools.Instruments.Oscilloscope.DCA_A86100CFlex400GConfig>(temp, new JsonSerializerSettings { TraceWriter = traceWriter4, Converters = { new JavaScriptDateTimeConverter() } });
+            //// cannot deserialized to ScopeConfig which is an abstract class
+            ////var temp5 = JsonConvert.DeserializeObject<InstrumentsLib.Tools.Instruments.Oscilloscope.ScopeConfig>(temp, new JsonSerializerSettings { TraceWriter = traceWriter4, Converters = { new JavaScriptDateTimeConverter() } });
+            //Console.WriteLine(traceWriter4);
 
             // initialize server
             _server = new InstrumentLockServiceHost_WPF();
