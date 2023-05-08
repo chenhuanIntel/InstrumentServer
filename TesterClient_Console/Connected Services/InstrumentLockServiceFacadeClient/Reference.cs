@@ -87,6 +87,8 @@ namespace TesterClient_Console.InstrumentLockServiceFacadeClient {
     [System.Runtime.Serialization.DataContractAttribute(Name="CDynamicConfig", Namespace="http://schemas.datacontract.org/2004/07/Utility")]
     [System.SerializableAttribute()]
     [System.Runtime.Serialization.KnownTypeAttribute(typeof(TesterClient_Console.InstrumentLockServiceFacadeClient.ProtocolXConfig))]
+    [System.Runtime.Serialization.KnownTypeAttribute(typeof(TesterClient_Console.InstrumentLockServiceFacadeClient.ProtocolVISADotNetConfig))]
+    [System.Runtime.Serialization.KnownTypeAttribute(typeof(TesterClient_Console.InstrumentLockServiceFacadeClient.WCFProtocolXConfig))]
     [System.Runtime.Serialization.KnownTypeAttribute(typeof(TesterClient_Console.InstrumentLockServiceFacadeClient.InstrumentXConfig))]
     [System.Runtime.Serialization.KnownTypeAttribute(typeof(TesterClient_Console.InstrumentLockServiceFacadeClient.ScopeConfig))]
     [System.Runtime.Serialization.KnownTypeAttribute(typeof(TesterClient_Console.InstrumentLockServiceFacadeClient.WCFScopeConfig))]
@@ -183,6 +185,8 @@ namespace TesterClient_Console.InstrumentLockServiceFacadeClient {
     [System.CodeDom.Compiler.GeneratedCodeAttribute("System.Runtime.Serialization", "4.0.0.0")]
     [System.Runtime.Serialization.DataContractAttribute(Name="ProtocolXConfig", Namespace="http://schemas.datacontract.org/2004/07/InstrumentsLib.Tools.Core")]
     [System.SerializableAttribute()]
+    [System.Runtime.Serialization.KnownTypeAttribute(typeof(TesterClient_Console.InstrumentLockServiceFacadeClient.ProtocolVISADotNetConfig))]
+    [System.Runtime.Serialization.KnownTypeAttribute(typeof(TesterClient_Console.InstrumentLockServiceFacadeClient.WCFProtocolXConfig))]
     public partial class ProtocolXConfig : TesterClient_Console.InstrumentLockServiceFacadeClient.CDynamicConfig {
         
         [System.Runtime.Serialization.OptionalFieldAttribute()]
@@ -280,6 +284,181 @@ namespace TesterClient_Console.InstrumentLockServiceFacadeClient {
                 }
             }
         }
+    }
+    
+    [System.Diagnostics.DebuggerStepThroughAttribute()]
+    [System.CodeDom.Compiler.GeneratedCodeAttribute("System.Runtime.Serialization", "4.0.0.0")]
+    [System.Runtime.Serialization.DataContractAttribute(Name="ProtocolVISADotNetConfig", Namespace="http://schemas.datacontract.org/2004/07/InstrumentsLib.Tools.Core")]
+    [System.SerializableAttribute()]
+    [System.Runtime.Serialization.KnownTypeAttribute(typeof(TesterClient_Console.InstrumentLockServiceFacadeClient.WCFProtocolXConfig))]
+    public partial class ProtocolVISADotNetConfig : TesterClient_Console.InstrumentLockServiceFacadeClient.ProtocolXConfig {
+        
+        [System.Runtime.Serialization.OptionalFieldAttribute()]
+        private string ResourceField;
+        
+        [System.Runtime.Serialization.OptionalFieldAttribute()]
+        private bool bAppendStringToCmdField;
+        
+        [System.Runtime.Serialization.OptionalFieldAttribute()]
+        private bool bClearSessionOnQueryField;
+        
+        [System.Runtime.Serialization.OptionalFieldAttribute()]
+        private bool bRxTerminationCharacterEnabledField;
+        
+        [System.Runtime.Serialization.OptionalFieldAttribute()]
+        private bool bTxTerminationCharacterEnabledField;
+        
+        [System.Runtime.Serialization.OptionalFieldAttribute()]
+        private int nReadBufferSizeField;
+        
+        [System.Runtime.Serialization.OptionalFieldAttribute()]
+        private byte nTerminationCharacterField;
+        
+        [System.Runtime.Serialization.OptionalFieldAttribute()]
+        private int nTimeoutField;
+        
+        [System.Runtime.Serialization.OptionalFieldAttribute()]
+        private int nWriteBufferSizeField;
+        
+        [System.Runtime.Serialization.OptionalFieldAttribute()]
+        private string strToAppendField;
+        
+        [System.Runtime.Serialization.DataMemberAttribute()]
+        public string Resource {
+            get {
+                return this.ResourceField;
+            }
+            set {
+                if ((object.ReferenceEquals(this.ResourceField, value) != true)) {
+                    this.ResourceField = value;
+                    this.RaisePropertyChanged("Resource");
+                }
+            }
+        }
+        
+        [System.Runtime.Serialization.DataMemberAttribute()]
+        public bool bAppendStringToCmd {
+            get {
+                return this.bAppendStringToCmdField;
+            }
+            set {
+                if ((this.bAppendStringToCmdField.Equals(value) != true)) {
+                    this.bAppendStringToCmdField = value;
+                    this.RaisePropertyChanged("bAppendStringToCmd");
+                }
+            }
+        }
+        
+        [System.Runtime.Serialization.DataMemberAttribute()]
+        public bool bClearSessionOnQuery {
+            get {
+                return this.bClearSessionOnQueryField;
+            }
+            set {
+                if ((this.bClearSessionOnQueryField.Equals(value) != true)) {
+                    this.bClearSessionOnQueryField = value;
+                    this.RaisePropertyChanged("bClearSessionOnQuery");
+                }
+            }
+        }
+        
+        [System.Runtime.Serialization.DataMemberAttribute()]
+        public bool bRxTerminationCharacterEnabled {
+            get {
+                return this.bRxTerminationCharacterEnabledField;
+            }
+            set {
+                if ((this.bRxTerminationCharacterEnabledField.Equals(value) != true)) {
+                    this.bRxTerminationCharacterEnabledField = value;
+                    this.RaisePropertyChanged("bRxTerminationCharacterEnabled");
+                }
+            }
+        }
+        
+        [System.Runtime.Serialization.DataMemberAttribute()]
+        public bool bTxTerminationCharacterEnabled {
+            get {
+                return this.bTxTerminationCharacterEnabledField;
+            }
+            set {
+                if ((this.bTxTerminationCharacterEnabledField.Equals(value) != true)) {
+                    this.bTxTerminationCharacterEnabledField = value;
+                    this.RaisePropertyChanged("bTxTerminationCharacterEnabled");
+                }
+            }
+        }
+        
+        [System.Runtime.Serialization.DataMemberAttribute()]
+        public int nReadBufferSize {
+            get {
+                return this.nReadBufferSizeField;
+            }
+            set {
+                if ((this.nReadBufferSizeField.Equals(value) != true)) {
+                    this.nReadBufferSizeField = value;
+                    this.RaisePropertyChanged("nReadBufferSize");
+                }
+            }
+        }
+        
+        [System.Runtime.Serialization.DataMemberAttribute()]
+        public byte nTerminationCharacter {
+            get {
+                return this.nTerminationCharacterField;
+            }
+            set {
+                if ((this.nTerminationCharacterField.Equals(value) != true)) {
+                    this.nTerminationCharacterField = value;
+                    this.RaisePropertyChanged("nTerminationCharacter");
+                }
+            }
+        }
+        
+        [System.Runtime.Serialization.DataMemberAttribute()]
+        public int nTimeout {
+            get {
+                return this.nTimeoutField;
+            }
+            set {
+                if ((this.nTimeoutField.Equals(value) != true)) {
+                    this.nTimeoutField = value;
+                    this.RaisePropertyChanged("nTimeout");
+                }
+            }
+        }
+        
+        [System.Runtime.Serialization.DataMemberAttribute()]
+        public int nWriteBufferSize {
+            get {
+                return this.nWriteBufferSizeField;
+            }
+            set {
+                if ((this.nWriteBufferSizeField.Equals(value) != true)) {
+                    this.nWriteBufferSizeField = value;
+                    this.RaisePropertyChanged("nWriteBufferSize");
+                }
+            }
+        }
+        
+        [System.Runtime.Serialization.DataMemberAttribute()]
+        public string strToAppend {
+            get {
+                return this.strToAppendField;
+            }
+            set {
+                if ((object.ReferenceEquals(this.strToAppendField, value) != true)) {
+                    this.strToAppendField = value;
+                    this.RaisePropertyChanged("strToAppend");
+                }
+            }
+        }
+    }
+    
+    [System.Diagnostics.DebuggerStepThroughAttribute()]
+    [System.CodeDom.Compiler.GeneratedCodeAttribute("System.Runtime.Serialization", "4.0.0.0")]
+    [System.Runtime.Serialization.DataContractAttribute(Name="WCFProtocolXConfig", Namespace="http://schemas.datacontract.org/2004/07/InstrumentLockServices")]
+    [System.SerializableAttribute()]
+    public partial class WCFProtocolXConfig : TesterClient_Console.InstrumentLockServiceFacadeClient.ProtocolVISADotNetConfig {
     }
     
     [System.Diagnostics.DebuggerStepThroughAttribute()]
@@ -576,6 +755,9 @@ namespace TesterClient_Console.InstrumentLockServiceFacadeClient {
         private bool bDebugRelaunchDCAField;
         
         [System.Runtime.Serialization.OptionalFieldAttribute()]
+        private bool bEmbCRUField;
+        
+        [System.Runtime.Serialization.OptionalFieldAttribute()]
         private bool bRelaunchDCAWhenExceptionField;
         
         [System.Runtime.Serialization.OptionalFieldAttribute()]
@@ -775,6 +957,19 @@ namespace TesterClient_Console.InstrumentLockServiceFacadeClient {
                 if ((this.bDebugRelaunchDCAField.Equals(value) != true)) {
                     this.bDebugRelaunchDCAField = value;
                     this.RaisePropertyChanged("bDebugRelaunchDCA");
+                }
+            }
+        }
+        
+        [System.Runtime.Serialization.DataMemberAttribute()]
+        public bool bEmbCRU {
+            get {
+                return this.bEmbCRUField;
+            }
+            set {
+                if ((this.bEmbCRUField.Equals(value) != true)) {
+                    this.bEmbCRUField = value;
+                    this.RaisePropertyChanged("bEmbCRU");
                 }
             }
         }
@@ -993,22 +1188,6 @@ namespace TesterClient_Console.InstrumentLockServiceFacadeClient {
     [System.Runtime.Serialization.DataContractAttribute(Name="WCFScopeConfig", Namespace="http://schemas.datacontract.org/2004/07/InstrumentLockServices")]
     [System.SerializableAttribute()]
     public partial class WCFScopeConfig : TesterClient_Console.InstrumentLockServiceFacadeClient.ScopeConfig {
-        
-        [System.Runtime.Serialization.OptionalFieldAttribute()]
-        private System.Collections.Generic.Dictionary<string, TesterClient_Console.InstrumentLockServiceFacadeClient.myTestSettings> mapTestSettingsField;
-        
-        [System.Runtime.Serialization.DataMemberAttribute()]
-        public System.Collections.Generic.Dictionary<string, TesterClient_Console.InstrumentLockServiceFacadeClient.myTestSettings> mapTestSettings {
-            get {
-                return this.mapTestSettingsField;
-            }
-            set {
-                if ((object.ReferenceEquals(this.mapTestSettingsField, value) != true)) {
-                    this.mapTestSettingsField = value;
-                    this.RaisePropertyChanged("mapTestSettings");
-                }
-            }
-        }
     }
     
     [System.Diagnostics.DebuggerStepThroughAttribute()]
@@ -1635,51 +1814,6 @@ namespace TesterClient_Console.InstrumentLockServiceFacadeClient {
             }
             set {
                 this.extensionDataField = value;
-            }
-        }
-        
-        public event System.ComponentModel.PropertyChangedEventHandler PropertyChanged;
-        
-        protected void RaisePropertyChanged(string propertyName) {
-            System.ComponentModel.PropertyChangedEventHandler propertyChanged = this.PropertyChanged;
-            if ((propertyChanged != null)) {
-                propertyChanged(this, new System.ComponentModel.PropertyChangedEventArgs(propertyName));
-            }
-        }
-    }
-    
-    [System.Diagnostics.DebuggerStepThroughAttribute()]
-    [System.CodeDom.Compiler.GeneratedCodeAttribute("System.Runtime.Serialization", "4.0.0.0")]
-    [System.Runtime.Serialization.DataContractAttribute(Name="myTestSettings", Namespace="http://schemas.datacontract.org/2004/07/InstrumentLockServices")]
-    [System.SerializableAttribute()]
-    public partial class myTestSettings : object, System.Runtime.Serialization.IExtensibleDataObject, System.ComponentModel.INotifyPropertyChanged {
-        
-        [System.NonSerializedAttribute()]
-        private System.Runtime.Serialization.ExtensionDataObject extensionDataField;
-        
-        [System.Runtime.Serialization.OptionalFieldAttribute()]
-        private TesterClient_Console.InstrumentLockServiceFacadeClient.tstCRUSetupcmd testField;
-        
-        [global::System.ComponentModel.BrowsableAttribute(false)]
-        public System.Runtime.Serialization.ExtensionDataObject ExtensionData {
-            get {
-                return this.extensionDataField;
-            }
-            set {
-                this.extensionDataField = value;
-            }
-        }
-        
-        [System.Runtime.Serialization.DataMemberAttribute()]
-        public TesterClient_Console.InstrumentLockServiceFacadeClient.tstCRUSetupcmd test {
-            get {
-                return this.testField;
-            }
-            set {
-                if ((object.ReferenceEquals(this.testField, value) != true)) {
-                    this.testField = value;
-                    this.RaisePropertyChanged("test");
-                }
             }
         }
         
@@ -2620,200 +2754,6 @@ namespace TesterClient_Console.InstrumentLockServiceFacadeClient {
         CDFinal = 7,
     }
     
-    [System.Diagnostics.DebuggerStepThroughAttribute()]
-    [System.CodeDom.Compiler.GeneratedCodeAttribute("System.Runtime.Serialization", "4.0.0.0")]
-    [System.Runtime.Serialization.DataContractAttribute(Name="WCFProtocolXConfig", Namespace="http://schemas.datacontract.org/2004/07/InstrumentLockServices")]
-    [System.SerializableAttribute()]
-    public partial class WCFProtocolXConfig : object, System.Runtime.Serialization.IExtensibleDataObject, System.ComponentModel.INotifyPropertyChanged {
-        
-        [System.NonSerializedAttribute()]
-        private System.Runtime.Serialization.ExtensionDataObject extensionDataField;
-        
-        [global::System.ComponentModel.BrowsableAttribute(false)]
-        public System.Runtime.Serialization.ExtensionDataObject ExtensionData {
-            get {
-                return this.extensionDataField;
-            }
-            set {
-                this.extensionDataField = value;
-            }
-        }
-        
-        public event System.ComponentModel.PropertyChangedEventHandler PropertyChanged;
-        
-        protected void RaisePropertyChanged(string propertyName) {
-            System.ComponentModel.PropertyChangedEventHandler propertyChanged = this.PropertyChanged;
-            if ((propertyChanged != null)) {
-                propertyChanged(this, new System.ComponentModel.PropertyChangedEventArgs(propertyName));
-            }
-        }
-    }
-    
-    [System.Diagnostics.DebuggerStepThroughAttribute()]
-    [System.CodeDom.Compiler.GeneratedCodeAttribute("System.Runtime.Serialization", "4.0.0.0")]
-    [System.Runtime.Serialization.DataContractAttribute(Name="tstCRUSetupcmd", Namespace="http://schemas.datacontract.org/2004/07/InstrumentLockServices")]
-    [System.SerializableAttribute()]
-    public partial class tstCRUSetupcmd : TesterClient_Console.InstrumentLockServiceFacadeClient.parentCmd {
-        
-        [System.Runtime.Serialization.OptionalFieldAttribute()]
-        private string PresetField;
-        
-        [System.Runtime.Serialization.OptionalFieldAttribute()]
-        private string SLOTField;
-        
-        [System.Runtime.Serialization.OptionalFieldAttribute()]
-        private string SOURCEField;
-        
-        [System.Runtime.Serialization.OptionalFieldAttribute()]
-        private double dMaxBusyTimeoutSecsField;
-        
-        [System.Runtime.Serialization.DataMemberAttribute()]
-        public string Preset {
-            get {
-                return this.PresetField;
-            }
-            set {
-                if ((object.ReferenceEquals(this.PresetField, value) != true)) {
-                    this.PresetField = value;
-                    this.RaisePropertyChanged("Preset");
-                }
-            }
-        }
-        
-        [System.Runtime.Serialization.DataMemberAttribute()]
-        public string SLOT {
-            get {
-                return this.SLOTField;
-            }
-            set {
-                if ((object.ReferenceEquals(this.SLOTField, value) != true)) {
-                    this.SLOTField = value;
-                    this.RaisePropertyChanged("SLOT");
-                }
-            }
-        }
-        
-        [System.Runtime.Serialization.DataMemberAttribute()]
-        public string SOURCE {
-            get {
-                return this.SOURCEField;
-            }
-            set {
-                if ((object.ReferenceEquals(this.SOURCEField, value) != true)) {
-                    this.SOURCEField = value;
-                    this.RaisePropertyChanged("SOURCE");
-                }
-            }
-        }
-        
-        [System.Runtime.Serialization.DataMemberAttribute()]
-        public double dMaxBusyTimeoutSecs {
-            get {
-                return this.dMaxBusyTimeoutSecsField;
-            }
-            set {
-                if ((this.dMaxBusyTimeoutSecsField.Equals(value) != true)) {
-                    this.dMaxBusyTimeoutSecsField = value;
-                    this.RaisePropertyChanged("dMaxBusyTimeoutSecs");
-                }
-            }
-        }
-    }
-    
-    [System.Diagnostics.DebuggerStepThroughAttribute()]
-    [System.CodeDom.Compiler.GeneratedCodeAttribute("System.Runtime.Serialization", "4.0.0.0")]
-    [System.Runtime.Serialization.DataContractAttribute(Name="parentCmd", Namespace="http://schemas.datacontract.org/2004/07/InstrumentLockServices")]
-    [System.SerializableAttribute()]
-    [System.Runtime.Serialization.KnownTypeAttribute(typeof(TesterClient_Console.InstrumentLockServiceFacadeClient.tstCRUSetupcmd))]
-    public partial class parentCmd : object, System.Runtime.Serialization.IExtensibleDataObject, System.ComponentModel.INotifyPropertyChanged {
-        
-        [System.NonSerializedAttribute()]
-        private System.Runtime.Serialization.ExtensionDataObject extensionDataField;
-        
-        [System.Runtime.Serialization.OptionalFieldAttribute()]
-        private string pPresetField;
-        
-        [System.Runtime.Serialization.OptionalFieldAttribute()]
-        private string pSLOTField;
-        
-        [System.Runtime.Serialization.OptionalFieldAttribute()]
-        private string pSOURCEField;
-        
-        [System.Runtime.Serialization.OptionalFieldAttribute()]
-        private double pdMaxBusyTimeoutSecsField;
-        
-        [global::System.ComponentModel.BrowsableAttribute(false)]
-        public System.Runtime.Serialization.ExtensionDataObject ExtensionData {
-            get {
-                return this.extensionDataField;
-            }
-            set {
-                this.extensionDataField = value;
-            }
-        }
-        
-        [System.Runtime.Serialization.DataMemberAttribute()]
-        public string pPreset {
-            get {
-                return this.pPresetField;
-            }
-            set {
-                if ((object.ReferenceEquals(this.pPresetField, value) != true)) {
-                    this.pPresetField = value;
-                    this.RaisePropertyChanged("pPreset");
-                }
-            }
-        }
-        
-        [System.Runtime.Serialization.DataMemberAttribute()]
-        public string pSLOT {
-            get {
-                return this.pSLOTField;
-            }
-            set {
-                if ((object.ReferenceEquals(this.pSLOTField, value) != true)) {
-                    this.pSLOTField = value;
-                    this.RaisePropertyChanged("pSLOT");
-                }
-            }
-        }
-        
-        [System.Runtime.Serialization.DataMemberAttribute()]
-        public string pSOURCE {
-            get {
-                return this.pSOURCEField;
-            }
-            set {
-                if ((object.ReferenceEquals(this.pSOURCEField, value) != true)) {
-                    this.pSOURCEField = value;
-                    this.RaisePropertyChanged("pSOURCE");
-                }
-            }
-        }
-        
-        [System.Runtime.Serialization.DataMemberAttribute()]
-        public double pdMaxBusyTimeoutSecs {
-            get {
-                return this.pdMaxBusyTimeoutSecsField;
-            }
-            set {
-                if ((this.pdMaxBusyTimeoutSecsField.Equals(value) != true)) {
-                    this.pdMaxBusyTimeoutSecsField = value;
-                    this.RaisePropertyChanged("pdMaxBusyTimeoutSecs");
-                }
-            }
-        }
-        
-        public event System.ComponentModel.PropertyChangedEventHandler PropertyChanged;
-        
-        protected void RaisePropertyChanged(string propertyName) {
-            System.ComponentModel.PropertyChangedEventHandler propertyChanged = this.PropertyChanged;
-            if ((propertyChanged != null)) {
-                propertyChanged(this, new System.ComponentModel.PropertyChangedEventArgs(propertyName));
-            }
-        }
-    }
-    
     [System.CodeDom.Compiler.GeneratedCodeAttribute("System.Runtime.Serialization", "4.0.0.0")]
     [System.Runtime.Serialization.DataContractAttribute(Name="sharedProtocol", Namespace="http://schemas.datacontract.org/2004/07/InstrumentLockServices")]
     public enum sharedProtocol : int {
@@ -2840,7 +2780,7 @@ namespace TesterClient_Console.InstrumentLockServiceFacadeClient {
         bool getInstrumentLock(TesterClient_Console.InstrumentLockServiceFacadeClient.sharedInstrument instr, string ThreadID, string MachineName);
         
         [System.ServiceModel.OperationContractAttribute(Action="http://tempuri.org/IInstrumentLockService/getInstrumentLockWithReturn", ReplyAction="http://tempuri.org/IInstrumentLockService/getInstrumentLockWithReturnResponse")]
-        bool getInstrumentLockWithReturn(TesterClient_Console.InstrumentLockServiceFacadeClient.sharedInstrument instr, string sThreadID, string sMachineName, ref TesterClient_Console.InstrumentLockServiceFacadeClient.WCFScopeConfig DCA, ref TesterClient_Console.InstrumentLockServiceFacadeClient.WCFProtocolXConfig Protocol);
+        bool getInstrumentLockWithReturn(TesterClient_Console.InstrumentLockServiceFacadeClient.sharedInstrument instr, string sThreadID, string sMachineName, ref TesterClient_Console.InstrumentLockServiceFacadeClient.WCFScopeConfig DCA, ref TesterClient_Console.InstrumentLockServiceFacadeClient.WCFProtocolXConfig Protocol, int nChannelInEachMeasurementGroup);
         
         [System.ServiceModel.OperationContractAttribute(Action="http://tempuri.org/IInstrumentLockService/releaseInstrumentLock", ReplyAction="http://tempuri.org/IInstrumentLockService/releaseInstrumentLockResponse")]
         bool releaseInstrumentLock(TesterClient_Console.InstrumentLockServiceFacadeClient.sharedInstrument instr, string ThreadID, string MachineName);
@@ -2898,8 +2838,8 @@ namespace TesterClient_Console.InstrumentLockServiceFacadeClient {
             return base.Channel.getInstrumentLock(instr, ThreadID, MachineName);
         }
         
-        public bool getInstrumentLockWithReturn(TesterClient_Console.InstrumentLockServiceFacadeClient.sharedInstrument instr, string sThreadID, string sMachineName, ref TesterClient_Console.InstrumentLockServiceFacadeClient.WCFScopeConfig DCA, ref TesterClient_Console.InstrumentLockServiceFacadeClient.WCFProtocolXConfig Protocol) {
-            return base.Channel.getInstrumentLockWithReturn(instr, sThreadID, sMachineName, ref DCA, ref Protocol);
+        public bool getInstrumentLockWithReturn(TesterClient_Console.InstrumentLockServiceFacadeClient.sharedInstrument instr, string sThreadID, string sMachineName, ref TesterClient_Console.InstrumentLockServiceFacadeClient.WCFScopeConfig DCA, ref TesterClient_Console.InstrumentLockServiceFacadeClient.WCFProtocolXConfig Protocol, int nChannelInEachMeasurementGroup) {
+            return base.Channel.getInstrumentLockWithReturn(instr, sThreadID, sMachineName, ref DCA, ref Protocol, nChannelInEachMeasurementGroup);
         }
         
         public bool releaseInstrumentLock(TesterClient_Console.InstrumentLockServiceFacadeClient.sharedInstrument instr, string ThreadID, string MachineName) {
