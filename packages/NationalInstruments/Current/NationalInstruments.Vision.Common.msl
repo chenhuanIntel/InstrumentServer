@@ -1,0 +1,25 @@
+﻿<?xml version="1.0"?>
+<DotNETComponent xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
+  <ToolBoxPriority>3</ToolBoxPriority>
+  <Visible>true</Visible>
+  <SupportedProjectTypes>
+    <string>WindowsFormsApplication2008</string> 
+  </SupportedProjectTypes>
+  <SelectedByDefault>true</SelectedByDefault>
+  <Title>Vision Common Class Library</Title>
+  <Description>Contains the Vision common functionality, including the ImageViewer.</Description>
+  <Name2008>NationalInstruments.Vision.Common</Name2008>
+  <Licensed>false</Licensed>
+  <Dependencies>
+    <DotNETAssembly>
+      <Name>NationalInstruments.Common</Name>
+    </DotNETAssembly>
+  </Dependencies>
+  <Namespaces>
+    <string>NationalInstruments.Vision</string>
+    <string>NationalInstruments.Vision.WindowsForms</string>
+  </Namespaces>
+  <ToolBoxItems>
+    <string>NationalInstruments.Vision.WindowsForms.ImageViewer</string>
+  </ToolBoxItems>
+</DotNETComponent>

@@ -1,0 +1,202 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<xs:schema xmlns:tns="http://schemas.datacontract.org/2004/07/InstrumentsLib.Tools.Instruments.Oscilloscope" elementFormDefault="qualified" targetNamespace="http://schemas.datacontract.org/2004/07/InstrumentsLib.Tools.Instruments.Oscilloscope" xmlns:xs="http://www.w3.org/2001/XMLSchema">
+  <xs:import namespace="http://schemas.microsoft.com/2003/10/Serialization/Arrays" />
+  <xs:import namespace="http://schemas.datacontract.org/2004/07/InstrumentsLib.Tools.Core" />
+  <xs:complexType name="ScopeConfig">
+    <xs:complexContent mixed="false">
+      <xs:extension xmlns:q1="http://schemas.datacontract.org/2004/07/InstrumentsLib.Tools.Core" base="q1:InstrumentXConfig">
+        <xs:sequence>
+          <xs:element minOccurs="0" name="CompressLevel" type="xs:long" />
+          <xs:element xmlns:q2="http://schemas.microsoft.com/2003/10/Serialization/Arrays" minOccurs="0" name="OERFactor" nillable="true" type="q2:ArrayOfstring" />
+          <xs:element minOccurs="0" name="OffsetTDECQMinLimit" type="xs:double" />
+          <xs:element minOccurs="0" name="TDECQOffset" type="xs:double" />
+          <xs:element xmlns:q3="http://schemas.microsoft.com/2003/10/Serialization/Arrays" minOccurs="0" name="arChannels" nillable="true" type="q3:ArrayOfstring" />
+          <xs:element minOccurs="0" name="arComputeHost" nillable="true" type="tns:ArrayOfDCA_A86100C_Flex400G_V3.ComputeInstrumentBase" />
+          <xs:element minOccurs="0" name="arDCAMHost" nillable="true" type="tns:ArrayOfDCA_A86100C_Flex400G_V3.ComputeInstrumentBase" />
+          <xs:element minOccurs="0" name="bAutoScaleScreenShot" type="xs:boolean" />
+          <xs:element minOccurs="0" name="bAutoScaleScreenShotWhenException" type="xs:boolean" />
+          <xs:element minOccurs="0" name="bCheckBusyAfterPatternLock" type="xs:boolean" />
+          <xs:element minOccurs="0" name="bDCAMWithDedicatedPC" type="xs:boolean" />
+          <xs:element minOccurs="0" name="bDebugRelaunchDCA" type="xs:boolean" />
+          <xs:element minOccurs="0" name="bRelaunchDCAWhenException" type="xs:boolean" />
+          <xs:element minOccurs="0" name="bShrinkEyeFile" type="xs:boolean" />
+          <xs:element minOccurs="0" name="bTakeScreenShot" type="xs:boolean" />
+          <xs:element minOccurs="0" name="bUseOOMACalcMethod" type="xs:boolean" />
+          <xs:element minOccurs="0" name="dImageSaveWaitTime" type="xs:double" />
+          <xs:element minOccurs="0" name="dMaxBusyTimeoutSecs" type="xs:double" />
+          <xs:element minOccurs="0" name="dMaxCRULockTimeoutSecs" type="xs:double" />
+          <xs:element minOccurs="0" name="dMaxLoadSetupTimeoutSecs" type="xs:double" />
+          <xs:element minOccurs="0" name="iMaxCRULockRetry" type="xs:double" />
+          <xs:element minOccurs="0" name="iRelaunchDCATimeOut_min" type="xs:int" />
+          <xs:element xmlns:q4="http://schemas.microsoft.com/2003/10/Serialization/Arrays" minOccurs="0" name="mapDCASettings" nillable="true" type="q4:ArrayOfKeyValueOfstringDCASettingsMP7k2GGi" />
+          <xs:element xmlns:q5="http://schemas.microsoft.com/2003/10/Serialization/Arrays" minOccurs="0" name="mapOverridenMeasCmds" nillable="true" type="q5:ArrayOfKeyValueOfstringMeasurementCmdobCLDZhF" />
+          <xs:element xmlns:q6="http://schemas.microsoft.com/2003/10/Serialization/Arrays" minOccurs="0" name="mapTDECQPiecewiseLinearFit" nillable="true" type="q6:ArrayOfKeyValueOfdoubledouble" />
+          <xs:element minOccurs="0" name="nRetryAutoScale" type="xs:int" />
+          <xs:element minOccurs="0" name="sRFSwitchNameForTrigger" nillable="true" type="xs:string" />
+          <xs:element minOccurs="0" name="strDCA_ID" nillable="true" type="xs:string" />
+        </xs:sequence>
+      </xs:extension>
+    </xs:complexContent>
+  </xs:complexType>
+  <xs:element name="ScopeConfig" nillable="true" type="tns:ScopeConfig" />
+  <xs:complexType name="ArrayOfDCA_A86100C_Flex400G_V3.ComputeInstrumentBase">
+    <xs:sequence>
+      <xs:element minOccurs="0" maxOccurs="unbounded" name="DCA_A86100C_Flex400G_V3.ComputeInstrumentBase" nillable="true" type="tns:DCA_A86100C_Flex400G_V3.ComputeInstrumentBase" />
+    </xs:sequence>
+  </xs:complexType>
+  <xs:element name="ArrayOfDCA_A86100C_Flex400G_V3.ComputeInstrumentBase" nillable="true" type="tns:ArrayOfDCA_A86100C_Flex400G_V3.ComputeInstrumentBase" />
+  <xs:complexType name="DCA_A86100C_Flex400G_V3.ComputeInstrumentBase">
+    <xs:sequence>
+      <xs:element minOccurs="0" name="HostName" nillable="true" type="xs:string" />
+    </xs:sequence>
+  </xs:complexType>
+  <xs:element name="DCA_A86100C_Flex400G_V3.ComputeInstrumentBase" nillable="true" type="tns:DCA_A86100C_Flex400G_V3.ComputeInstrumentBase" />
+  <xs:complexType name="DCASettings">
+    <xs:sequence>
+      <xs:element minOccurs="0" name="ACQSmoothAveNumWaveform" type="xs:int" />
+      <xs:element minOccurs="0" name="AmplitudeMeasUnitType" nillable="true" type="xs:string" />
+      <xs:element minOccurs="0" name="CRUsetup" nillable="true" type="tns:CRUSetupcmd" />
+      <xs:element minOccurs="0" name="EyeAcqWavLimVal" type="xs:int" />
+      <xs:element minOccurs="0" name="EyeAvg" type="xs:int" />
+      <xs:element minOccurs="0" name="EyePatLen" type="xs:int" />
+      <xs:element minOccurs="0" name="EyePointsPerWaveform" nillable="true" type="xs:string" />
+      <xs:element minOccurs="0" name="JittAcqLimType" nillable="true" type="xs:string" />
+      <xs:element minOccurs="0" name="JittAcqLimVal" nillable="true" type="xs:string" />
+      <xs:element minOccurs="0" name="JittAvg" nillable="true" type="xs:string" />
+      <xs:element minOccurs="0" name="JittPatLen" nillable="true" type="xs:string" />
+      <xs:element minOccurs="0" name="JittPatType" nillable="true" type="xs:string" />
+      <xs:element minOccurs="0" name="JitterMeasUnitType" nillable="true" type="xs:string" />
+      <xs:element minOccurs="0" name="MaskMarginHitsLimit" type="xs:int" />
+      <xs:element minOccurs="0" name="MaskMarginValue" type="xs:int" />
+      <xs:element minOccurs="0" name="OscAcqLimType" nillable="true" type="xs:string" />
+      <xs:element minOccurs="0" name="OscAcqLimVal" nillable="true" type="xs:string" />
+      <xs:element minOccurs="0" name="PAM4AcqPatLimVal" type="xs:int" />
+      <xs:element minOccurs="0" name="PAM4setup" nillable="true" type="tns:PAMSetupcmd" />
+      <xs:element minOccurs="0" name="PowerUnitType" nillable="true" type="xs:string" />
+      <xs:element minOccurs="0" name="RINoiseType" nillable="true" type="xs:string" />
+      <xs:element minOccurs="0" name="RINoiseUnits" nillable="true" type="xs:string" />
+      <xs:element minOccurs="0" name="TEQsetup" nillable="true" type="tns:TEQualizerSetupcmd" />
+      <xs:element minOccurs="0" name="bACQSmoothAverage" type="xs:boolean" />
+      <xs:element minOccurs="0" name="bEnableMask" type="xs:boolean" />
+      <xs:element minOccurs="0" name="bSetMeasUnitsType" type="xs:boolean" />
+      <xs:element minOccurs="0" name="bSetupParam" type="xs:boolean" />
+      <xs:element minOccurs="0" name="bTEQualizer" type="xs:boolean" />
+      <xs:element minOccurs="0" name="dCaptureEyePause_s" type="xs:double" />
+      <xs:element minOccurs="0" name="sDCAConfigFile" nillable="true" type="xs:string" />
+      <xs:element minOccurs="0" name="sDCA_MaskFileNameWithPath" nillable="true" type="xs:string" />
+      <xs:element minOccurs="0" name="sDSASetupFile" nillable="true" type="xs:string" />
+      <xs:element minOccurs="0" name="sDisplayMode" nillable="true" type="xs:string" />
+    </xs:sequence>
+  </xs:complexType>
+  <xs:element name="DCASettings" nillable="true" type="tns:DCASettings" />
+  <xs:complexType name="CRUSetupcmd">
+    <xs:complexContent mixed="false">
+      <xs:extension base="tns:DCASetupcmd">
+        <xs:sequence>
+          <xs:element minOccurs="0" name="CRATE" nillable="true" type="xs:string" />
+          <xs:element minOccurs="0" name="EHGain" nillable="true" type="xs:string" />
+          <xs:element minOccurs="0" name="ODRatio" nillable="true" type="xs:string" />
+          <xs:element minOccurs="0" name="ODRatioAUTO" nillable="true" type="xs:string" />
+          <xs:element minOccurs="0" name="Preset" nillable="true" type="xs:string" />
+          <xs:element minOccurs="0" name="SLOT" nillable="true" type="xs:string" />
+          <xs:element minOccurs="0" name="SOURCE" nillable="true" type="xs:string" />
+          <xs:element minOccurs="0" name="dMaxBusyTimeoutSecs" type="xs:double" />
+        </xs:sequence>
+      </xs:extension>
+    </xs:complexContent>
+  </xs:complexType>
+  <xs:element name="CRUSetupcmd" nillable="true" type="tns:CRUSetupcmd" />
+  <xs:complexType name="DCASetupcmd">
+    <xs:complexContent mixed="false">
+      <xs:extension xmlns:q7="http://schemas.datacontract.org/2004/07/InstrumentsLib.Tools.Core" base="q7:MeasurementCmd">
+        <xs:sequence>
+          <xs:element xmlns:q8="http://schemas.microsoft.com/2003/10/Serialization/Arrays" minOccurs="0" name="arCustomCmds" nillable="true" type="q8:ArrayOfstring" />
+        </xs:sequence>
+      </xs:extension>
+    </xs:complexContent>
+  </xs:complexType>
+  <xs:element name="DCASetupcmd" nillable="true" type="tns:DCASetupcmd" />
+  <xs:complexType name="PAMSetupcmd">
+    <xs:complexContent mixed="false">
+      <xs:extension base="tns:DCASetupcmd">
+        <xs:sequence>
+          <xs:element minOccurs="0" name="AMPL_UNITs" nillable="true" type="xs:string" />
+          <xs:element minOccurs="0" name="EYE_ELMethod" nillable="true" type="xs:string" />
+          <xs:element minOccurs="0" name="EYE_ESTiming" nillable="true" type="xs:string" />
+          <xs:element minOccurs="0" name="EYE_PPERcent" nillable="true" type="xs:string" />
+          <xs:element minOccurs="0" name="EYE_TIME_LTDefinition" nillable="true" type="xs:string" />
+          <xs:element minOccurs="0" name="EYE_TIME_UNITs" nillable="true" type="xs:string" />
+          <xs:element minOccurs="0" name="PATTernsLimit" nillable="true" type="xs:string" />
+          <xs:element minOccurs="0" name="TDEQ_HWIDth" nillable="true" type="xs:string" />
+          <xs:element minOccurs="0" name="TDEQ_OHSeparation" nillable="true" type="xs:string" />
+          <xs:element minOccurs="0" name="TDEQ_OHTHresholds" nillable="true" type="xs:string" />
+          <xs:element minOccurs="0" name="TDEQ_OHTime" nillable="true" type="xs:string" />
+          <xs:element minOccurs="0" name="TDEQ_PRESets" nillable="true" type="xs:string" />
+          <xs:element minOccurs="0" name="TDEQ_TALimit" nillable="true" type="xs:string" />
+          <xs:element minOccurs="0" name="TDEQ_TSER" nillable="true" type="xs:string" />
+        </xs:sequence>
+      </xs:extension>
+    </xs:complexContent>
+  </xs:complexType>
+  <xs:element name="PAMSetupcmd" nillable="true" type="tns:PAMSetupcmd" />
+  <xs:complexType name="TEQualizerSetupcmd">
+    <xs:complexContent mixed="false">
+      <xs:extension base="tns:DCASetupcmd">
+        <xs:sequence>
+          <xs:element minOccurs="0" name="AverageCount" type="xs:int" />
+          <xs:element xmlns:q9="http://schemas.microsoft.com/2003/10/Serialization/Arrays" minOccurs="0" name="DCAMeasureChannels" nillable="true" type="q9:ArrayOfstring" />
+          <xs:element minOccurs="0" name="EyeLinearityDefinition" type="tns:EnumEyeLinearityDefinition" />
+          <xs:element minOccurs="0" name="EyeWidthOpeningDefinition" type="tns:EnumEyeWidthOpeningDefinition" />
+          <xs:element minOccurs="0" name="EyeWidthOpeningProbability" type="xs:double" />
+          <xs:element minOccurs="0" name="IterativeOptimization" type="tns:EnumDCAOptions" />
+          <xs:element minOccurs="0" name="MaxPrecursors" type="xs:int" />
+          <xs:element minOccurs="0" name="NumOfTaps" type="xs:int" />
+          <xs:element minOccurs="0" name="TDEQThresholdOptimization" type="tns:EnumDCAOptions" />
+          <xs:element minOccurs="0" name="TapsPerUI" type="xs:int" />
+          <xs:element minOccurs="0" name="TdecqConfigurationPreset" type="tns:EnumTEQualizerPreset" />
+          <xs:element minOccurs="0" name="TdecqEqualizerPreset" type="tns:EnumTEQualizerPreset" />
+          <xs:element minOccurs="0" name="bOffloadCompute" type="xs:boolean" />
+          <xs:element minOccurs="0" name="bSeperateAcqTEQ" type="xs:boolean" />
+          <xs:element minOccurs="0" name="nChannelUsed" type="xs:int" />
+        </xs:sequence>
+      </xs:extension>
+    </xs:complexContent>
+  </xs:complexType>
+  <xs:element name="TEQualizerSetupcmd" nillable="true" type="tns:TEQualizerSetupcmd" />
+  <xs:simpleType name="EnumEyeLinearityDefinition">
+    <xs:restriction base="xs:string">
+      <xs:enumeration value="RLMC94" />
+      <xs:enumeration value="RLMA120" />
+      <xs:enumeration value="EYE" />
+    </xs:restriction>
+  </xs:simpleType>
+  <xs:element name="EnumEyeLinearityDefinition" nillable="true" type="tns:EnumEyeLinearityDefinition" />
+  <xs:simpleType name="EnumEyeWidthOpeningDefinition">
+    <xs:restriction base="xs:string">
+      <xs:enumeration value="ZHITs" />
+      <xs:enumeration value="PROBability" />
+    </xs:restriction>
+  </xs:simpleType>
+  <xs:element name="EnumEyeWidthOpeningDefinition" nillable="true" type="tns:EnumEyeWidthOpeningDefinition" />
+  <xs:simpleType name="EnumDCAOptions">
+    <xs:restriction base="xs:string">
+      <xs:enumeration value="Default" />
+      <xs:enumeration value="OFF" />
+      <xs:enumeration value="ON" />
+    </xs:restriction>
+  </xs:simpleType>
+  <xs:element name="EnumDCAOptions" nillable="true" type="tns:EnumDCAOptions" />
+  <xs:simpleType name="EnumTEQualizerPreset">
+    <xs:restriction base="xs:string">
+      <xs:enumeration value="FCPI05" />
+      <xs:enumeration value="FCPI13" />
+      <xs:enumeration value="BS22" />
+      <xs:enumeration value="BS32" />
+      <xs:enumeration value="BSFinal" />
+      <xs:enumeration value="CD30" />
+      <xs:enumeration value="CD" />
+      <xs:enumeration value="CDFinal" />
+    </xs:restriction>
+  </xs:simpleType>
+  <xs:element name="EnumTEQualizerPreset" nillable="true" type="tns:EnumTEQualizerPreset" />
+</xs:schema>

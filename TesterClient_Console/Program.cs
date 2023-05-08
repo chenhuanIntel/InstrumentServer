@@ -32,8 +32,9 @@ namespace TesterClient_Consoles
             string sThreadID = Process.GetCurrentProcess().Id.ToString();
             string sMachineName = Environment.MachineName;
             ConsoleKey key;
-            Uri baseAddress = new Uri("net.tcp://localhost:8001/");
-           // Uri baseAddress = new Uri("http://172.25.93.250:8080/");
+            //Uri baseAddress = new Uri("net.tcp://localhost:8001/");
+            //Uri baseAddress = new Uri("http://172.25.93.250:8080/");
+            Uri baseAddress = new Uri("net.tcp://172.25.93.250:8001/");
 
             try
             {
@@ -59,6 +60,12 @@ namespace TesterClient_Consoles
                     Console.WriteLine($"Machine={sMachineName}, Thread={sThreadID} AddAndDelay({a}, {b}) with delay = {delay.ToString()} seconds.");
                     sum = _client.AddAndDelay(a, b, delay, sThreadID, sMachineName);
                     Console.WriteLine($"Machine={sMachineName}, Thread={sThreadID} AddAndDelay({a}, {b}) = {sum.ToString()} with delay = {delay.ToString()} seconds.\n");
+
+                    WCFProtocolXConfig WCFProtocol = null;
+                    WCFScopeConfig WCFDCA = null;
+                    int nChannelInEachMeasurementGroup = 2;
+                    ret = _client.getInstrumentLockWithReturn(sharedInstrument.DCA, sThreadID, sMachineName, ref WCFDCA, ref WCFProtocol, nChannelInEachMeasurementGroup);
+                    Console.WriteLine($"Machine={sMachineName}, Thread={sThreadID} getInstrumentLock(sharedInstrument.DCA)");
 
                     ret = _client.getInstrumentLock(sharedInstrument.DCA, sThreadID, sMachineName);
                     Console.WriteLine($"Machine={sMachineName}, Thread={sThreadID} getInstrumentLock(sharedInstrument.DCA)");

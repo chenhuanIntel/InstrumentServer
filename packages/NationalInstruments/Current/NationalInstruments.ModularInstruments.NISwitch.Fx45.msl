@@ -1,0 +1,27 @@
+<?xml version="1.0"?>
+<DotNETComponent xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
+  <ToolBoxPriority>1</ToolBoxPriority>
+  <Visible>true</Visible>
+  <SupportedProjectTypes>
+    <string>CppCLI2012</string>
+    <string>WindowsFormsApplication2012</string>
+  </SupportedProjectTypes>
+  <SelectedByDefault>false</SelectedByDefault>
+  <Title>Measurement Studio Hardware Class Libraries/NI-SWITCH Library</Title>
+  <Description>Contains classes to control and configure NI switch modules using the NI-SWITCH driver.</Description>
+  <Name2012>NationalInstruments.ModularInstruments.NISwitch.Fx45</Name2012>
+  <Licensed>false</Licensed>
+  <Dependencies>
+    <DotNETAssembly>
+      <Name>NationalInstruments.ModularInstruments.Common</Name>
+    </DotNETAssembly>
+  </Dependencies>
+  <ThirdPartyDependencies>
+    <string>Ivi.Driver</string>
+    <string>Ivi.Swtch</string>
+  </ThirdPartyDependencies>
+  <Namespaces>
+    <string>NationalInstruments.ModularInstruments.NISwitch</string>
+  </Namespaces>  
+</DotNETComponent>
+

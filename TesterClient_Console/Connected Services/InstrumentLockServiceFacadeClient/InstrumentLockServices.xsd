@@ -1,5 +1,7 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
 <xs:schema xmlns:tns="http://schemas.datacontract.org/2004/07/InstrumentLockServices" elementFormDefault="qualified" targetNamespace="http://schemas.datacontract.org/2004/07/InstrumentLockServices" xmlns:xs="http://www.w3.org/2001/XMLSchema">
+  <xs:import namespace="http://schemas.microsoft.com/2003/10/Serialization/Arrays" />
+  <xs:import namespace="http://schemas.datacontract.org/2004/07/InstrumentsLib.Tools.Instruments.Oscilloscope" />
   <xs:complexType name="MathFault">
     <xs:sequence>
       <xs:element minOccurs="0" name="Operation" nillable="true" type="xs:string" />
@@ -13,6 +15,48 @@
     </xs:restriction>
   </xs:simpleType>
   <xs:element name="sharedInstrument" nillable="true" type="tns:sharedInstrument" />
+  <xs:complexType name="WCFScopeConfig">
+    <xs:complexContent mixed="false">
+      <xs:extension xmlns:q1="http://schemas.datacontract.org/2004/07/InstrumentsLib.Tools.Instruments.Oscilloscope" base="q1:ScopeConfig">
+        <xs:sequence>
+          <xs:element xmlns:q2="http://schemas.microsoft.com/2003/10/Serialization/Arrays" minOccurs="0" name="mapTestSettings" nillable="true" type="q2:ArrayOfKeyValueOfstringmyTestSettingsX1ZO2INX" />
+        </xs:sequence>
+      </xs:extension>
+    </xs:complexContent>
+  </xs:complexType>
+  <xs:element name="WCFScopeConfig" nillable="true" type="tns:WCFScopeConfig" />
+  <xs:complexType name="myTestSettings">
+    <xs:sequence>
+      <xs:element minOccurs="0" name="test" nillable="true" type="tns:tstCRUSetupcmd" />
+    </xs:sequence>
+  </xs:complexType>
+  <xs:element name="myTestSettings" nillable="true" type="tns:myTestSettings" />
+  <xs:complexType name="tstCRUSetupcmd">
+    <xs:complexContent mixed="false">
+      <xs:extension base="tns:parentCmd">
+        <xs:sequence>
+          <xs:element minOccurs="0" name="Preset" nillable="true" type="xs:string" />
+          <xs:element minOccurs="0" name="SLOT" nillable="true" type="xs:string" />
+          <xs:element minOccurs="0" name="SOURCE" nillable="true" type="xs:string" />
+          <xs:element minOccurs="0" name="dMaxBusyTimeoutSecs" type="xs:double" />
+        </xs:sequence>
+      </xs:extension>
+    </xs:complexContent>
+  </xs:complexType>
+  <xs:element name="tstCRUSetupcmd" nillable="true" type="tns:tstCRUSetupcmd" />
+  <xs:complexType name="parentCmd">
+    <xs:sequence>
+      <xs:element minOccurs="0" name="pPreset" nillable="true" type="xs:string" />
+      <xs:element minOccurs="0" name="pSLOT" nillable="true" type="xs:string" />
+      <xs:element minOccurs="0" name="pSOURCE" nillable="true" type="xs:string" />
+      <xs:element minOccurs="0" name="pdMaxBusyTimeoutSecs" type="xs:double" />
+    </xs:sequence>
+  </xs:complexType>
+  <xs:element name="parentCmd" nillable="true" type="tns:parentCmd" />
+  <xs:complexType name="WCFProtocolXConfig">
+    <xs:sequence />
+  </xs:complexType>
+  <xs:element name="WCFProtocolXConfig" nillable="true" type="tns:WCFProtocolXConfig" />
   <xs:simpleType name="sharedProtocol">
     <xs:restriction base="xs:string">
       <xs:enumeration value="DiCon" />

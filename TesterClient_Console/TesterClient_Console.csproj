@@ -55,7 +55,16 @@
   </ItemGroup>
   <ItemGroup>
     <None Include="App.config" />
+    <None Include="Connected Services\InstrumentLockServiceFacadeClient\Arrays.xsd">
+      <SubType>Designer</SubType>
+    </None>
     <None Include="Connected Services\InstrumentLockServiceFacadeClient\InstrumentLockServices.xsd">
+      <SubType>Designer</SubType>
+    </None>
+    <None Include="Connected Services\InstrumentLockServiceFacadeClient\InstrumentsLib.Tools.Core.xsd">
+      <SubType>Designer</SubType>
+    </None>
+    <None Include="Connected Services\InstrumentLockServiceFacadeClient\InstrumentsLib.Tools.Instruments.Oscilloscope.xsd">
       <SubType>Designer</SubType>
     </None>
     <None Include="Connected Services\InstrumentLockServiceFacadeClient\service.wsdl" />
@@ -63,6 +72,15 @@
       <SubType>Designer</SubType>
     </None>
     <None Include="Connected Services\InstrumentLockServiceFacadeClient\service1.xsd">
+      <SubType>Designer</SubType>
+    </None>
+    <None Include="Connected Services\InstrumentLockServiceFacadeClient\TesterClient_Console.InstrumentLockServiceFacadeClient.WCFProtocolXConfig.datasource">
+      <DependentUpon>Reference.svcmap</DependentUpon>
+    </None>
+    <None Include="Connected Services\InstrumentLockServiceFacadeClient\TesterClient_Console.InstrumentLockServiceFacadeClient.WCFScopeConfig.datasource">
+      <DependentUpon>Reference.svcmap</DependentUpon>
+    </None>
+    <None Include="Connected Services\InstrumentLockServiceFacadeClient\Utility.xsd">
       <SubType>Designer</SubType>
     </None>
   </ItemGroup>
