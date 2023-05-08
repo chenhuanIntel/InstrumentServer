@@ -97,6 +97,7 @@ namespace InstrumentLockServices
         /// </summary>
         [OperationContract]
         void getConnectedInfo();
+
     }
 
     /// <summary>

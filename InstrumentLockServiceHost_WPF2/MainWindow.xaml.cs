@@ -240,6 +240,13 @@ namespace InstrumentLockServiceHosts_WPF2
 
         }
 
+        private static IInstrumentLockServiceFacade _client;
+        private static clientFunctions _clientFct = new clientFunctions();
+        private void ResetDCAQueue()
+        {
+            InstrumentLockService.arDCAQueue.Clear();
+            InstrumentLockService.arDCAQueue = null;
+        }
 
         private void btnReset_Click(object sender, RoutedEventArgs e)
         {
@@ -249,6 +256,9 @@ namespace InstrumentLockServiceHosts_WPF2
             // stop service host (take > 10sec) after closing the window
             _server.Dispose();
 
+            // reset DCAQueue
+            ResetDCAQueue();
+            // re-create server
             CreateServer();
         }
     }

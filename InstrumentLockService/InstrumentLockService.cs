@@ -347,6 +347,19 @@ namespace InstrumentLockServices
     // NOTE: You can use the "Rename" command on the "Refactor" menu to change the class name "Service1" in both code and config file together.
     public class InstrumentLockService : IInstrumentLockService
     {
+        private static List<DCAQueue> _arDCAQueue;
+        public static List<DCAQueue> arDCAQueue
+        {
+            get
+            {
+                return _arDCAQueue;
+            }
+            set
+            {
+                _arDCAQueue = value;
+            }
+        }
+
         // Create a new Mutex. The creating thread does not own the mutex.
         private static Mutex mutexLockAdd = new Mutex();
         private static Mutex mutexLockAddAndDelay = new Mutex();
@@ -745,8 +758,7 @@ namespace InstrumentLockServices
         /// My station config
         /// </summary>
         protected StationHardware _stationInstance;
-        public List<DCAQueue> _arDCAQueue;
-
+        
         /// <summary>
         /// build a queue of all DCAs and their corresponding Protocols in the server station config file
         /// </summary>

@@ -106,6 +106,8 @@ namespace TesterClient_Consoles
                     ret = _client.releaseInstrumentLock(sharedInstrument.DCA, sThreadID, sMachineName);
                     Console.WriteLine($"Machine={sMachineName}, Thread={sThreadID} releaseInstrumentLock(sharedInstrument.DCA)\n");
 
+                    ret = _client.releaseInstrumentLock(sharedInstrument.DCA, sThreadID, sMachineName);
+                    Console.WriteLine($"Machine={sMachineName}, Thread={sThreadID} releaseInstrumentLock(sharedInstrument.DCA)\n");
 
 
                     Console.WriteLine($"Press ENTER to close the console window; other keys to repeat ...........");
