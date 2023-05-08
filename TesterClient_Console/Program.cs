@@ -98,7 +98,7 @@ namespace TesterClient_Consoles
 
                     // doing something with DCA
                     Console.WriteLine($"Machine={sMachineName}, Thread={sThreadID} doing something with DCA");
-                    Thread.Sleep(1 * 10000);
+                    Thread.Sleep(3 * 10000);
 
                     ret = _client.releaseInstrumentLock(sharedInstrument.DCA, sThreadID, sMachineName);
                     Console.WriteLine($"Machine={sMachineName}, Thread={sThreadID} releaseInstrumentLock(sharedInstrument.DCA)");
