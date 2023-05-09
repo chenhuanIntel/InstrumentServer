@@ -47,7 +47,7 @@ namespace InstrumentLockServices
         ///// Such as getIntrumentLock(ATT1)
         ///// </summary>
         [OperationContract]
-        bool getInstrumentLock(sharedInstrument instr, string ThreadID, string MachineName);
+        bool getInstrumentLock(sharedInstrument instr, string ThreadID, string MachineName, int nChannelInEachMeasurementGroup);
 
 
         /// <summary>
@@ -97,6 +97,7 @@ namespace InstrumentLockServices
         /// </summary>
         [OperationContract]
         void getConnectedInfo();
+
     }
 
     /// <summary>
