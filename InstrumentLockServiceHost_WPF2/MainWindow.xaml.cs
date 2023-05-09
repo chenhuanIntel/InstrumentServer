@@ -244,8 +244,8 @@ namespace InstrumentLockServiceHosts_WPF2
         private static clientFunctions _clientFct = new clientFunctions();
         private void ResetDCAQueue()
         {
-            InstrumentLockService.arDCAQueue.Clear();
-            InstrumentLockService.arDCAQueue = null;
+            InstrumentLockService.dictDCAQueue.Clear();
+            InstrumentLockService.dictDCAQueue = null;
         }
 
         private void btnReset_Click(object sender, RoutedEventArgs e)

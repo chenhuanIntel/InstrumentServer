@@ -79,7 +79,7 @@ namespace TesterClient_Consoles
                     ret = _client.getInstrumentLockWithReturn(sharedInstrument.DCA, sThreadID, sMachineName, ref WCFDCA, ref WCFProtocol, nChannelInEachMeasurementGroup);
                     Console.WriteLine($"Machine={sMachineName}, Thread={sThreadID} getInstrumentLock(sharedInstrument.DCA)");
 
-                    ret = _client.getInstrumentLock(sharedInstrument.DCA, sThreadID, sMachineName);
+                    ret = _client.getInstrumentLock(sharedInstrument.DCA, sThreadID, sMachineName, nChannelInEachMeasurementGroup);
                     Console.WriteLine($"Machine={sMachineName}, Thread={sThreadID} getInstrumentLock(sharedInstrument.DCA)");
 
                     ret = _client.getProtocolLock(sharedProtocol.DiCon, sThreadID, sMachineName);
@@ -93,7 +93,7 @@ namespace TesterClient_Consoles
                     Console.WriteLine($"Machine={sMachineName}, Thread={sThreadID} releaseProtocolLock(sharedProtocol.DiCon)\n");
 
                     // nested DCA lock request
-                    ret = _client.getInstrumentLock(sharedInstrument.DCA, sThreadID, sMachineName);
+                    ret = _client.getInstrumentLock(sharedInstrument.DCA, sThreadID, sMachineName, nChannelInEachMeasurementGroup);
                     Console.WriteLine($"Machine={sMachineName}, Thread={sThreadID} getInstrumentLock(sharedInstrument.DCA)");
 
                     // doing something with DCA
