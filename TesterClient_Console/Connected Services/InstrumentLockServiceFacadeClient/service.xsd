@@ -59,6 +59,7 @@
         <xs:element xmlns:q1="http://schemas.datacontract.org/2004/07/InstrumentLockServices" minOccurs="0" name="instr" type="q1:sharedInstrument" />
         <xs:element minOccurs="0" name="ThreadID" nillable="true" type="xs:string" />
         <xs:element minOccurs="0" name="MachineName" nillable="true" type="xs:string" />
+        <xs:element minOccurs="0" name="nChannelInEachMeasurementGroup" type="xs:int" />
       </xs:sequence>
     </xs:complexType>
   </xs:element>

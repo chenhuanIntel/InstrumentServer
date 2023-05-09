@@ -2777,7 +2777,7 @@ namespace TesterClient_Console.InstrumentLockServiceFacadeClient {
         int intDivide(double a, double b, string ThreadID, string MachineName);
         
         [System.ServiceModel.OperationContractAttribute(Action="http://tempuri.org/IInstrumentLockService/getInstrumentLock", ReplyAction="http://tempuri.org/IInstrumentLockService/getInstrumentLockResponse")]
-        bool getInstrumentLock(TesterClient_Console.InstrumentLockServiceFacadeClient.sharedInstrument instr, string ThreadID, string MachineName);
+        bool getInstrumentLock(TesterClient_Console.InstrumentLockServiceFacadeClient.sharedInstrument instr, string ThreadID, string MachineName, int nChannelInEachMeasurementGroup);
         
         [System.ServiceModel.OperationContractAttribute(Action="http://tempuri.org/IInstrumentLockService/getInstrumentLockWithReturn", ReplyAction="http://tempuri.org/IInstrumentLockService/getInstrumentLockWithReturnResponse")]
         bool getInstrumentLockWithReturn(TesterClient_Console.InstrumentLockServiceFacadeClient.sharedInstrument instr, string sThreadID, string sMachineName, ref TesterClient_Console.InstrumentLockServiceFacadeClient.WCFScopeConfig DCA, ref TesterClient_Console.InstrumentLockServiceFacadeClient.WCFProtocolXConfig Protocol, int nChannelInEachMeasurementGroup);
@@ -2834,8 +2834,8 @@ namespace TesterClient_Console.InstrumentLockServiceFacadeClient {
             return base.Channel.intDivide(a, b, ThreadID, MachineName);
         }
         
-        public bool getInstrumentLock(TesterClient_Console.InstrumentLockServiceFacadeClient.sharedInstrument instr, string ThreadID, string MachineName) {
-            return base.Channel.getInstrumentLock(instr, ThreadID, MachineName);
+        public bool getInstrumentLock(TesterClient_Console.InstrumentLockServiceFacadeClient.sharedInstrument instr, string ThreadID, string MachineName, int nChannelInEachMeasurementGroup) {
+            return base.Channel.getInstrumentLock(instr, ThreadID, MachineName, nChannelInEachMeasurementGroup);
         }
         
         public bool getInstrumentLockWithReturn(TesterClient_Console.InstrumentLockServiceFacadeClient.sharedInstrument instr, string sThreadID, string sMachineName, ref TesterClient_Console.InstrumentLockServiceFacadeClient.WCFScopeConfig DCA, ref TesterClient_Console.InstrumentLockServiceFacadeClient.WCFProtocolXConfig Protocol, int nChannelInEachMeasurementGroup) {
