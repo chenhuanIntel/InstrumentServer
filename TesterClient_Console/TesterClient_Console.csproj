@@ -33,6 +33,10 @@
     <WarningLevel>4</WarningLevel>
   </PropertyGroup>
   <ItemGroup>
+    <Reference Include="Newtonsoft.Json, Version=6.0.0.0, Culture=neutral, PublicKeyToken=30ad4fe6b2a6aeed, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\..\sppd_cg_ng_span-span\FG\SPAN\packages\Newtonsoft.Json.6.0.8\lib\net40\Newtonsoft.Json.dll</HintPath>
+    </Reference>
     <Reference Include="System" />
     <Reference Include="System.Core" />
     <Reference Include="System.Runtime.Serialization" />
@@ -102,6 +106,14 @@
     <ProjectReference Include="..\InstrumentLockService\InstrumentLockService.csproj">
       <Project>{e22bfb4c-2769-45a1-ac10-76cf2e8a4ad6}</Project>
       <Name>InstrumentLockService</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\InstrumentsLib\InstrumentsLib.csproj">
+      <Project>{99d95b33-9f62-40e8-940f-f75282af652a}</Project>
+      <Name>InstrumentsLib</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\Utility\UtilityLib.csproj">
+      <Project>{1a142215-f759-4999-91e9-7560f8eac5aa}</Project>
+      <Name>UtilityLib</Name>
     </ProjectReference>
   </ItemGroup>
   <ItemGroup>

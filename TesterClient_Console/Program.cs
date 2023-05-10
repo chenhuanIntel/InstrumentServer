@@ -2,12 +2,14 @@
 using System.Collections.Generic;
 using System.Diagnostics;
 using System.Linq;
+using System.Security.Cryptography;
 using System.ServiceModel;
 using System.Text;
 using System.Threading;
 using System.Threading.Tasks;
 using InstrumentLockServices;
 using NetFwTypeLib; // Located in FirewallAPI.dll
+using InstrumentsLib.Tools.Instruments.Oscilloscope;
 
 // namespace name uses plural
 namespace TesterClient_Consoles
@@ -43,7 +45,7 @@ namespace TesterClient_Consoles
             bool ret = false;
             string sThreadID = getThreadID();
             string sMachineName = Environment.MachineName;
-            ConsoleKey key;
+            ConsoleKey key = ConsoleKey.F1;
             //Uri baseAddress = new Uri("net.tcp://localhost:8001/");
             //Uri baseAddress = new Uri("http://172.25.93.250:8080/");
             Uri baseAddress = new Uri("net.tcp://172.25.93.250:8001/");
@@ -77,20 +79,20 @@ namespace TesterClient_Consoles
                     WCFScopeConfig WCFDCA = null;
                     int nChannelInEachMeasurementGroup = 2;
                     ret = _client.getInstrumentLockWithReturn(sharedInstrument.DCA, sThreadID, sMachineName, ref WCFDCA, ref WCFProtocol, nChannelInEachMeasurementGroup);
-                    Console.WriteLine($"Machine={sMachineName}, Thread={sThreadID} getInstrumentLock(sharedInstrument.DCA)");
+                    Console.WriteLine($"Machine={sMachineName}, Thread={sThreadID} getInstrumentLockWithReturn gets {WCFDCA.strName}");
 
                     ret = _client.getInstrumentLock(sharedInstrument.DCA, sThreadID, sMachineName, nChannelInEachMeasurementGroup);
-                    Console.WriteLine($"Machine={sMachineName}, Thread={sThreadID} getInstrumentLock(sharedInstrument.DCA)");
+                    Console.WriteLine($"Machine={sMachineName}, Thread={sThreadID} getInstrumentLock");
 
                     ret = _client.getProtocolLock(sharedProtocol.DiCon, sThreadID, sMachineName);
-                    Console.WriteLine($"Machine={sMachineName}, Thread={sThreadID} getProtocolLock(sharedProtocol.DiCon)");
+                    Console.WriteLine($"Machine={sMachineName}, Thread={sThreadID} getProtocolLock");
 
                     // doing something with DiCon
                     Console.WriteLine($"Machine={sMachineName}, Thread={sThreadID} doing something with DiCon");
                     Thread.Sleep(1000);
 
                     ret = _client.releaseProtocolLock(sharedProtocol.DiCon, sThreadID, sMachineName);
-                    Console.WriteLine($"Machine={sMachineName}, Thread={sThreadID} releaseProtocolLock(sharedProtocol.DiCon)\n");
+                    Console.WriteLine($"Machine={sMachineName}, Thread={sThreadID} releaseProtocolLock(sharedProtocol.DiCon)");
 
                     // nested DCA lock request
                     ret = _client.getInstrumentLock(sharedInstrument.DCA, sThreadID, sMachineName, nChannelInEachMeasurementGroup);
@@ -104,14 +106,14 @@ namespace TesterClient_Consoles
                     Console.WriteLine($"Machine={sMachineName}, Thread={sThreadID} releaseInstrumentLock(sharedInstrument.DCA)");
 
                     ret = _client.releaseInstrumentLock(sharedInstrument.DCA, sThreadID, sMachineName);
-                    Console.WriteLine($"Machine={sMachineName}, Thread={sThreadID} releaseInstrumentLock(sharedInstrument.DCA)\n");
+                    Console.WriteLine($"Machine={sMachineName}, Thread={sThreadID} releaseInstrumentLock(sharedInstrument.DCA)");
 
                     ret = _client.releaseInstrumentLock(sharedInstrument.DCA, sThreadID, sMachineName);
-                    Console.WriteLine($"Machine={sMachineName}, Thread={sThreadID} releaseInstrumentLock(sharedInstrument.DCA)\n");
+                    Console.WriteLine($"Machine={sMachineName}, Thread={sThreadID} releaseInstrumentLock(sharedInstrument.DCA)");
 
 
                     Console.WriteLine($"Press ENTER to close the console window; other keys to repeat ...........");
-                    key = Console.ReadKey().Key;
+                    //key = Console.ReadKey().Key;
                 } while (key != ConsoleKey.Enter);
             }
             catch (TimeoutException timeProblem)

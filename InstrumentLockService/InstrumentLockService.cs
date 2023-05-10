@@ -514,6 +514,8 @@ namespace InstrumentLockServices
         ///// </summary>
         public bool getInstrumentLock(sharedInstrument instr, string sThreadID, string sMachineName, int nChannelInEachMeasurementGroup)
         {
+            Console.WriteLine($"Thread {sThreadID} enters getInstrumentLock");
+
             if (_dictDCAQueue==null)
                 buildDCAandProtocolQueue();
 
@@ -547,9 +549,14 @@ namespace InstrumentLockServices
                     dca.ownerSemaphoreDCA.nestedCount++;
                     dca.ownerSemaphoreDCA.sThreadID = sThreadID;
                     dca.ownerSemaphoreDCA.sMachineName = sMachineName;
+                    clog.Log($"Thread {sThreadID} already owned a semaphore of DCA {dca.DCA.strName}");
+                    Console.WriteLine($"Thread {sThreadID} already owned a semaphore of DCA {dca.DCA.strName}");
                 }
                 else
                 {
+                    clog.Log($"Thread {sThreadID} semaphoreDCA.WaitOne()");
+                    Console.WriteLine($"Thread {sThreadID} semaphoreDCA.WaitOne()");
+
                     // if not a semaphore owner, WaitOne() which blocks the current thread until the current WaitHandle receives a signal.
                     _dictDCAQueue[nChannelInEachMeasurementGroup].semaphoreDCA.WaitOne();
 
@@ -565,6 +572,8 @@ namespace InstrumentLockServices
                             dca.ownerSemaphoreDCA.sThreadID = sThreadID;
                             dca.ownerSemaphoreDCA.sMachineName = sMachineName;
                             bOwnSemaphore = true;
+                            clog.Log($"Thread {sThreadID} getting a semaphore of DCA {dca.DCA.strName}");
+                            Console.WriteLine($"Thread {sThreadID} getting a semaphore of DCA {dca.DCA.strName}");
                             break;
                         }
                         if (i == _dictDCAQueue[nChannelInEachMeasurementGroup].lstDCAQueueElement.Count - 1) // no DCA is available, impossibleex
@@ -574,7 +583,7 @@ namespace InstrumentLockServices
                     }                 
                 }
                 // then grant the InstrumentLock
-                Console.WriteLine("InstrumentLockService.getInstrumentLock");
+                Console.WriteLine($"Thread {sThreadID} InstrumentLockService.getInstrumentLock");
                 sService = "InstrumentLockService.getInstrumentLock";
                 ret = true;
 
@@ -583,6 +592,8 @@ namespace InstrumentLockServices
                 var value = new ClientRequestValue(dInputA: 0, dInputB: 0, delayInSec: 0, dResult: 0, sService: sService, sThreadID: sThreadID, sMachineName: sMachineName, ServiceStart: ServiceStart, ServiceFinish: ServiceFinish);
                 // each WCF service fires the event EventFromClient with the values from WCF client
                 EventFromClient?.Invoke(this, new CustomEventArgs(value));
+
+                Console.WriteLine($"Thread {sThreadID} exits getInstrumentLock");
             }
             catch (Exception ex)
             {
@@ -600,6 +611,8 @@ namespace InstrumentLockServices
         /// </summary>
         public bool getInstrumentLockWithReturn(sharedInstrument instr, string sThreadID, string sMachineName, ref WCFScopeConfig DCA, ref WCFProtocolXConfig Protocol, int nChannelInEachMeasurementGroup)
         {
+            Console.WriteLine($"Thread {sThreadID} enters getInstrumentLockWithReturn");
+
             if (_dictDCAQueue == null)
                 buildDCAandProtocolQueue();
 
@@ -621,8 +634,8 @@ namespace InstrumentLockServices
                         //Get the DCA and its protocol
                         DCA = dca.DCA;
                         Protocol = dca.Protocol;
-                        clog.Log($"Thread {sThreadID} already owned a semaphore");
-                        Console.WriteLine($"Thread {sThreadID} already owned a semaphore");
+                        clog.Log($"Thread {sThreadID} already owned a semaphore of DCA {dca.DCA.strName}");
+                        Console.WriteLine($"Thread {sThreadID} already owned a semaphore of DCA {dca.DCA.strName}");
                         break;
                     }
                 }
@@ -638,11 +651,14 @@ namespace InstrumentLockServices
                     dca.ownerSemaphoreDCA.nestedCount++;
                     dca.ownerSemaphoreDCA.sThreadID = sThreadID;
                     dca.ownerSemaphoreDCA.sMachineName = sMachineName;
-                    clog.Log($"Thread {sThreadID} increases nestedCount");
-                    Console.WriteLine($"Thread {sThreadID} increases nestedCount");
+                    clog.Log($"Thread {sThreadID} increases nestedCount of DCA {dca.DCA.strName}");
+                    Console.WriteLine($"Thread {sThreadID} increases nestedCount of DCA {dca.DCA.strName}");
                 }
                 else
                 {
+                    clog.Log($"Thread {sThreadID} semaphoreDCA.WaitOne()");
+                    Console.WriteLine($"Thread {sThreadID} semaphoreDCA.WaitOne()");
+
                     // if not a semaphore owner, WaitOne() which blocks the current thread until the current WaitHandle receives a signal.
                     _dictDCAQueue[nChannelInEachMeasurementGroup].semaphoreDCA.WaitOne();
 
@@ -661,19 +677,19 @@ namespace InstrumentLockServices
                             //Get the DCA and its protocol
                             DCA = dca.DCA;
                             Protocol = dca.Protocol;
-                            clog.Log($"Thread {sThreadID} claiming a semaphore");
-                            Console.WriteLine($"Thread {sThreadID} claiming a semaphore");
+                            clog.Log($"Thread {sThreadID} claiming a semaphore of DCA {dca.DCA.strName}");
+                            Console.WriteLine($"Thread {sThreadID} claiming a semaphore of DCA {dca.DCA.strName}");
                             break;
                         }
                         if (i == _dictDCAQueue[nChannelInEachMeasurementGroup].lstDCAQueueElement.Count - 1) // no DCA is available, impossibleex
                         {
-                            throw new Exception("No DCA available, even got a semaphore");
+                            throw new Exception($"Thread {sThreadID} No DCA available, even got a semaphore");
                         }
                     }
                 }
 
                 // then grant the InstrumentLock
-                Console.WriteLine("InstrumentLockService.getInstrumentLockWithReturn");
+                Console.WriteLine($"Thread {sThreadID} InstrumentLockService.getInstrumentLockWithReturn");
                 sService = "InstrumentLockService.getInstrumentLockWithReturn";
                 ret = true;
 
@@ -682,6 +698,8 @@ namespace InstrumentLockServices
                 var value = new ClientRequestValue(dInputA: 0, dInputB: 0, delayInSec: 0, dResult: 0, sService: sService, sThreadID: sThreadID, sMachineName: sMachineName, ServiceStart: ServiceStart, ServiceFinish: ServiceFinish);
                 // each WCF service fires the event EventFromClient with the values from WCF client
                 EventFromClient?.Invoke(this, new CustomEventArgs(value));
+
+                Console.WriteLine($"Thread {sThreadID} exits getInstrumentLockWithReturn");
             }
             catch (Exception ex)
             {
@@ -695,6 +713,7 @@ namespace InstrumentLockServices
 
         public bool releaseInstrumentLock(sharedInstrument instr, string sThreadID, string sMachineName)
         {
+            Console.WriteLine($"Thread {sThreadID} enters releaseInstrumentLock");
             bool ret = false;
             DateTime ServiceStart = DateTime.Now;
             DateTime ServiceFinish = new DateTime(1, 1, 1);
@@ -725,6 +744,7 @@ namespace InstrumentLockServices
                 }
                 // now found the dca owned by the tester client, so first to descrease nestedCount
                 dca.ownerSemaphoreDCA.nestedCount--;
+                Console.WriteLine($"Thread {sThreadID} decrease nested semaphore count");
 
                 // if nestedCount==0, then reset the ownership to null
                 // and release semaphore
@@ -734,10 +754,11 @@ namespace InstrumentLockServices
                     dca.ownerSemaphoreDCA.sThreadID = null;
                     dca.ownerSemaphoreDCA.sMachineName = null;
                     // release one semaphore of the entry
+                    Console.WriteLine($"Thread {sThreadID} releasing semaphore");
                     queue.semaphoreDCA.Release();
                 }            
 
-                Console.WriteLine("InstrumentLockService.releaseInstrumentLock");
+                Console.WriteLine($"Thread {sThreadID} InstrumentLockService.releaseInstrumentLock");
                 sService = "InstrumentLockService.releaseInstrumentLock";
                 ret = true;
 
@@ -754,6 +775,7 @@ namespace InstrumentLockServices
                 Console.WriteLine(ex.Message);
             }
 
+            Console.WriteLine($"Thread {sThreadID} exits releaseInstrumentLock");
             return ret;
         }
 
@@ -820,6 +842,7 @@ namespace InstrumentLockServices
         /// </summary>
         public bool getProtocolLock(sharedProtocol protocol, string sThreadID, string sMachineName)
         {
+            Console.WriteLine($"Thread {sThreadID} enters getProtocolLock");
             bool ret = false;
             DateTime ServiceStart = DateTime.Now;
             DateTime ServiceFinish = new DateTime(1, 1, 1);
@@ -839,7 +862,7 @@ namespace InstrumentLockServices
                 ownerSemaphoreDiCon.sThreadID = sThreadID;
                 ownerSemaphoreDiCon.sMachineName = sMachineName;
                 // then grant the InstrumentLock
-                Console.WriteLine("InstrumentLockService.getProtocolLock");
+                Console.WriteLine($"Thread {sThreadID} InstrumentLockService.getProtocolLock");
                 sService = "InstrumentLockService.getProtocolLock";
                 ret = true;
 
@@ -855,70 +878,14 @@ namespace InstrumentLockServices
                 // Logging
                 Console.WriteLine(ex.Message);
             }
-
+            Console.WriteLine($"Thread {sThreadID} exits getProtocolLock");
             return ret;
         }
 
-        /// <summary>
-        /// getProtocolLock() of a mutex
-        /// Such as getProtocolLock(Dicon1)
-        /// Mutex of Dicon1 is shared by PM1, SW1 and ATT1
-        /// Because the DiCon box contains 3 different functional instruments, SW, ATT and PowerMeter.
-        /// </summary>
-        //public bool getProtocolLock(sharedProtocol protocol, string sThreadID, string sMachineName, WCFMapSwitchConfig TxSwitch, WCFProtocolXConfig ProtocolX)
-        //{
-        //    bool ret = false;
-        //    DateTime ServiceStart = DateTime.Now;
-        //    DateTime ServiceFinish = new DateTime(1, 1, 1);
-        //    string sService = "InstrumentLockService.null";
-        //    // set StationHardware.Instance
-        //    _stationInstance = StationHardware.Instance();
-        //    string sTxSwitch = "TxSwitch";
-
-        //    try
-        //    {
-        //        if (_stationInstance.MapInst.ContainsKey(sTxSwitch))
-        //        {
-        //            //Get the Tx switch configuration
-        //            //TxSwitch = (myMapSwitch_DICON_GP750_Config)_stationInstance.myConfig.arInstConfig[0];
-
-        //            TxSwitch = JsonConvert.DeserializeObject<WCFMapSwitchConfig>(JsonConvert.SerializeObject(_stationInstance.myConfig.arInstConfig[0]));
-        //        }
-
-        //        // check if the client already owns the semaphore
-        //        // if not the owner, WaitOne() which blocks the current thread until the current WaitHandle receives a signal.
-        //        if (!(ownerSemaphoreDiCon.sThreadID == sThreadID && ownerSemaphoreDiCon.sMachineName == sMachineName))
-        //            semaphoreDiCon.WaitOne();
-
-        //        // if the client already owns the semaphore , no need to obtain semaphore again
-        //        // or if the client just obtains the semaphore via WaitOne() 
-        //        // we will first re-afrim or re-assign the ownership and increase nestedCount
-        //        ownerSemaphoreDiCon.nestedCount++;
-        //        ownerSemaphoreDiCon.sThreadID = sThreadID;
-        //        ownerSemaphoreDiCon.sMachineName = sMachineName;
-        //        // then grant the InstrumentLock
-        //        Console.WriteLine("InstrumentLockService.getProtocolLock");
-        //        sService = "InstrumentLockService.getProtocolLock";
-        //        ret = true;
-
-        //        ServiceFinish = DateTime.Now;
-        //        // contruct the client request values to be sent to host
-        //        var value = new ClientRequestValue(dInputA: 0, dInputB: 0, delayInSec: 0, dResult: 0, sService: sService, sThreadID: sThreadID, sMachineName: sMachineName, ServiceStart: ServiceStart, ServiceFinish: ServiceFinish);
-        //        // each WCF service fires the event EventFromClient with the values from WCF client
-        //        EventFromClient?.Invoke(this, new CustomEventArgs(value));
-        //    }
-        //    catch (Exception ex)
-        //    {
-        //        ret = false;
-        //        // Logging
-        //        Console.WriteLine(ex.Message);
-        //    }
-
-        //    return ret;
-        //}
 
         public bool releaseProtocolLock(sharedProtocol protocol, string sThreadID, string sMachineName)
         {
+            Console.WriteLine($"Thread {sThreadID} enters releaseProtocolLock");
             bool ret = false;
             DateTime ServiceStart = DateTime.Now;
             DateTime ServiceFinish = new DateTime(1, 1, 1);
@@ -939,7 +906,7 @@ namespace InstrumentLockServices
                     semaphoreDiCon.Release();
                 }
 
-                Console.WriteLine("InstrumentLockService.releaseProtocolLock");
+                Console.WriteLine($"Thread {sThreadID} InstrumentLockService.releaseProtocolLock");
                 sService = "InstrumentLockService.releaseProtocolLock";
                 ret = true;
 
@@ -948,6 +915,7 @@ namespace InstrumentLockServices
                 var value = new ClientRequestValue(dInputA: 0, dInputB: 0, delayInSec: 0, dResult: 0, sService: sService, sThreadID: sThreadID, sMachineName: sMachineName, ServiceStart: ServiceStart, ServiceFinish: ServiceFinish);
                 // each WCF service fires the event EventFromClient with the values from WCF client
                 EventFromClient?.Invoke(this, new CustomEventArgs(value));
+                Console.WriteLine($"Thread {sThreadID} exits releaseProtocolLock");
             }
             catch (Exception ex)
             {
