@@ -304,11 +304,6 @@ namespace InstrumentLockServices
             return _serviceInstance.getProtocolLock(protocol, sThreadID, sMachineName);
         }
 
-        //public bool getProtocolLock(sharedProtocol protocol, string sThreadID, string sMachineName, WCFMapSwitchConfig TxSwitch)
-        //{
-        //    return _serviceInstance.getProtocolLock(protocol, sThreadID, sMachineName, TxSwitch);
-        //}
-
         public bool releaseProtocolLock(sharedProtocol protocol, string sThreadID, string sMachineName)
         {
             return _serviceInstance.releaseProtocolLock(protocol, sThreadID, sMachineName);
@@ -323,7 +318,6 @@ namespace InstrumentLockServices
 
     public class SemaphoreOwner
     {
-        //public Semaphore mySemaphore { get; set; }
         public int nestedCount { get; set; }
         public string sMachineName { get; set; }
         public string sThreadID { get; set; }
@@ -333,13 +327,6 @@ namespace InstrumentLockServices
             sMachineName = null;
             sThreadID = null;
         }
-        //public SemaphoreOwner(Semaphore mySemaphore)
-        //{
-        //    this.mySemaphore = mySemaphore;
-        //    nestedCount = 0;
-        //    sMachineName = null;
-        //    sThreadID = null;
-        //}
     }
 
 

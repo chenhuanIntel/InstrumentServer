@@ -131,6 +131,7 @@
     <Compile Include="Tools\Core\ProtocolVISA.cs" />
     <Compile Include="Tools\Core\InstrumentX.cs" />
     <Compile Include="Tools\Core\ProtocolX.cs" />
+    <Compile Include="Tools\Instruments\InstrumentServer\InstrumentServer.cs" />
     <Compile Include="Tools\Instruments\Misc\Message.cs" />
     <Compile Include="Tools\Instruments\Oscilloscope\Anritsu_BertWave_MP2110A.cs" />
     <Compile Include="Tools\Instruments\Oscilloscope\CChannelConfigParallel.cs" />

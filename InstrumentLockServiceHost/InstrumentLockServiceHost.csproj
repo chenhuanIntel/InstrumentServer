@@ -54,6 +54,10 @@
       <Project>{e22bfb4c-2769-45a1-ac10-76cf2e8a4ad6}</Project>
       <Name>InstrumentLockService</Name>
     </ProjectReference>
+    <ProjectReference Include="..\InstrumentsLib\InstrumentsLib.csproj">
+      <Project>{99d95b33-9f62-40e8-940f-f75282af652a}</Project>
+      <Name>InstrumentsLib</Name>
+    </ProjectReference>
   </ItemGroup>
   <ItemGroup>
     <COMReference Include="NetFwTypeLib">

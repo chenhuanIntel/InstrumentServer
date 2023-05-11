@@ -11,6 +11,7 @@ using System.ServiceModel.Description;
 using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Threading;
+using InstrumentsLib.Tools.Instruments.InstrumentServer;
 
 // namespace name uses plural
 namespace InstrumentLockServiceHosts
@@ -110,7 +111,7 @@ namespace InstrumentLockServiceHosts
         /// https://learn.microsoft.com/en-us/previous-versions/windows/desktop/ics/using-windows-firewall-with-advanced-security
         /// programmably to set firewall rules
         /// </summary>
-        public void setFirewall()
+        public void setFirewall(InstrumentServer_Config serverConfig)
         {
             INetFwPolicy2 firewallPolicy = (INetFwPolicy2)Activator.CreateInstance(Type.GetTypeFromProgID("HNetCfg.FwPolicy2"));
 
@@ -125,14 +126,14 @@ namespace InstrumentLockServiceHosts
 
             // add inbound rules for TCP ports
             // first to remove the rule with the same name
-            INetFwRule firewallRule = firewallPolicy.Rules.OfType<INetFwRule>().Where(x => x.Name == "WCF_inbound_rule").FirstOrDefault();
+            INetFwRule firewallRule = firewallPolicy.Rules.OfType<INetFwRule>().Where(x => x.Name == serverConfig.strFirewallInRuleName).FirstOrDefault();
             if (firewallRule != null)
                 firewallPolicy.Rules.Remove(firewallRule.Name);
             INetFwRule firewallInRule = (INetFwRule)Activator.CreateInstance(Type.GetTypeFromProgID("HNetCfg.FWRule"));
-            firewallInRule.Name = "WCF_inbound_rule";
-            firewallInRule.Description = "WCF service port inbound rule";
+            firewallInRule.Name = serverConfig.strFirewallInRuleName;
+            firewallInRule.Description = serverConfig.strFirewallInRuleDescription;
             firewallInRule.Protocol = (int)NET_FW_IP_PROTOCOL_.NET_FW_IP_PROTOCOL_TCP;
-            firewallInRule.LocalPorts = "8001";
+            firewallInRule.LocalPorts = serverConfig.strFirewallInRuleLocalPorts;
             firewallInRule.Direction = NET_FW_RULE_DIRECTION_.NET_FW_RULE_DIR_IN;
             firewallInRule.Action = NET_FW_ACTION_.NET_FW_ACTION_ALLOW;
             firewallInRule.Enabled = true;
@@ -140,14 +141,14 @@ namespace InstrumentLockServiceHosts
 
             // add outbound rules for TCP ports
             // first to remove the rule with the same name
-            firewallRule = firewallPolicy.Rules.OfType<INetFwRule>().Where(x => x.Name == "WCF_outbound_rule").FirstOrDefault();
+            firewallRule = firewallPolicy.Rules.OfType<INetFwRule>().Where(x => x.Name == serverConfig.strFirewallOutRuleName).FirstOrDefault();
             if (firewallRule != null)
                 firewallPolicy.Rules.Remove(firewallRule.Name);
             INetFwRule firewallOutRule = (INetFwRule)Activator.CreateInstance(Type.GetTypeFromProgID("HNetCfg.FWRule"));
-            firewallOutRule.Name = "WCF_outbound_rule";
-            firewallOutRule.Description = "WCF service port outbound rule";
+            firewallOutRule.Name = serverConfig.strFirewallOutRuleName;
+            firewallOutRule.Description = serverConfig.strFirewallOutRuleDescription;
             firewallOutRule.Protocol = (int)NET_FW_IP_PROTOCOL_.NET_FW_IP_PROTOCOL_TCP;
-            firewallOutRule.LocalPorts = "8001";
+            firewallOutRule.LocalPorts = serverConfig.strFirewallOutRuleLocalPorts;
             firewallOutRule.Direction = NET_FW_RULE_DIRECTION_.NET_FW_RULE_DIR_OUT;
             firewallOutRule.Action = NET_FW_ACTION_.NET_FW_ACTION_ALLOW;
             firewallOutRule.Enabled = true;

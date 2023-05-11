@@ -4,6 +4,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using InstrumentLockServices;
+using InstrumentsLib.Tools.Instruments.InstrumentServer;
 
 // namespace name uses plural
 namespace InstrumentLockServiceHosts
@@ -33,7 +34,7 @@ namespace InstrumentLockServiceHosts
         /// https://learn.microsoft.com/en-us/previous-versions/windows/desktop/ics/using-windows-firewall-with-advanced-security
         /// programmably to set firewall rules
         /// </summary>
-        void setFirewall();
+        void setFirewall(InstrumentServer_Config serverConfig);
 
         /// <summary>
         ///  https://stackoverflow.com/questions/6118221/how-do-i-add-wcf-client-endpoints-programmatically
