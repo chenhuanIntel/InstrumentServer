@@ -103,7 +103,7 @@ namespace TesterClient_WPF
                 }
                 else if (cmbService.SelectedItem == (Object)typeof(Service).GetProperty(Service.getInstrumentLock))
                 {
-                    bool ret = _client.getInstrumentLock(sharedInstrument.DCA, sThreadID, sMachineName);
+                    bool ret = _client.getInstrumentLock(sharedInstrument.DCA, sThreadID, sMachineName, 2);
                     tbOut.Text = $"getInstrumentLock(sharedInstrument.DCA)";
                 }
                 else if (cmbService.SelectedItem == (Object)typeof(Service).GetProperty(Service.releaseInstrumentLock))

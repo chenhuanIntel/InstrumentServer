@@ -112,6 +112,10 @@
       <Project>{99d95b33-9f62-40e8-940f-f75282af652a}</Project>
       <Name>InstrumentsLib</Name>
     </ProjectReference>
+    <ProjectReference Include="..\Utility\UtilityLib.csproj">
+      <Project>{1a142215-f759-4999-91e9-7560f8eac5aa}</Project>
+      <Name>UtilityLib</Name>
+    </ProjectReference>
   </ItemGroup>
   <ItemGroup>
     <COMReference Include="NetFwTypeLib">

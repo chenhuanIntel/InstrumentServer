@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="utf-8"?>
-<ReferenceGroup xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" ID="125daefd-9b38-44d7-aed1-67ca2ffbe9e7" xmlns="urn:schemas-microsoft-com:xml-wcfservicemap">
+<ReferenceGroup xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" ID="9f178cf4-ad6d-43ff-bac6-9835d681c368" xmlns="urn:schemas-microsoft-com:xml-wcfservicemap">
   <ClientOptions>
     <GenerateAsynchronousMethods>false</GenerateAsynchronousMethods>
     <EnableDataBinding>true</EnableDataBinding>
@@ -21,14 +21,14 @@
     <MetadataSource Address="net.tcp://172.25.93.250:8001/mex" Protocol="mex" SourceId="1" />
   </MetadataSources>
   <Metadata>
-    <MetadataFile FileName="service.wsdl" MetadataType="Wsdl" ID="089ce9bb-12ee-4014-b51f-6b96bd7967ec" SourceId="1" SourceUrl="net.tcp://172.25.93.250:8001/mex" />
-    <MetadataFile FileName="service.xsd" MetadataType="Schema" ID="73ac7cd0-60fe-42af-8265-b186a79bc748" SourceId="1" SourceUrl="net.tcp://172.25.93.250:8001/mex" />
-    <MetadataFile FileName="service1.xsd" MetadataType="Schema" ID="b7859fe7-0be4-40cc-9c22-c36937313a90" SourceId="1" SourceUrl="net.tcp://172.25.93.250:8001/mex" />
-    <MetadataFile FileName="InstrumentLockServices.xsd" MetadataType="Schema" ID="4940fab3-496d-488a-a872-7ae19031ec07" SourceId="1" SourceUrl="net.tcp://172.25.93.250:8001/mex" />
-    <MetadataFile FileName="InstrumentsLib.Tools.Instruments.Oscilloscope.xsd" MetadataType="Schema" ID="bcd550ed-8db3-4ed2-a05b-35c1b9a54df1" SourceId="1" SourceUrl="net.tcp://172.25.93.250:8001/mex" />
-    <MetadataFile FileName="InstrumentsLib.Tools.Core.xsd" MetadataType="Schema" ID="815d4b2c-a506-4b40-9ec0-60b660f93cd0" SourceId="1" SourceUrl="net.tcp://172.25.93.250:8001/mex" />
-    <MetadataFile FileName="Utility.xsd" MetadataType="Schema" ID="372fae71-e273-4f9f-bc22-465d09ed7526" SourceId="1" SourceUrl="net.tcp://172.25.93.250:8001/mex" />
-    <MetadataFile FileName="Arrays.xsd" MetadataType="Schema" ID="e4e0c334-7111-4b2b-805e-3d75192d53a0" SourceId="1" SourceUrl="net.tcp://172.25.93.250:8001/mex" />
+    <MetadataFile FileName="service.wsdl" MetadataType="Wsdl" ID="84eac242-6681-4613-98f8-fa3001840f1a" SourceId="1" SourceUrl="net.tcp://172.25.93.250:8001/mex" />
+    <MetadataFile FileName="service.xsd" MetadataType="Schema" ID="98396fd4-a476-4217-a1d1-efd634a8fb31" SourceId="1" SourceUrl="net.tcp://172.25.93.250:8001/mex" />
+    <MetadataFile FileName="service1.xsd" MetadataType="Schema" ID="6d618d44-e32b-4ab3-bbd5-363907259345" SourceId="1" SourceUrl="net.tcp://172.25.93.250:8001/mex" />
+    <MetadataFile FileName="InstrumentLockServices.xsd" MetadataType="Schema" ID="07992f91-1e15-44fe-b2ad-c219906633f1" SourceId="1" SourceUrl="net.tcp://172.25.93.250:8001/mex" />
+    <MetadataFile FileName="InstrumentsLib.Tools.Instruments.Oscilloscope.xsd" MetadataType="Schema" ID="3162796d-9283-4f9c-911e-5936ea32c623" SourceId="1" SourceUrl="net.tcp://172.25.93.250:8001/mex" />
+    <MetadataFile FileName="InstrumentsLib.Tools.Core.xsd" MetadataType="Schema" ID="c1ae700b-6182-46e9-9f7a-14397d621efd" SourceId="1" SourceUrl="net.tcp://172.25.93.250:8001/mex" />
+    <MetadataFile FileName="Utility.xsd" MetadataType="Schema" ID="c30471f4-6366-415c-a7b1-7e8f0661ce3b" SourceId="1" SourceUrl="net.tcp://172.25.93.250:8001/mex" />
+    <MetadataFile FileName="Arrays.xsd" MetadataType="Schema" ID="5497033b-1f25-41e0-b2b3-e9edfeb69b1c" SourceId="1" SourceUrl="net.tcp://172.25.93.250:8001/mex" />
   </Metadata>
   <Extensions>
     <ExtensionFile FileName="configuration91.svcinfo" Name="configuration91.svcinfo" />
