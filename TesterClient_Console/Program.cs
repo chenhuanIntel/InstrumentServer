@@ -81,7 +81,7 @@ namespace TesterClient_Consoles
 
                     // request DCA with return
                     ret = _client.getInstrumentLockWithReturn(sharedInstrument.DCA, sThreadID, sMachineName, ref WCFDCA, ref WCFProtocol, nChannelInEachMeasurementGroup);
-                    Console.WriteLine($"Machine={sMachineName}, Thread={sThreadID} getInstrumentLockWithReturn gets {WCFDCA.strName}");
+                    Console.WriteLine($"Machine={sMachineName}, Thread={sThreadID} getInstrumentLockWithReturn ------ gets {WCFDCA.strName}");
 
                     // first measurement group switch via DiCon
                     ret = _client.getProtocolLock(sharedProtocol.DiCon, sThreadID, sMachineName);
