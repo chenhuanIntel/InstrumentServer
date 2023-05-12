@@ -78,36 +78,44 @@ namespace TesterClient_Consoles
                     WCFProtocolXConfig WCFProtocol = null;
                     WCFScopeConfig WCFDCA = null;
                     int nChannelInEachMeasurementGroup = 2;
+
+                    // request DCA with return
                     ret = _client.getInstrumentLockWithReturn(sharedInstrument.DCA, sThreadID, sMachineName, ref WCFDCA, ref WCFProtocol, nChannelInEachMeasurementGroup);
                     Console.WriteLine($"Machine={sMachineName}, Thread={sThreadID} getInstrumentLockWithReturn gets {WCFDCA.strName}");
 
-                    ret = _client.getInstrumentLock(sharedInstrument.DCA, sThreadID, sMachineName, nChannelInEachMeasurementGroup);
-                    Console.WriteLine($"Machine={sMachineName}, Thread={sThreadID} getInstrumentLock");
-
+                    // first measurement group switch via DiCon
                     ret = _client.getProtocolLock(sharedProtocol.DiCon, sThreadID, sMachineName);
                     Console.WriteLine($"Machine={sMachineName}, Thread={sThreadID} getProtocolLock");
-
-                    // doing something with DiCon
-                    Console.WriteLine($"Machine={sMachineName}, Thread={sThreadID} doing something with DiCon");
+                    Console.WriteLine($"Machine={sMachineName}, Thread={sThreadID} first measurement group switch via DiCon");
                     Thread.Sleep(1000);
+                    ret = _client.releaseProtocolLock(sharedProtocol.DiCon, sThreadID, sMachineName);
+                    Console.WriteLine($"Machine={sMachineName}, Thread={sThreadID} releaseProtocolLock(sharedProtocol.DiCon)");
 
+                    // nested DCA lock request
+                    ret = _client.getInstrumentLock(sharedInstrument.DCA, sThreadID, sMachineName, nChannelInEachMeasurementGroup);
+                    Console.WriteLine($"Machine={sMachineName}, Thread={sThreadID} getInstrumentLock");
+                    Console.WriteLine($"Machine={sMachineName}, Thread={sThreadID} 1st measurement group with DCA");
+                    Thread.Sleep(3 * 10000);
+                    ret = _client.releaseInstrumentLock(sharedInstrument.DCA, sThreadID, sMachineName);
+                    Console.WriteLine($"Machine={sMachineName}, Thread={sThreadID} releaseInstrumentLock(sharedInstrument.DCA)");
+
+                    // second measurement group switch via DiCon
+                    ret = _client.getProtocolLock(sharedProtocol.DiCon, sThreadID, sMachineName);
+                    Console.WriteLine($"Machine={sMachineName}, Thread={sThreadID} getProtocolLock");
+                    Console.WriteLine($"Machine={sMachineName}, Thread={sThreadID} second measurement group switch via DiCon");
+                    Thread.Sleep(1000);
                     ret = _client.releaseProtocolLock(sharedProtocol.DiCon, sThreadID, sMachineName);
                     Console.WriteLine($"Machine={sMachineName}, Thread={sThreadID} releaseProtocolLock(sharedProtocol.DiCon)");
 
                     // nested DCA lock request
                     ret = _client.getInstrumentLock(sharedInstrument.DCA, sThreadID, sMachineName, nChannelInEachMeasurementGroup);
                     Console.WriteLine($"Machine={sMachineName}, Thread={sThreadID} getInstrumentLock(sharedInstrument.DCA)");
-
-                    // doing something with DCA
-                    Console.WriteLine($"Machine={sMachineName}, Thread={sThreadID} doing something with DCA");
+                    Console.WriteLine($"Machine={sMachineName}, Thread={sThreadID} 2nd measurement group with DCA");
                     Thread.Sleep(3 * 10000);
-
                     ret = _client.releaseInstrumentLock(sharedInstrument.DCA, sThreadID, sMachineName);
                     Console.WriteLine($"Machine={sMachineName}, Thread={sThreadID} releaseInstrumentLock(sharedInstrument.DCA)");
 
-                    ret = _client.releaseInstrumentLock(sharedInstrument.DCA, sThreadID, sMachineName);
-                    Console.WriteLine($"Machine={sMachineName}, Thread={sThreadID} releaseInstrumentLock(sharedInstrument.DCA)");
-
+                    // release the first DCA request with return
                     ret = _client.releaseInstrumentLock(sharedInstrument.DCA, sThreadID, sMachineName);
                     Console.WriteLine($"Machine={sMachineName}, Thread={sThreadID} releaseInstrumentLock(sharedInstrument.DCA)");
 
