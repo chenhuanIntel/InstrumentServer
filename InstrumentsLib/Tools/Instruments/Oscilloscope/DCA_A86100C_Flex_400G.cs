@@ -29,9 +29,14 @@ namespace InstrumentsLib.Tools.Instruments.Oscilloscope
     {
         [DataMember]
         /// <summary>
+        /// true for server DCA; false for local DCAM
+        /// </summary>
+        public bool bServerDCA { get; set; }
+        [DataMember]
+        /// <summary>
         /// true for embedded CRU; false for external CRU
         /// </summary>
-        public bool bEmbCRU { get; set; }
+        public bool bServerDCAWithEmbCRU { get; set; }
         [DataMember]
         /// <summary>
         /// 
