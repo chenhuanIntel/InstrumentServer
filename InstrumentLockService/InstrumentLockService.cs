@@ -341,7 +341,7 @@ namespace InstrumentLockServices
     public class InstrumentLockService : IInstrumentLockService
     {
         // key = number of DCA channels
-        private static Dictionary<int, DCAQueue> _dictDCAQueue;
+        private static Dictionary<int, DCAQueue> _dictDCAQueue = new Dictionary<int, DCAQueue>();   
         public static Dictionary<int, DCAQueue> dictDCAQueue
         {
             get
@@ -503,8 +503,13 @@ namespace InstrumentLockServices
         {
             Console.WriteLine($"Thread {sThreadID} enters getInstrumentLock");
 
-            if (_dictDCAQueue==null)
-                buildDCAandProtocolQueue();
+            // if _dictDCAQueue is never built, i.e. count==0, build it
+            // put a lock because more than one tester clients may access it simultaneously
+            lock (_dictDCAQueue)
+            {
+                if (_dictDCAQueue.Count == 0)
+                    buildDCAandProtocolQueue();
+            }
 
             bool ret = false;
             DateTime ServiceStart = DateTime.Now;
@@ -600,8 +605,13 @@ namespace InstrumentLockServices
         {
             Console.WriteLine($"Thread {sThreadID} enters getInstrumentLockWithReturn");
 
-            if (_dictDCAQueue == null)
-                buildDCAandProtocolQueue();
+            // if _dictDCAQueue is never built, i.e. count==0, build it
+            // put a lock because more than one tester clients may access it simultaneously
+            lock (_dictDCAQueue)
+            {
+                if (_dictDCAQueue.Count==0)
+                    buildDCAandProtocolQueue();
+            }
 
             bool ret = false;
             DateTime ServiceStart = DateTime.Now;
