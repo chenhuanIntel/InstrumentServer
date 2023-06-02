@@ -223,9 +223,7 @@ namespace InstrumentLockServices
 
     // https://stackoverflow.com/questions/3469044/self-hosted-wcf-service-how-to-access-the-objects-implementing-the-service-co
     // dummy Facade
-    // PerCall creates a new instance for each operation.
     [ServiceBehavior(InstanceContextMode = InstanceContextMode.PerCall, ConcurrencyMode = ConcurrencyMode.Multiple, UseSynchronizationContext = false)]
-    //[ServiceBehavior(InstanceContextMode = InstanceContextMode.PerCall, ConcurrencyMode = ConcurrencyMode.Multiple, UseSynchronizationContext = true)]
     public class InstrumentLockServiceFacade : IInstrumentLockServiceFacade
     {
         public static InstrumentLockService _serviceInstance = new InstrumentLockService();
@@ -306,6 +304,7 @@ namespace InstrumentLockServices
 
         public bool releaseProtocolLock(sharedProtocol protocol, string sThreadID, string sMachineName)
         {
+            Console.WriteLine($"Thread {sThreadID} enters releaseProtocolLock xxxxxxxx");
             return _serviceInstance.releaseProtocolLock(protocol, sThreadID, sMachineName);
         }
 
@@ -331,12 +330,15 @@ namespace InstrumentLockServices
 
 
     // Enable one of the following instance modes to compare instancing behaviors: per session, per call or single
-    //[ServiceBehavior(InstanceContextMode = InstanceContextMode.PerSession)]
-    // PerCall creates a new instance for each operation.
-    [ServiceBehavior(InstanceContextMode = InstanceContextMode.PerCall, ConcurrencyMode = ConcurrencyMode.Multiple, UseSynchronizationContext = false)] //UseSynchronizationContext = false will generate a new work thread for the service, regardless if the previous thread is completed or not
-    //[ServiceBehavior(InstanceContextMode = InstanceContextMode.PerCall, ConcurrencyMode = ConcurrencyMode.Multiple, UseSynchronizationContext = true)] // UseSynchronizationContext = true will wait for the previous service to finish and use the same thread
-    // Singleton creates a single instance for application lifetime.
-    //[ServiceBehavior(InstanceContextMode = InstanceContextMode.Single)]
+    // InstanceContextMode = PerCall     A new InstanceContext object is created prior to and recycled subsequent to each call.
+    // InstanceContextMode = PerSession  A new InstanceContext object is created for each session. If the channel does not create a session this value behaves as if it were PerCall.
+    // InstanceContextMode = Single      Only one InstanceContext object is used for all incoming calls and is not recycled subsequent to the calls. If a service object does not exist, one is created.
+    // ConcurrencyMode = Multiple        The service instance is multi-threaded. No synchronization guarantees are made. Because other threads can change your service object at any time, you must handle synchronization and state consistency at all times.
+    // ConcurrencyMode = Reentrant       The service instance is single-threaded and accepts reentrant calls. The reentrant service accepts calls when you call another service; it is therefore your responsibility to leave your object state consistent before callouts and you must confirm that operation-local data is valid after callouts. Note that the service instance is unlocked only by calling another service over a WCF channel. In this case, the called service can reenter the first service via a callback. If the first service is not reentrant, the sequence of calls results in a deadlock. For details, see ConcurrencyMode.
+    // ConcurrencyMode = Single          The service instance is single-threaded and does not accept reentrant calls. If the InstanceContextMode property is Single, and additional messages arrive while the instance services a call, these messages must wait until the service is available or until the messages time out.
+    // UseSynchronizationContext = false will generate a new work thread for the service, regardless if the previous thread is completed or not
+    // UseSynchronizationContext = true  will wait for the previous service to finish and use the same thread
+    [ServiceBehavior(InstanceContextMode = InstanceContextMode.Single, ConcurrencyMode = ConcurrencyMode.Single, UseSynchronizationContext = false)] 
     // NOTE: You can use the "Rename" command on the "Refactor" menu to change the class name "Service1" in both code and config file together.
     public class InstrumentLockService : IInstrumentLockService
     {
@@ -814,8 +816,9 @@ namespace InstrumentLockServices
                             else
                             {
                                 DCAQueue value = new DCAQueue();
-                                value.lstDCAQueueElement= new List<DCAQueueElement>() { element };  
-                                _dictDCAQueue.Add(key, value);
+                                value.lstDCAQueueElement = new List<DCAQueueElement>() { element };
+                                if (!_dictDCAQueue.ContainsKey(key))
+                                    _dictDCAQueue.Add(key, value);
                             }
                         }
                     }
@@ -839,7 +842,9 @@ namespace InstrumentLockServices
         /// </summary>
         public bool getProtocolLock(sharedProtocol protocol, string sThreadID, string sMachineName)
         {
-            Console.WriteLine($"Thread {sThreadID} enters getProtocolLock");
+            int nProcessID = Process.GetCurrentProcess().Id; 
+            int nManagedID = System.Environment.CurrentManagedThreadId; 
+            Console.WriteLine($"Thread {sThreadID} enters getProtocolLock at server processID={nProcessID} managedID={nManagedID}");
             bool ret = false;
             DateTime ServiceStart = DateTime.Now;
             DateTime ServiceFinish = new DateTime(1, 1, 1);
@@ -850,7 +855,16 @@ namespace InstrumentLockServices
                 // check if the client already owns the semaphore
                 // if not the owner, WaitOne() which blocks the current thread until the current WaitHandle receives a signal.
                 if (!(ownerSemaphoreDiCon.sThreadID == sThreadID && ownerSemaphoreDiCon.sMachineName == sMachineName))
-                    semaphoreDiCon.WaitOne();
+                {
+                    //if (ownerSemaphoreDiCon.sThreadID == null)
+                        semaphoreDiCon.WaitOne();
+                    //else
+                    //{
+                    //    bool test=true;
+                    //    while (test)
+                    //        ;
+                    //}
+                }
 
                 // if the client already owns the semaphore , no need to obtain semaphore again
                 // or if the client just obtains the semaphore via WaitOne() 
@@ -859,7 +873,7 @@ namespace InstrumentLockServices
                 ownerSemaphoreDiCon.sThreadID = sThreadID;
                 ownerSemaphoreDiCon.sMachineName = sMachineName;
                 // then grant the InstrumentLock
-                Console.WriteLine($"Thread {sThreadID} InstrumentLockService.getProtocolLock");
+                Console.WriteLine($"Thread {sThreadID} InstrumentLockService.getProtocolLock at server processID={nProcessID} managedID={nManagedID}");
                 sService = "InstrumentLockService.getProtocolLock";
                 ret = true;
 
@@ -882,7 +896,10 @@ namespace InstrumentLockServices
 
         public bool releaseProtocolLock(sharedProtocol protocol, string sThreadID, string sMachineName)
         {
-            Console.WriteLine($"Thread {sThreadID} enters releaseProtocolLock");
+            int nProcessID = Process.GetCurrentProcess().Id;
+            int nManagedID = System.Environment.CurrentManagedThreadId;
+            Console.WriteLine($"Thread {sThreadID} enters releaseProtocolLock at server processID={nProcessID} managedID={nManagedID} 1st");
+            Console.WriteLine($"Thread {sThreadID} enters releaseProtocolLock at server processID={nProcessID} managedID={nManagedID} 2nd");
             bool ret = false;
             DateTime ServiceStart = DateTime.Now;
             DateTime ServiceFinish = new DateTime(1, 1, 1);
@@ -912,7 +929,7 @@ namespace InstrumentLockServices
                 var value = new ClientRequestValue(dInputA: 0, dInputB: 0, delayInSec: 0, dResult: 0, sService: sService, sThreadID: sThreadID, sMachineName: sMachineName, ServiceStart: ServiceStart, ServiceFinish: ServiceFinish);
                 // each WCF service fires the event EventFromClient with the values from WCF client
                 EventFromClient?.Invoke(this, new CustomEventArgs(value));
-                Console.WriteLine($"Thread {sThreadID} exits releaseProtocolLock");
+                Console.WriteLine($"Thread {sThreadID} exits releaseProtocolLock at server processID={nProcessID} managedID={nManagedID}");
             }
             catch (Exception ex)
             {
