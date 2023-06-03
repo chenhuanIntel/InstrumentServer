@@ -188,6 +188,9 @@ namespace InstrumentLockServiceHosts_WPF2
             _stationInstance = StationHardware.Instance();
             _stationInstance.Initialize();
 
+            // after reading station config and initialize station, let's build DCA queue
+            buildDCAQueue();
+
             //ITraceWriter traceWriter = new MemoryTraceWriter();
             //var temp = JsonConvert.SerializeObject(_stationInstance.myConfig.arInstConfig[0], new JsonSerializerSettings { TraceWriter = traceWriter, Converters = { new JavaScriptDateTimeConverter() } });
             //Console.WriteLine(traceWriter);
@@ -266,6 +269,14 @@ namespace InstrumentLockServiceHosts_WPF2
         {
             InstrumentLockService.dictDCAQueue.Clear();
             InstrumentLockService.dictDCAQueue = null;
+        }
+        /// <summary>
+        /// during the creation of server, to build a queue of all DCAs and their corresponding Protocols in the server station config file
+        /// </summary>
+        private void buildDCAQueue()
+        {
+            InstrumentLockService clientService= new InstrumentLockService();
+            clientService.buildDCAandProtocolQueue();
         }
 
         private void btnReset_Click(object sender, RoutedEventArgs e)

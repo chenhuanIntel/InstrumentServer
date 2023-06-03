@@ -223,7 +223,7 @@ namespace InstrumentLockServices
 
     // https://stackoverflow.com/questions/3469044/self-hosted-wcf-service-how-to-access-the-objects-implementing-the-service-co
     // dummy Facade
-    [ServiceBehavior(InstanceContextMode = InstanceContextMode.PerCall, ConcurrencyMode = ConcurrencyMode.Multiple, UseSynchronizationContext = false)]
+    [ServiceBehavior(InstanceContextMode = InstanceContextMode.Single, ConcurrencyMode = ConcurrencyMode.Single, UseSynchronizationContext = true)]
     public class InstrumentLockServiceFacade : IInstrumentLockServiceFacade
     {
         public static InstrumentLockService _serviceInstance = new InstrumentLockService();
@@ -338,7 +338,7 @@ namespace InstrumentLockServices
     // ConcurrencyMode = Single          The service instance is single-threaded and does not accept reentrant calls. If the InstanceContextMode property is Single, and additional messages arrive while the instance services a call, these messages must wait until the service is available or until the messages time out.
     // UseSynchronizationContext = false will generate a new work thread for the service, regardless if the previous thread is completed or not
     // UseSynchronizationContext = true  will wait for the previous service to finish and use the same thread
-    [ServiceBehavior(InstanceContextMode = InstanceContextMode.Single, ConcurrencyMode = ConcurrencyMode.Single, UseSynchronizationContext = false)] 
+    [ServiceBehavior(InstanceContextMode = InstanceContextMode.Single, ConcurrencyMode = ConcurrencyMode.Single, UseSynchronizationContext = true)] 
     // NOTE: You can use the "Rename" command on the "Refactor" menu to change the class name "Service1" in both code and config file together.
     public class InstrumentLockService : IInstrumentLockService
     {
@@ -505,14 +505,6 @@ namespace InstrumentLockServices
         {
             Console.WriteLine($"Thread {sThreadID} enters getInstrumentLock");
 
-            // if _dictDCAQueue is never built, i.e. count==0, build it
-            // put a lock because more than one tester clients may access it simultaneously
-            lock (_dictDCAQueue)
-            {
-                if (_dictDCAQueue.Count == 0)
-                    buildDCAandProtocolQueue();
-            }
-
             bool ret = false;
             DateTime ServiceStart = DateTime.Now;
             DateTime ServiceFinish = new DateTime(1, 1, 1);
@@ -606,14 +598,6 @@ namespace InstrumentLockServices
         public bool getInstrumentLockWithReturn(sharedInstrument instr, string sThreadID, string sMachineName, ref WCFScopeConfig DCA, ref WCFProtocolXConfig Protocol, int nChannelInEachMeasurementGroup)
         {
             Console.WriteLine($"Thread {sThreadID} enters getInstrumentLockWithReturn");
-
-            // if _dictDCAQueue is never built, i.e. count==0, build it
-            // put a lock because more than one tester clients may access it simultaneously
-            lock (_dictDCAQueue)
-            {
-                if (_dictDCAQueue.Count==0)
-                    buildDCAandProtocolQueue();
-            }
 
             bool ret = false;
             DateTime ServiceStart = DateTime.Now;
@@ -786,7 +770,7 @@ namespace InstrumentLockServices
         /// <summary>
         /// build a queue of all DCAs and their corresponding Protocols in the server station config file
         /// </summary>
-        protected void buildDCAandProtocolQueue()
+        public void buildDCAandProtocolQueue()
         {
             // set StationHardware.Instance
             _stationInstance = StationHardware.Instance();
@@ -817,8 +801,7 @@ namespace InstrumentLockServices
                             {
                                 DCAQueue value = new DCAQueue();
                                 value.lstDCAQueueElement = new List<DCAQueueElement>() { element };
-                                if (!_dictDCAQueue.ContainsKey(key))
-                                    _dictDCAQueue.Add(key, value);
+                                _dictDCAQueue.Add(key, value);
                             }
                         }
                     }
