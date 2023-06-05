@@ -223,7 +223,7 @@ namespace InstrumentLockServices
 
     // https://stackoverflow.com/questions/3469044/self-hosted-wcf-service-how-to-access-the-objects-implementing-the-service-co
     // dummy Facade
-    [ServiceBehavior(InstanceContextMode = InstanceContextMode.Single, ConcurrencyMode = ConcurrencyMode.Single, UseSynchronizationContext = true)]
+    [ServiceBehavior(InstanceContextMode = InstanceContextMode.PerCall, ConcurrencyMode = ConcurrencyMode.Multiple, UseSynchronizationContext = false)]
     public class InstrumentLockServiceFacade : IInstrumentLockServiceFacade
     {
         public static InstrumentLockService _serviceInstance = new InstrumentLockService();
@@ -304,7 +304,6 @@ namespace InstrumentLockServices
 
         public bool releaseProtocolLock(sharedProtocol protocol, string sThreadID, string sMachineName)
         {
-            Console.WriteLine($"Thread {sThreadID} enters releaseProtocolLock xxxxxxxx");
             return _serviceInstance.releaseProtocolLock(protocol, sThreadID, sMachineName);
         }
 
@@ -338,7 +337,7 @@ namespace InstrumentLockServices
     // ConcurrencyMode = Single          The service instance is single-threaded and does not accept reentrant calls. If the InstanceContextMode property is Single, and additional messages arrive while the instance services a call, these messages must wait until the service is available or until the messages time out.
     // UseSynchronizationContext = false will generate a new work thread for the service, regardless if the previous thread is completed or not
     // UseSynchronizationContext = true  will wait for the previous service to finish and use the same thread
-    [ServiceBehavior(InstanceContextMode = InstanceContextMode.Single, ConcurrencyMode = ConcurrencyMode.Single, UseSynchronizationContext = true)] 
+    [ServiceBehavior(InstanceContextMode = InstanceContextMode.PerCall, ConcurrencyMode = ConcurrencyMode.Multiple, UseSynchronizationContext = false)] 
     // NOTE: You can use the "Rename" command on the "Refactor" menu to change the class name "Service1" in both code and config file together.
     public class InstrumentLockService : IInstrumentLockService
     {
@@ -503,7 +502,7 @@ namespace InstrumentLockServices
         ///// </summary>
         public bool getInstrumentLock(sharedInstrument instr, string sThreadID, string sMachineName, int nChannelInEachMeasurementGroup)
         {
-            Console.WriteLine($"Thread {sThreadID} enters getInstrumentLock");
+            Console.WriteLine($"Thread={sThreadID} enters getInstrumentLock processID={Process.GetCurrentProcess().Id} managedID={System.Environment.CurrentManagedThreadId}");
 
             bool ret = false;
             DateTime ServiceStart = DateTime.Now;
@@ -535,13 +534,13 @@ namespace InstrumentLockServices
                     dca.ownerSemaphoreDCA.nestedCount++;
                     dca.ownerSemaphoreDCA.sThreadID = sThreadID;
                     dca.ownerSemaphoreDCA.sMachineName = sMachineName;
-                    clog.Log($"Thread {sThreadID} already owned a semaphore of DCA {dca.DCA.strName}");
-                    Console.WriteLine($"Thread {sThreadID} already owned a semaphore of DCA {dca.DCA.strName}");
+                    clog.Log($"Thread={sThreadID} already owned a semaphore of DCA {dca.DCA.strName} processID={Process.GetCurrentProcess().Id} managedID={System.Environment.CurrentManagedThreadId}");
+                    Console.WriteLine($"Thread={sThreadID} already owned a semaphore of DCA {dca.DCA.strName} processID={Process.GetCurrentProcess().Id} managedID={System.Environment.CurrentManagedThreadId}");
                 }
                 else
                 {
-                    clog.Log($"Thread {sThreadID} semaphoreDCA.WaitOne()");
-                    Console.WriteLine($"Thread {sThreadID} semaphoreDCA.WaitOne()");
+                    clog.Log($"Thread={sThreadID} semaphoreDCA.WaitOne() processID={Process.GetCurrentProcess().Id} managedID={System.Environment.CurrentManagedThreadId}");
+                    Console.WriteLine($"Thread={sThreadID} semaphoreDCA.WaitOne() processID={Process.GetCurrentProcess().Id} managedID={System.Environment.CurrentManagedThreadId}");
 
                     // if not a semaphore owner, WaitOne() which blocks the current thread until the current WaitHandle receives a signal.
                     _dictDCAQueue[nChannelInEachMeasurementGroup].semaphoreDCA.WaitOne();
@@ -558,18 +557,18 @@ namespace InstrumentLockServices
                             dca.ownerSemaphoreDCA.sThreadID = sThreadID;
                             dca.ownerSemaphoreDCA.sMachineName = sMachineName;
                             bOwnSemaphore = true;
-                            clog.Log($"Thread {sThreadID} getting a semaphore of DCA {dca.DCA.strName}");
-                            Console.WriteLine($"Thread {sThreadID} getting a semaphore of DCA {dca.DCA.strName}");
+                            clog.Log($"Thread={sThreadID} getting a semaphore of DCA {dca.DCA.strName} processID={Process.GetCurrentProcess().Id} managedID={System.Environment.CurrentManagedThreadId}");
+                            Console.WriteLine($"Thread={sThreadID} getting a semaphore of DCA {dca.DCA.strName} processID={Process.GetCurrentProcess().Id} managedID={System.Environment.CurrentManagedThreadId}");
                             break;
                         }
                         if (i == _dictDCAQueue[nChannelInEachMeasurementGroup].lstDCAQueueElement.Count - 1) // no DCA is available, impossibleex
                         {
-                            throw new Exception("No DCA available, even got a semaphore");
+                            throw new Exception("No DCA available, even got a semaphore processID={Process.GetCurrentProcess().Id} managedID={System.Environment.CurrentManagedThreadId}");
                         }
                     }                 
                 }
                 // then grant the InstrumentLock
-                Console.WriteLine($"Thread {sThreadID} InstrumentLockService.getInstrumentLock");
+                Console.WriteLine($"Thread={sThreadID} InstrumentLockService.getInstrumentLock processID={Process.GetCurrentProcess().Id} managedID={System.Environment.CurrentManagedThreadId}");
                 sService = "InstrumentLockService.getInstrumentLock";
                 ret = true;
 
@@ -579,7 +578,7 @@ namespace InstrumentLockServices
                 // each WCF service fires the event EventFromClient with the values from WCF client
                 EventFromClient?.Invoke(this, new CustomEventArgs(value));
 
-                Console.WriteLine($"Thread {sThreadID} exits getInstrumentLock");
+                Console.WriteLine($"Thread={sThreadID} exits getInstrumentLock processID={Process.GetCurrentProcess().Id} managedID={System.Environment.CurrentManagedThreadId}");
             }
             catch (Exception ex)
             {
@@ -597,7 +596,7 @@ namespace InstrumentLockServices
         /// </summary>
         public bool getInstrumentLockWithReturn(sharedInstrument instr, string sThreadID, string sMachineName, ref WCFScopeConfig DCA, ref WCFProtocolXConfig Protocol, int nChannelInEachMeasurementGroup)
         {
-            Console.WriteLine($"Thread {sThreadID} enters getInstrumentLockWithReturn");
+            Console.WriteLine($"Thread={sThreadID} enters getInstrumentLockWithReturn processID={Process.GetCurrentProcess().Id} managedID={System.Environment.CurrentManagedThreadId}");
 
             bool ret = false;
             DateTime ServiceStart = DateTime.Now;
@@ -617,8 +616,8 @@ namespace InstrumentLockServices
                         //Get the DCA and its protocol
                         DCA = dca.DCA;
                         Protocol = dca.Protocol;
-                        clog.Log($"Thread {sThreadID} already owned a semaphore of DCA {dca.DCA.strName}");
-                        Console.WriteLine($"Thread {sThreadID} already owned a semaphore of DCA {dca.DCA.strName}");
+                        clog.Log($"Thread={sThreadID} already owned a semaphore of DCA {dca.DCA.strName} processID={Process.GetCurrentProcess().Id} managedID={System.Environment.CurrentManagedThreadId}");
+                        Console.WriteLine($"Thread={sThreadID} already owned a semaphore of DCA {dca.DCA.strName} processID={Process.GetCurrentProcess().Id} managedID={System.Environment.CurrentManagedThreadId}");
                         break;
                     }
                 }
@@ -634,13 +633,13 @@ namespace InstrumentLockServices
                     dca.ownerSemaphoreDCA.nestedCount++;
                     dca.ownerSemaphoreDCA.sThreadID = sThreadID;
                     dca.ownerSemaphoreDCA.sMachineName = sMachineName;
-                    clog.Log($"Thread {sThreadID} increases nestedCount of DCA {dca.DCA.strName}");
-                    Console.WriteLine($"Thread {sThreadID} increases nestedCount of DCA {dca.DCA.strName}");
+                    clog.Log($"Thread={sThreadID} increases nestedCount of DCA {dca.DCA.strName} processID={Process.GetCurrentProcess().Id} managedID={System.Environment.CurrentManagedThreadId}");
+                    Console.WriteLine($"Thread={sThreadID} increases nestedCount of DCA {dca.DCA.strName} processID={Process.GetCurrentProcess().Id} managedID={System.Environment.CurrentManagedThreadId}");
                 }
                 else
                 {
-                    clog.Log($"Thread {sThreadID} semaphoreDCA.WaitOne()");
-                    Console.WriteLine($"Thread {sThreadID} semaphoreDCA.WaitOne()");
+                    clog.Log($"Thread={sThreadID} semaphoreDCA.WaitOne() processID= {Process.GetCurrentProcess().Id}  managedID= {System.Environment.CurrentManagedThreadId}");
+                    Console.WriteLine($"Thread={sThreadID} semaphoreDCA.WaitOne() processID= {Process.GetCurrentProcess().Id}  managedID= {System.Environment.CurrentManagedThreadId}");
 
                     // if not a semaphore owner, WaitOne() which blocks the current thread until the current WaitHandle receives a signal.
                     _dictDCAQueue[nChannelInEachMeasurementGroup].semaphoreDCA.WaitOne();
@@ -660,19 +659,19 @@ namespace InstrumentLockServices
                             //Get the DCA and its protocol
                             DCA = dca.DCA;
                             Protocol = dca.Protocol;
-                            clog.Log($"Thread {sThreadID} claiming a semaphore of DCA {dca.DCA.strName}");
-                            Console.WriteLine($"Thread {sThreadID} claiming a semaphore of DCA {dca.DCA.strName}");
+                            clog.Log($"Thread={sThreadID} claiming a semaphore of DCA {dca.DCA.strName} processID={Process.GetCurrentProcess().Id} managedID={System.Environment.CurrentManagedThreadId}");
+                            Console.WriteLine($"Thread={sThreadID} claiming a semaphore of DCA {dca.DCA.strName} processID={Process.GetCurrentProcess().Id} managedID={System.Environment.CurrentManagedThreadId}");
                             break;
                         }
                         if (i == _dictDCAQueue[nChannelInEachMeasurementGroup].lstDCAQueueElement.Count - 1) // no DCA is available, impossibleex
                         {
-                            throw new Exception($"Thread {sThreadID} No DCA available, even got a semaphore");
+                            throw new Exception($"Thread={sThreadID} No DCA available, even got a semaphore processID={Process.GetCurrentProcess().Id} managedID={System.Environment.CurrentManagedThreadId}");
                         }
                     }
                 }
 
                 // then grant the InstrumentLock
-                Console.WriteLine($"Thread {sThreadID} InstrumentLockService.getInstrumentLockWithReturn");
+                Console.WriteLine($"Thread={sThreadID} InstrumentLockService.getInstrumentLockWithReturn processID={Process.GetCurrentProcess().Id} managedID={System.Environment.CurrentManagedThreadId}");
                 sService = "InstrumentLockService.getInstrumentLockWithReturn";
                 ret = true;
 
@@ -682,7 +681,7 @@ namespace InstrumentLockServices
                 // each WCF service fires the event EventFromClient with the values from WCF client
                 EventFromClient?.Invoke(this, new CustomEventArgs(value));
 
-                Console.WriteLine($"Thread {sThreadID} exits getInstrumentLockWithReturn");
+                Console.WriteLine($"Thread={sThreadID} exits getInstrumentLockWithReturn processID={Process.GetCurrentProcess().Id} managedID={System.Environment.CurrentManagedThreadId}");
             }
             catch (Exception ex)
             {
@@ -696,7 +695,7 @@ namespace InstrumentLockServices
 
         public bool releaseInstrumentLock(sharedInstrument instr, string sThreadID, string sMachineName)
         {
-            Console.WriteLine($"Thread {sThreadID} enters releaseInstrumentLock");
+            Console.WriteLine($"Thread={sThreadID} enters releaseInstrumentLock processID={Process.GetCurrentProcess().Id} managedID={System.Environment.CurrentManagedThreadId}");
             bool ret = false;
             DateTime ServiceStart = DateTime.Now;
             DateTime ServiceFinish = new DateTime(1, 1, 1);
@@ -727,7 +726,7 @@ namespace InstrumentLockServices
                 }
                 // now found the dca owned by the tester client, so first to descrease nestedCount
                 dca.ownerSemaphoreDCA.nestedCount--;
-                Console.WriteLine($"Thread {sThreadID} decrease nested semaphore count");
+                Console.WriteLine($"Thread={sThreadID} decrease nested semaphore count processID={Process.GetCurrentProcess().Id} managedID={System.Environment.CurrentManagedThreadId}");
 
                 // if nestedCount==0, then reset the ownership to null
                 // and release semaphore
@@ -737,11 +736,11 @@ namespace InstrumentLockServices
                     dca.ownerSemaphoreDCA.sThreadID = null;
                     dca.ownerSemaphoreDCA.sMachineName = null;
                     // release one semaphore of the entry
-                    Console.WriteLine($"Thread {sThreadID} releasing semaphore");
+                    Console.WriteLine($"Thread={sThreadID} releasing semaphore processID={Process.GetCurrentProcess().Id} managedID={System.Environment.CurrentManagedThreadId}");
                     queue.semaphoreDCA.Release();
                 }            
 
-                Console.WriteLine($"Thread {sThreadID} InstrumentLockService.releaseInstrumentLock");
+                Console.WriteLine($"Thread={sThreadID} InstrumentLockService.releaseInstrumentLock processID={Process.GetCurrentProcess().Id} managedID={System.Environment.CurrentManagedThreadId}");
                 sService = "InstrumentLockService.releaseInstrumentLock";
                 ret = true;
 
@@ -758,7 +757,7 @@ namespace InstrumentLockServices
                 Console.WriteLine(ex.Message);
             }
 
-            Console.WriteLine($"Thread {sThreadID} exits releaseInstrumentLock");
+            Console.WriteLine($"Thread={sThreadID} exits releaseInstrumentLock processID={Process.GetCurrentProcess().Id} managedID={System.Environment.CurrentManagedThreadId}");
             return ret;
         }
 
@@ -825,9 +824,7 @@ namespace InstrumentLockServices
         /// </summary>
         public bool getProtocolLock(sharedProtocol protocol, string sThreadID, string sMachineName)
         {
-            int nProcessID = Process.GetCurrentProcess().Id; 
-            int nManagedID = System.Environment.CurrentManagedThreadId; 
-            Console.WriteLine($"Thread {sThreadID} enters getProtocolLock at server processID={nProcessID} managedID={nManagedID}");
+            Console.WriteLine($"Thread={sThreadID} enters getProtocolLock at server processID={Process.GetCurrentProcess().Id} managedID={System.Environment.CurrentManagedThreadId}");
             bool ret = false;
             DateTime ServiceStart = DateTime.Now;
             DateTime ServiceFinish = new DateTime(1, 1, 1);
@@ -856,7 +853,7 @@ namespace InstrumentLockServices
                 ownerSemaphoreDiCon.sThreadID = sThreadID;
                 ownerSemaphoreDiCon.sMachineName = sMachineName;
                 // then grant the InstrumentLock
-                Console.WriteLine($"Thread {sThreadID} InstrumentLockService.getProtocolLock at server processID={nProcessID} managedID={nManagedID}");
+                Console.WriteLine($"Thread={sThreadID} InstrumentLockService.getProtocolLock at server processID={Process.GetCurrentProcess().Id} managedID={System.Environment.CurrentManagedThreadId}");
                 sService = "InstrumentLockService.getProtocolLock";
                 ret = true;
 
@@ -872,17 +869,14 @@ namespace InstrumentLockServices
                 // Logging
                 Console.WriteLine(ex.Message);
             }
-            Console.WriteLine($"Thread {sThreadID} exits getProtocolLock");
+            Console.WriteLine($"Thread={sThreadID} exits getProtocolLock processID={Process.GetCurrentProcess().Id} managedID={System.Environment.CurrentManagedThreadId}");
             return ret;
         }
 
 
         public bool releaseProtocolLock(sharedProtocol protocol, string sThreadID, string sMachineName)
         {
-            int nProcessID = Process.GetCurrentProcess().Id;
-            int nManagedID = System.Environment.CurrentManagedThreadId;
-            Console.WriteLine($"Thread {sThreadID} enters releaseProtocolLock at server processID={nProcessID} managedID={nManagedID} 1st");
-            Console.WriteLine($"Thread {sThreadID} enters releaseProtocolLock at server processID={nProcessID} managedID={nManagedID} 2nd");
+            Console.WriteLine($"Thread={sThreadID} enters releaseProtocolLock at server processID={Process.GetCurrentProcess().Id} managedID={System.Environment.CurrentManagedThreadId}");
             bool ret = false;
             DateTime ServiceStart = DateTime.Now;
             DateTime ServiceFinish = new DateTime(1, 1, 1);
@@ -903,7 +897,7 @@ namespace InstrumentLockServices
                     semaphoreDiCon.Release();
                 }
 
-                Console.WriteLine($"Thread {sThreadID} InstrumentLockService.releaseProtocolLock");
+                Console.WriteLine($"Thread={sThreadID} InstrumentLockService.releaseProtocolLock processID={Process.GetCurrentProcess().Id} managedID={System.Environment.CurrentManagedThreadId}");
                 sService = "InstrumentLockService.releaseProtocolLock";
                 ret = true;
 
@@ -912,7 +906,7 @@ namespace InstrumentLockServices
                 var value = new ClientRequestValue(dInputA: 0, dInputB: 0, delayInSec: 0, dResult: 0, sService: sService, sThreadID: sThreadID, sMachineName: sMachineName, ServiceStart: ServiceStart, ServiceFinish: ServiceFinish);
                 // each WCF service fires the event EventFromClient with the values from WCF client
                 EventFromClient?.Invoke(this, new CustomEventArgs(value));
-                Console.WriteLine($"Thread {sThreadID} exits releaseProtocolLock at server processID={nProcessID} managedID={nManagedID}");
+                Console.WriteLine($"Thread={sThreadID} exits releaseProtocolLock at server processID={Process.GetCurrentProcess().Id} managedID={System.Environment.CurrentManagedThreadId}");
             }
             catch (Exception ex)
             {

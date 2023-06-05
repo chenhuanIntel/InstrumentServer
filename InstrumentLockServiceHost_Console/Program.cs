@@ -25,6 +25,7 @@ namespace InstrumentLockServiceHost_Consoles
             var myHost = new InstrumentLockServiceHost();
             // create firewall rules
             myHost.setFirewall();
+
             // initialize host
             Uri baseAddress = new Uri("net.tcp://localhost:8001/");
             // Uri baseAddress = new Uri("http://172.25.93.250:8080/");

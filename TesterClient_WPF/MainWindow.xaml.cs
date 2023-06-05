@@ -55,8 +55,8 @@ namespace TesterClient_WPF
             _clientFct.setFirewall();
 
             // programmably set up EndPoint
-            _clientFct.wshttpClientEndPoint(baseAddress, myTS);
-            //_clientFct.netTcpClientEndPoint(baseAddress, myTS);
+            //_clientFct.wshttpClientEndPoint(baseAddress, myTS);
+            _clientFct.netTcpClientEndPoint(baseAddress, myTS);
 
             // assign the _iClient obtained within the above Endpoint functions
             _client = _clientFct._iClient;
