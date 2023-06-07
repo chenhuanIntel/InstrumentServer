@@ -45,6 +45,17 @@ namespace InstrumentLockServices
         }
     }
 
+    public class DiConQueue
+    {
+        public Semaphore semaphoreDiCon { get; set; } 
+        public SemaphoreOwner ownerSemaphoreDiCon { get; set; }
+
+        public DiConQueue()
+        {
+            semaphoreDiCon = new Semaphore(initialCount: 1, maximumCount: 1);
+            ownerSemaphoreDiCon = new SemaphoreOwner();
+        }
+    }
 
     public enum sharedProtocol
     {
@@ -341,6 +352,7 @@ namespace InstrumentLockServices
     // NOTE: You can use the "Rename" command on the "Refactor" menu to change the class name "Service1" in both code and config file together.
     public class InstrumentLockService : IInstrumentLockService
     {
+        private static DiConQueue DiConQueue= new DiConQueue();
         // key = number of DCA channels
         private static Dictionary<int, DCAQueue> _dictDCAQueue = new Dictionary<int, DCAQueue>();   
         public static Dictionary<int, DCAQueue> dictDCAQueue
@@ -361,8 +373,8 @@ namespace InstrumentLockServices
         private static Mutex mutexLockintDivide = new Mutex();
         //private static Semaphore semaphoreDCA;// = new Semaphore(initialCount: 1, maximumCount: 1);
         //private static SemaphoreOwner ownerSemaphoreDCA = new SemaphoreOwner(semaphoreDCA);
-        private static Semaphore semaphoreDiCon = new Semaphore(initialCount: 1, maximumCount: 1);
-        private static SemaphoreOwner ownerSemaphoreDiCon = new SemaphoreOwner();
+        //private static Semaphore semaphoreDiCon = new Semaphore(initialCount: 1, maximumCount: 1);
+        //private static SemaphoreOwner ownerSemaphoreDiCon = new SemaphoreOwner();
 
         /// <summary>
         /// WCF service will fire EventFromClient togerther with the values sent from WCF client
@@ -816,6 +828,7 @@ namespace InstrumentLockServices
             
     }
 
+
         /// <summary>
         /// getProtocolLock() of a mutex
         /// Such as getProtocolLock(Dicon1)
@@ -824,36 +837,48 @@ namespace InstrumentLockServices
         /// </summary>
         public bool getProtocolLock(sharedProtocol protocol, string sThreadID, string sMachineName)
         {
-            Console.WriteLine($"Thread={sThreadID} enters getProtocolLock at server processID={Process.GetCurrentProcess().Id} managedID={System.Environment.CurrentManagedThreadId}");
+            Console.WriteLine($"Thread={sThreadID} enters getProtocolLock processID={Process.GetCurrentProcess().Id} managedID={System.Environment.CurrentManagedThreadId}");
+
             bool ret = false;
             DateTime ServiceStart = DateTime.Now;
             DateTime ServiceFinish = new DateTime(1, 1, 1);
             string sService = "InstrumentLockService.null";
-
             try
             {
-                // check if the client already owns the semaphore
-                // if not the owner, WaitOne() which blocks the current thread until the current WaitHandle receives a signal.
-                if (!(ownerSemaphoreDiCon.sThreadID == sThreadID && ownerSemaphoreDiCon.sMachineName == sMachineName))
+                // first, check DiConQueue to see if the client already owns the semaphore
+                if ((DiConQueue.ownerSemaphoreDiCon.sThreadID == sThreadID && DiConQueue.ownerSemaphoreDiCon.sMachineName == sMachineName))
                 {
-                    //if (ownerSemaphoreDiCon.sThreadID == null)
-                        semaphoreDiCon.WaitOne();
-                    //else
-                    //{
-                    //    bool test=true;
-                    //    while (test)
-                    //        ;
-                    //}
+                    clog.Log($"Thread={sThreadID} already owned DiCon semaphore processID={Process.GetCurrentProcess().Id} managedID={System.Environment.CurrentManagedThreadId}");
+                    Console.WriteLine($"Thread={sThreadID} already owned DiCon semaphore processID={Process.GetCurrentProcess().Id} managedID={System.Environment.CurrentManagedThreadId}");
+
+                    // if the client already owns the semaphore , no need to obtain semaphore again
+                    // or if the client just obtains the semaphore via WaitOne() 
+                    // we will first re-afrim or re-assign the ownership and increase nestedCount
+                    DiConQueue.ownerSemaphoreDiCon.nestedCount++;
+                    DiConQueue.ownerSemaphoreDiCon.sThreadID = sThreadID;
+                    DiConQueue.ownerSemaphoreDiCon.sMachineName = sMachineName;
+                    clog.Log($"Thread={sThreadID} increases nestedCount of DiCon processID={Process.GetCurrentProcess().Id} managedID={System.Environment.CurrentManagedThreadId}");
+                    Console.WriteLine($"Thread={sThreadID} increases nestedCount of DiCon processID={Process.GetCurrentProcess().Id} managedID={System.Environment.CurrentManagedThreadId}");
+                }
+                else
+                {
+                    clog.Log($"Thread={sThreadID} semaphoreDiCon.WaitOne() processID= {Process.GetCurrentProcess().Id}  managedID= {System.Environment.CurrentManagedThreadId}");
+                    Console.WriteLine($"Thread={sThreadID} semaphoreDiCon.WaitOne() processID= {Process.GetCurrentProcess().Id}  managedID= {System.Environment.CurrentManagedThreadId}");
+
+                    // if not a semaphore owner, WaitOne() which blocks the current thread until the current WaitHandle receives a signal.
+                    DiConQueue.semaphoreDiCon.WaitOne();
+
+                    // once passing the WaitOne(), it means DiCon available
+                    // assign the ownership and increase nestedCount
+                    DiConQueue.ownerSemaphoreDiCon.nestedCount++;
+                    DiConQueue.ownerSemaphoreDiCon.sThreadID = sThreadID;
+                    DiConQueue.ownerSemaphoreDiCon.sMachineName = sMachineName;
+                    clog.Log($"Thread={sThreadID} claiming a semaphore of DiCon processID={Process.GetCurrentProcess().Id} managedID={System.Environment.CurrentManagedThreadId}");
+                    Console.WriteLine($"Thread={sThreadID} claiming a semaphore of DiCon processID={Process.GetCurrentProcess().Id} managedID={System.Environment.CurrentManagedThreadId}");
                 }
 
-                // if the client already owns the semaphore , no need to obtain semaphore again
-                // or if the client just obtains the semaphore via WaitOne() 
-                // we will first re-afrim or re-assign the ownership and increase nestedCount
-                ownerSemaphoreDiCon.nestedCount++;
-                ownerSemaphoreDiCon.sThreadID = sThreadID;
-                ownerSemaphoreDiCon.sMachineName = sMachineName;
-                // then grant the InstrumentLock
-                Console.WriteLine($"Thread={sThreadID} InstrumentLockService.getProtocolLock at server processID={Process.GetCurrentProcess().Id} managedID={System.Environment.CurrentManagedThreadId}");
+                // then grant the getProtocolLock
+                Console.WriteLine($"Thread={sThreadID} InstrumentLockService.getProtocolLock processID={Process.GetCurrentProcess().Id} managedID={System.Environment.CurrentManagedThreadId}");
                 sService = "InstrumentLockService.getProtocolLock";
                 ret = true;
 
@@ -862,6 +887,8 @@ namespace InstrumentLockServices
                 var value = new ClientRequestValue(dInputA: 0, dInputB: 0, delayInSec: 0, dResult: 0, sService: sService, sThreadID: sThreadID, sMachineName: sMachineName, ServiceStart: ServiceStart, ServiceFinish: ServiceFinish);
                 // each WCF service fires the event EventFromClient with the values from WCF client
                 EventFromClient?.Invoke(this, new CustomEventArgs(value));
+
+                Console.WriteLine($"Thread={sThreadID} exits getProtocolLock processID={Process.GetCurrentProcess().Id} managedID={System.Environment.CurrentManagedThreadId}");
             }
             catch (Exception ex)
             {
@@ -869,9 +896,66 @@ namespace InstrumentLockServices
                 // Logging
                 Console.WriteLine(ex.Message);
             }
-            Console.WriteLine($"Thread={sThreadID} exits getProtocolLock processID={Process.GetCurrentProcess().Id} managedID={System.Environment.CurrentManagedThreadId}");
+
             return ret;
         }
+
+        /// <summary>
+        /// getProtocolLock() of a mutex
+        /// Such as getProtocolLock(Dicon1)
+        /// Mutex of Dicon1 is shared by PM1, SW1 and ATT1
+        /// Because the DiCon box contains 3 different functional instruments, SW, ATT and PowerMeter.
+        /// </summary>
+        //public bool getProtocolLock_OLD(sharedProtocol protocol, string sThreadID, string sMachineName)
+        //{
+        //    Console.WriteLine($"Thread={sThreadID} enters getProtocolLock at server processID={Process.GetCurrentProcess().Id} managedID={System.Environment.CurrentManagedThreadId}");
+        //    bool ret = false;
+        //    DateTime ServiceStart = DateTime.Now;
+        //    DateTime ServiceFinish = new DateTime(1, 1, 1);
+        //    string sService = "InstrumentLockService.null";
+
+        //    try
+        //    {
+        //        // check if the client already owns the semaphore
+        //        // if not the owner, WaitOne() which blocks the current thread until the current WaitHandle receives a signal.
+        //        if (!(ownerSemaphoreDiCon.sThreadID == sThreadID && ownerSemaphoreDiCon.sMachineName == sMachineName))
+        //        {
+        //            //if (ownerSemaphoreDiCon.sThreadID == null)
+        //                semaphoreDiCon.WaitOne();
+        //            //else
+        //            //{
+        //            //    bool test=true;
+        //            //    while (test)
+        //            //        ;
+        //            //}
+        //        }
+
+        //        // if the client already owns the semaphore , no need to obtain semaphore again
+        //        // or if the client just obtains the semaphore via WaitOne() 
+        //        // we will first re-afrim or re-assign the ownership and increase nestedCount
+        //        ownerSemaphoreDiCon.nestedCount++;
+        //        ownerSemaphoreDiCon.sThreadID = sThreadID;
+        //        ownerSemaphoreDiCon.sMachineName = sMachineName;
+        //        // then grant the InstrumentLock
+        //        Console.WriteLine($"Thread={sThreadID} InstrumentLockService.getProtocolLock at server processID={Process.GetCurrentProcess().Id} managedID={System.Environment.CurrentManagedThreadId}");
+        //        sService = "InstrumentLockService.getProtocolLock";
+        //        ret = true;
+
+        //        ServiceFinish = DateTime.Now;
+        //        // contruct the client request values to be sent to host
+        //        var value = new ClientRequestValue(dInputA: 0, dInputB: 0, delayInSec: 0, dResult: 0, sService: sService, sThreadID: sThreadID, sMachineName: sMachineName, ServiceStart: ServiceStart, ServiceFinish: ServiceFinish);
+        //        // each WCF service fires the event EventFromClient with the values from WCF client
+        //        EventFromClient?.Invoke(this, new CustomEventArgs(value));
+        //    }
+        //    catch (Exception ex)
+        //    {
+        //        ret = false;
+        //        // Logging
+        //        Console.WriteLine(ex.Message);
+        //    }
+        //    Console.WriteLine($"Thread={sThreadID} exits getProtocolLock processID={Process.GetCurrentProcess().Id} managedID={System.Environment.CurrentManagedThreadId}");
+        //    return ret;
+        //}
 
 
         public bool releaseProtocolLock(sharedProtocol protocol, string sThreadID, string sMachineName)
@@ -885,16 +969,16 @@ namespace InstrumentLockServices
             try
             {
                 // first to descrease nestedCount
-                ownerSemaphoreDiCon.nestedCount--;
+                DiConQueue.ownerSemaphoreDiCon.nestedCount--;
 
                 // if nestedCount==0, then reset the ownership to null
                 // otherwise, keep the sThreadID and sMachineName as owner of the semaphore; i.e., no release of semaphore
-                if (ownerSemaphoreDiCon.nestedCount == 0)
+                if (DiConQueue.ownerSemaphoreDiCon.nestedCount == 0)
                 {
-                    ownerSemaphoreDiCon.sThreadID = null;
-                    ownerSemaphoreDiCon.sMachineName = null;
+                    DiConQueue.ownerSemaphoreDiCon.sThreadID = null;
+                    DiConQueue.ownerSemaphoreDiCon.sMachineName = null;
                     // then release the semaphore
-                    semaphoreDiCon.Release();
+                    DiConQueue.semaphoreDiCon.Release();
                 }
 
                 Console.WriteLine($"Thread={sThreadID} InstrumentLockService.releaseProtocolLock processID={Process.GetCurrentProcess().Id} managedID={System.Environment.CurrentManagedThreadId}");

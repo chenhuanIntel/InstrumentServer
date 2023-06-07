@@ -29,6 +29,7 @@ using Newtonsoft.Json.Serialization;
 using Newtonsoft.Json.Converters;
 using InstrumentsLib.Tools.Core;
 using InstrumentsLib.Tools.Instruments.InstrumentServer;
+using System.ServiceModel.Dispatcher;
 
 namespace InstrumentLockServiceHosts_WPF2
 {
@@ -190,6 +191,7 @@ namespace InstrumentLockServiceHosts_WPF2
 
             // after reading station config and initialize station, let's build DCA queue
             buildDCAQueue();
+
 
             //ITraceWriter traceWriter = new MemoryTraceWriter();
             //var temp = JsonConvert.SerializeObject(_stationInstance.myConfig.arInstConfig[0], new JsonSerializerSettings { TraceWriter = traceWriter, Converters = { new JavaScriptDateTimeConverter() } });
