@@ -120,8 +120,8 @@ namespace TesterClient_Consoles
                     Console.WriteLine($"Machine={sMachineName}, Thread={sThreadID} releaseInstrumentLock");
 
                     Console.WriteLine($"...........................................................................");
-                    //Console.WriteLine($"Press ENTER to close the console window; other keys to repeat ...........");
-                    //key = Console.ReadKey().Key;
+                    Console.WriteLine($"Press ENTER to close the console window; other keys to repeat ...........");
+                    key = Console.ReadKey().Key;
                 } while (key != ConsoleKey.Enter);
             }
             catch (TimeoutException timeProblem)
