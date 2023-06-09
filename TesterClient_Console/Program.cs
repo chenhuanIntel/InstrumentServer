@@ -10,6 +10,8 @@ using System.Threading.Tasks;
 using InstrumentLockServices;
 using NetFwTypeLib; // Located in FirewallAPI.dll
 using InstrumentsLib.Tools.Instruments.Oscilloscope;
+using System.Runtime.InteropServices;
+using System.Timers;
 
 // namespace name uses plural
 namespace TesterClient_Consoles
@@ -34,14 +36,22 @@ namespace TesterClient_Consoles
             return (nProcessID.ToString() + "-" + nManagedID.ToString());
         }
 
-        static void Main(string[] args)
+        private static System.Timers.Timer aTimer;
+        private void SetTimer(int nDelayInSec)
         {
+            bool bTimeIsUp = false;
+            // Create a timer with a two second interval.
+            aTimer = new System.Timers.Timer(nDelayInSec*1000);
+            // Hook up the Elapsed event for the timer. 
+            aTimer.Elapsed += (s, args) => bTimeIsUp = true;
+            aTimer.AutoReset = false; //so that it only calls the method once
+            aTimer.Start();
+            while (bTimeIsUp == false) { };
+        }
 
-            //InstrumentLockServiceFacadeClient.InstrumentLockServiceFacadeClient obj = new InstrumentLockServiceFacadeClient.InstrumentLockServiceFacadeClient();
-            double a = 0;
-            double b = 0;
-            double sum = 0;
-            int delay = 0;
+
+        protected void dutThread()
+        {
             bool ret = false;
             string sThreadID = getThreadID();
             string sMachineName = Environment.MachineName;
@@ -52,11 +62,11 @@ namespace TesterClient_Consoles
 
             try
             {
-                // use client function class to set up firewall rules
-                _clientFct.setFirewall();
-
                 do
                 {
+                    // use client function class to set up firewall rules
+                    _clientFct.setFirewall();
+
                     // the reason to place the endpoint function within the do-while loop:
                     // if server restarts in between two loops, must set up endpoint again
                     // programmably set up EndPoint
@@ -84,10 +94,22 @@ namespace TesterClient_Consoles
                     Console.WriteLine($"Machine={sMachineName}, Thread={sThreadID} getInstrumentLockWithReturn ------ gets {WCFDCA.strName}");
 
                     // first measurement group switch via DiCon
+                    Console.WriteLine($"Machine={sMachineName}, Thread={sThreadID} entering getProtocolLock");
                     ret = _client.getProtocolLock(sharedProtocol.DiCon, sThreadID, sMachineName);
-                    Console.WriteLine($"Machine={sMachineName}, Thread={sThreadID} getProtocolLock");
+                    ;
+                    ;
+                    ;
+                    ;
+                    ;
+                    ;
+                    ;
+                    ;
+                    ;
+                    ;
+                    ;
+                    Console.WriteLine($"Machine={sMachineName}, Thread={sThreadID} exiting getProtocolLock");
                     Console.WriteLine($"Machine={sMachineName}, Thread={sThreadID} first measurement group switch via DiCon");
-                    Thread.Sleep(1000);
+                    SetTimer(10);
                     ret = _client.releaseProtocolLock(sharedProtocol.DiCon, sThreadID, sMachineName);
                     Console.WriteLine($"Machine={sMachineName}, Thread={sThreadID} releaseProtocolLock");
 
@@ -95,7 +117,7 @@ namespace TesterClient_Consoles
                     ret = _client.getInstrumentLock(sharedInstrument.DCA, sThreadID, sMachineName, nChannelInEachMeasurementGroup);
                     Console.WriteLine($"Machine={sMachineName}, Thread={sThreadID} getInstrumentLock");
                     Console.WriteLine($"Machine={sMachineName}, Thread={sThreadID} 1st measurement group with DCA");
-                    Thread.Sleep(3 * 10000);
+                    SetTimer(10);
                     ret = _client.releaseInstrumentLock(sharedInstrument.DCA, sThreadID, sMachineName);
                     Console.WriteLine($"Machine={sMachineName}, Thread={sThreadID} releaseInstrumentLock");
 
@@ -103,7 +125,7 @@ namespace TesterClient_Consoles
                     ret = _client.getProtocolLock(sharedProtocol.DiCon, sThreadID, sMachineName);
                     Console.WriteLine($"Machine={sMachineName}, Thread={sThreadID} getProtocolLock");
                     Console.WriteLine($"Machine={sMachineName}, Thread={sThreadID} second measurement group switch via DiCon");
-                    Thread.Sleep(1000);
+                    SetTimer(1);
                     ret = _client.releaseProtocolLock(sharedProtocol.DiCon, sThreadID, sMachineName);
                     Console.WriteLine($"Machine={sMachineName}, Thread={sThreadID} releaseProtocolLock");
 
@@ -111,7 +133,7 @@ namespace TesterClient_Consoles
                     ret = _client.getInstrumentLock(sharedInstrument.DCA, sThreadID, sMachineName, nChannelInEachMeasurementGroup);
                     Console.WriteLine($"Machine={sMachineName}, Thread={sThreadID} getInstrumentLock(sharedInstrument.DCA)");
                     Console.WriteLine($"Machine={sMachineName}, Thread={sThreadID} 2nd measurement group with DCA");
-                    Thread.Sleep(3 * 10000);
+                    SetTimer(10);
                     ret = _client.releaseInstrumentLock(sharedInstrument.DCA, sThreadID, sMachineName);
                     Console.WriteLine($"Machine={sMachineName}, Thread={sThreadID} releaseInstrumentLock");
 
@@ -139,6 +161,20 @@ namespace TesterClient_Consoles
                 // Logging
                 Console.WriteLine(ex.Message);
             }
+
+        }
+
+        static void Main(string[] args)
+        {
+            var program = new Program();
+            Thread DUT1 = null;
+            DUT1 = new Thread(() => { program.dutThread(); });
+            Thread DUT2 = null;
+            DUT2 = new Thread(() => { program.dutThread(); });
+
+            DUT1.Start();
+            DUT2.Start();
+
         }
     }
 }

@@ -755,10 +755,13 @@ namespace TesterClient_Console.InstrumentLockServiceFacadeClient {
         private bool bDebugRelaunchDCAField;
         
         [System.Runtime.Serialization.OptionalFieldAttribute()]
-        private bool bEmbCRUField;
+        private bool bRelaunchDCAWhenExceptionField;
         
         [System.Runtime.Serialization.OptionalFieldAttribute()]
-        private bool bRelaunchDCAWhenExceptionField;
+        private bool bServerDCAField;
+        
+        [System.Runtime.Serialization.OptionalFieldAttribute()]
+        private bool bServerDCAWithEmbCRUField;
         
         [System.Runtime.Serialization.OptionalFieldAttribute()]
         private bool bShrinkEyeFileField;
@@ -962,19 +965,6 @@ namespace TesterClient_Console.InstrumentLockServiceFacadeClient {
         }
         
         [System.Runtime.Serialization.DataMemberAttribute()]
-        public bool bEmbCRU {
-            get {
-                return this.bEmbCRUField;
-            }
-            set {
-                if ((this.bEmbCRUField.Equals(value) != true)) {
-                    this.bEmbCRUField = value;
-                    this.RaisePropertyChanged("bEmbCRU");
-                }
-            }
-        }
-        
-        [System.Runtime.Serialization.DataMemberAttribute()]
         public bool bRelaunchDCAWhenException {
             get {
                 return this.bRelaunchDCAWhenExceptionField;
@@ -983,6 +973,32 @@ namespace TesterClient_Console.InstrumentLockServiceFacadeClient {
                 if ((this.bRelaunchDCAWhenExceptionField.Equals(value) != true)) {
                     this.bRelaunchDCAWhenExceptionField = value;
                     this.RaisePropertyChanged("bRelaunchDCAWhenException");
+                }
+            }
+        }
+        
+        [System.Runtime.Serialization.DataMemberAttribute()]
+        public bool bServerDCA {
+            get {
+                return this.bServerDCAField;
+            }
+            set {
+                if ((this.bServerDCAField.Equals(value) != true)) {
+                    this.bServerDCAField = value;
+                    this.RaisePropertyChanged("bServerDCA");
+                }
+            }
+        }
+        
+        [System.Runtime.Serialization.DataMemberAttribute()]
+        public bool bServerDCAWithEmbCRU {
+            get {
+                return this.bServerDCAWithEmbCRUField;
+            }
+            set {
+                if ((this.bServerDCAWithEmbCRUField.Equals(value) != true)) {
+                    this.bServerDCAWithEmbCRUField = value;
+                    this.RaisePropertyChanged("bServerDCAWithEmbCRU");
                 }
             }
         }
