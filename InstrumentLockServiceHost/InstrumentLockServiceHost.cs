@@ -127,8 +127,8 @@ namespace InstrumentLockServiceHosts
             // add inbound rules for TCP ports
             // first to remove the rule with the same name
             INetFwRule firewallRule = firewallPolicy.Rules.OfType<INetFwRule>().Where(x => x.Name == serverConfig.strFirewallInRuleName).FirstOrDefault();
-            if (firewallRule != null)
-                firewallPolicy.Rules.Remove(firewallRule.Name);
+            //if (firewallRule != null) //need to first check if rule exists
+            //    firewallPolicy.Rules.Remove(firewallRule.Name);
             INetFwRule firewallInRule = (INetFwRule)Activator.CreateInstance(Type.GetTypeFromProgID("HNetCfg.FWRule"));
             firewallInRule.Name = serverConfig.strFirewallInRuleName;
             firewallInRule.Description = serverConfig.strFirewallInRuleDescription;
@@ -142,8 +142,8 @@ namespace InstrumentLockServiceHosts
             // add outbound rules for TCP ports
             // first to remove the rule with the same name
             firewallRule = firewallPolicy.Rules.OfType<INetFwRule>().Where(x => x.Name == serverConfig.strFirewallOutRuleName).FirstOrDefault();
-            if (firewallRule != null)
-                firewallPolicy.Rules.Remove(firewallRule.Name);
+            //if (firewallRule != null) need to first check if rule exists
+            //    firewallPolicy.Rules.Remove(firewallRule.Name);
             INetFwRule firewallOutRule = (INetFwRule)Activator.CreateInstance(Type.GetTypeFromProgID("HNetCfg.FWRule"));
             firewallOutRule.Name = serverConfig.strFirewallOutRuleName;
             firewallOutRule.Description = serverConfig.strFirewallOutRuleDescription;
